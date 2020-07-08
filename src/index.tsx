@@ -1,9 +1,14 @@
 import './styles/index.scss';
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { setDefaultOptions } from 'esri-loader';
+
+import App from './components/App/App';
+
+setDefaultOptions({ url: 'https://js.arcgis.com/next/'})
 
 ReactDOM.render(
-    <h5>hello world</h5>, 
+    <App/>, 
     document.getElementById('root')
 );

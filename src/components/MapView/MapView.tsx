@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, {
+    useEffect
+} from 'react';
 
 import { loadModules, loadCss } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
@@ -48,7 +50,7 @@ const MapView:React.FC<Props> = ({
         }
     };
 
-    React.useEffect(()=>{
+    useEffect(()=>{
         loadCss();
         initMapView();
     }, []);
