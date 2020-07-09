@@ -8,6 +8,10 @@ import IFeatureLayer from 'esri/layers/FeatureLayer';
 import ICIMSymbol from 'esri/symbols/CIMSymbol';
 import IGraphic from 'esri/Graphic';
 
+import {
+    get7DaysAve
+} from '../../utils/covid19-data';
+
 type Props = {
     mapView?:IMapView;
 }
@@ -144,9 +148,13 @@ const Covid19TrendLayer:React.FC<Props> = ({
     };
 
     useEffect(()=>{
-        if(mapView){
-            init();
-        }
+        get7DaysAve();
+    }, [])
+
+    useEffect(()=>{
+        // if(mapView){
+        //     init();
+        // }
     }, [mapView]);
 
     return null;
