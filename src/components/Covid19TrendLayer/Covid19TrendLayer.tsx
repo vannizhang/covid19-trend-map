@@ -165,7 +165,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
                                             symbolLayers: [{
                                                 type: "CIMSolidStroke",
                                                 width: 1,
-                                                color: [0, 0, 0, 80]
+                                                color: [161, 13, 34, 255]
                                             }]
                                         }
                                     }]
