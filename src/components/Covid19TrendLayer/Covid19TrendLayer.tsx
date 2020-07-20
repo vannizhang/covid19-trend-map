@@ -1,29 +1,65 @@
 import React, {
-    useEffect
-} from 'react'
+    useEffect,
+    useState
+} from 'react';
 
 import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import ICIMSymbol from 'esri/symbols/CIMSymbol';
 import IGraphic from 'esri/Graphic';
 import IPoint from 'esri/geometry/Point';
+import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 
 import {
     TrendData,
-    Covid19USCountyTrendData
+    Covid19USCountyTrendData,
+    Covid19USStateTrendData
 } from 'covid19-trend-map'
 
 type Props = {
     activeTrendData: TrendData;
-    data: Covid19USCountyTrendData[];
+    data: Covid19USCountyTrendData[] | Covid19USStateTrendData[];
+    visibleScale?: {
+        min: number;
+        max: number;
+    }
     mapView?:IMapView;
 }
 
 const Covid19TrendLayer:React.FC<Props> = ({
     activeTrendData,
     data,
+    visibleScale,
     mapView
 }) => {
+
+    const [ trendLayer, setTrendLayer ] = useState<IGraphicsLayer>();
+
+    const init = async()=>{
+        type Modules = [
+            typeof IGraphicsLayer
+        ];
+
+        try {
+            const [ 
+                GraphicsLayer,
+            ] = await (loadModules([
+                'esri/layers/GraphicsLayer',
+            ]) as Promise<Modules>);
+
+            const layer = new GraphicsLayer({
+                minScale: visibleScale && visibleScale.min,
+                maxScale: visibleScale && visibleScale.max
+            });
+
+            mapView.map.add(layer);
+
+            setTrendLayer(layer);
+
+        } catch(err){
+            console.error(err);
+        }
+    };
 
     const draw = async()=>{
 
@@ -44,7 +80,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
                 'esri/geometry/Point'
             ]) as Promise<Modules>);
 
-            mapView.graphics.removeAll();
+            trendLayer.removeAll();
 
             // Iterate over each feature
             for (const feature of data) {
@@ -148,7 +184,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
                 })
 
                 // Add the symbol on the county's centroid
-                mapView.graphics.add(graphic);
+                trendLayer.add(graphic);
             }
 
         } catch(err){   
@@ -157,12 +193,31 @@ const Covid19TrendLayer:React.FC<Props> = ({
     };
 
     useEffect(()=>{
-        if(mapView && data){
+        if(mapView){
+            init();
+        }
+    }, [mapView]);
+
+    useEffect(()=>{
+        if(trendLayer && data){
             draw();
         }
-    }, [mapView, data, activeTrendData]);
+    }, [trendLayer, data, activeTrendData]);
 
     return null;
 }
+
+// const Covid19TrendLayerContainer: React.FC<Props> = ({
+//     activeTrendData,
+//     data,
+//     mapView
+// })=>{
+
+//     const getValuesToRender = ()=>{
+
+//     }
+
+//     return null;
+// }
 
 export default Covid19TrendLayer

@@ -10,7 +10,8 @@ import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 
 import {
     TrendData,
-    Covid19USCountyTrendData
+    Covid19USCountyTrendData,
+    Covid19USStateTrendData
 } from 'covid19-trend-map'
 
 import AppConfig from '../../AppConfig';
@@ -28,11 +29,25 @@ const App = () => {
 
     const [ activeTrendData, setActiveTrendData ] = useState<TrendData>(DefaultTrend || 'new-cases');
 
-    const [ covid19Data, setCovid19Data ] = useState<Covid19USCountyTrendData[]>();
+    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19USCountyTrendData[]>();
+
+    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19USStateTrendData[]>();
 
     const fetchData = async()=>{
-        const { data } = await axios.get<Covid19USCountyTrendData[]>(AppConfig["covid19-data-url"]);
-        setCovid19Data(data);
+
+        try {
+            const queryResUSCounties = await axios.get<Covid19USCountyTrendData[]>(AppConfig["covid19-data-us-counties-url"]);
+            setCovid19USCountiesData(queryResUSCounties.data);
+            // console.log(queryResUSCounties)
+
+            const queryResUSStates = await axios.get<Covid19USStateTrendData[]>(AppConfig["covid19-data-us-states-url"]);
+            setCovid19USStatesData(queryResUSStates.data);
+            // console.log(queryResUSStates)
+
+        } catch(err){
+            console.error(err);
+        }
+
     };
 
     useEffect(() => {
@@ -44,8 +59,17 @@ const App = () => {
             webmapId={AppConfig["webmap-id"]}
         >
             <Covid19TrendLayer 
-                data={covid19Data}
+                key='US-Counties'
+                data={covid19USCountiesData}
                 activeTrendData={activeTrendData}
+                visibleScale={AppConfig["us-counties-layer-visible-scale"]}
+            />
+
+            <Covid19TrendLayer 
+                key='US-States'
+                data={covid19USStatesData}
+                activeTrendData={activeTrendData}
+                visibleScale={AppConfig["us-states-layer-visible-scale"]}
             />
         </MapView>
     )
