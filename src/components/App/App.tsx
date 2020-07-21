@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import MapView from '../MapView/MapView';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
+import ControlPanel from '../ControlPanel/ControlPanel';
 
 import {
     TrendData,
@@ -57,27 +58,34 @@ const App = () => {
     }, []);
 
     return (
-        <MapView 
-            webmapId={AppConfig["webmap-id"]}
-        >
-            <Covid19TrendLayer 
-                key='US-Counties'
-                data={covid19USCountiesData}
-                activeTrendData={activeTrendData}
-                // showNormalizedData={showNormalizedData}
-                size={18}
-                visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-            />
+        <>
+            <MapView 
+                webmapId={AppConfig["webmap-id"]}
+            >
+                {/* <Covid19TrendLayer 
+                    key='US-Counties'
+                    data={covid19USCountiesData}
+                    activeTrendData={activeTrendData}
+                    // showNormalizedData={showNormalizedData}
+                    size={18}
+                    visibleScale={AppConfig["us-counties-layer-visible-scale"]}
+                /> */}
 
-            <Covid19TrendLayer 
-                key='US-States'
-                data={covid19USStatesData}
+                <Covid19TrendLayer 
+                    key='US-States'
+                    data={covid19USStatesData}
+                    activeTrendData={activeTrendData}
+                    // showNormalizedData={showNormalizedData}
+                    size={24}
+                    visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                />
+            </MapView>
+
+            <ControlPanel 
                 activeTrendData={activeTrendData}
-                // showNormalizedData={showNormalizedData}
-                size={24}
-                visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                trendDataOnChange={setActiveTrendData}
             />
-        </MapView>
+        </>
     )
 }
 

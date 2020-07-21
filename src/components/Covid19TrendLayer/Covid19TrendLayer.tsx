@@ -235,8 +235,6 @@ const Covid19TrendLayerContainer: React.FC<ContainerProps> = ({
             const xmax = values.length;
 
             let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
-            
-            // console.log(ymin, ymax)
 
             if ( ymax < xmax ){
                 // console.log('use xmax as ymax', ymax, xmax);
@@ -245,14 +243,14 @@ const Covid19TrendLayerContainer: React.FC<ContainerProps> = ({
             } else {
                 // normalize the graph otherwise
                 // by normalizing the y values
-                const ratio = Math.floor(( xmax / ymax ) * 1000) / 1000;
-                // console.log(ratio)
+                const ratio = Math.floor(( xmax / 2000 ) * 1000) / 1000;
+                // console.log('ratio', ratio)
 
                 path.forEach((p) => {
                     p[1] = p[1] * ratio;
                 });
                 
-                ymax = Math.ceil(ymax * ratio);
+                ymax = Math.ceil(2000 * ratio);
 
                 // console.log(ymax);
             };
