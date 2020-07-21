@@ -8,7 +8,10 @@ declare module 'covid19-trend-map' {
     type TrendValues = {
         confirmed: number[],
         deaths: number[],
-        newCases: number[]
+        newCases: number[],
+        confirmedPer100k: number[];
+        deathsPer100k: number[];
+        newCasesPer100k: number[];
     } 
 
     type Covid19USCountyTrendData = {

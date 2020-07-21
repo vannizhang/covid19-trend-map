@@ -29,6 +29,8 @@ const App = () => {
 
     const [ activeTrendData, setActiveTrendData ] = useState<TrendData>(DefaultTrend || 'new-cases');
 
+    // const [ showNormalizedData, setShowNormalizedData ] = useState<boolean>(true);
+
     const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19USCountyTrendData[]>();
 
     const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19USStateTrendData[]>();
@@ -62,6 +64,8 @@ const App = () => {
                 key='US-Counties'
                 data={covid19USCountiesData}
                 activeTrendData={activeTrendData}
+                // showNormalizedData={showNormalizedData}
+                size={18}
                 visibleScale={AppConfig["us-counties-layer-visible-scale"]}
             />
 
@@ -69,6 +73,8 @@ const App = () => {
                 key='US-States'
                 data={covid19USStatesData}
                 activeTrendData={activeTrendData}
+                // showNormalizedData={showNormalizedData}
+                size={24}
                 visibleScale={AppConfig["us-states-layer-visible-scale"]}
             />
         </MapView>

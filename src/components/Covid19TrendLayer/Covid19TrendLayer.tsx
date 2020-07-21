@@ -25,11 +25,15 @@ type DataItem = {
     confirmed: number[];
     deaths: number[];
     newCases: number[];
+    confirmedPer100k: number[];
+    deathsPer100k: number[];
+    newCasesPer100k: number[];
 }
 
 type Props = {
     activeTrendData: TrendData;
     data: DataItem[];
+    size?: number;
     visibleScale?: {
         min: number;
         max: number;
@@ -41,6 +45,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
     activeTrendData,
     data,
     visibleScale,
+    size = 20,
     mapView
 }) => {
 
@@ -101,13 +106,16 @@ const Covid19TrendLayer:React.FC<Props> = ({
                     geometry,
                     confirmed,
                     deaths,
-                    newCases
+                    newCases,
+                    confirmedPer100k,
+                    deathsPer100k,
+                    newCasesPer100k
                 } = feature;
 
                 const numbersByTrendName: { [key in TrendData]: number[] } = {
-                    'confirmed': confirmed,
-                    'death': deaths,
-                    'new-cases': newCases
+                    'confirmed': confirmedPer100k,
+                    'death': deathsPer100k,
+                    'new-cases': newCasesPer100k
                 };
 
                 const values = numbersByTrendName[activeTrendData] || newCases;
@@ -154,7 +162,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
                                     enable: true,
                                     scaleSymbolsProportionally: false,
                                     respectFrame: false,
-                                    size: 20,
+                                    size,
                                     frame: {
                                         xmin,
                                         ymin,
@@ -216,6 +224,8 @@ const Covid19TrendLayer:React.FC<Props> = ({
 // const Covid19TrendLayerContainer: React.FC<Props> = ({
 //     activeTrendData,
 //     data,
+//     visibleScale,
+//     size = 20,
 //     mapView
 // })=>{
 
@@ -223,7 +233,11 @@ const Covid19TrendLayer:React.FC<Props> = ({
 
 //     }
 
-//     return null;
+//     return (
+//         <Covid19TrendLayer 
+            
+//         />
+//     );
 // }
 
 export default Covid19TrendLayer
