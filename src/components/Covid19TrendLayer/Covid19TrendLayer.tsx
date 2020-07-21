@@ -14,14 +14,17 @@ import {
     TrendData,
     Covid19USCountyTrendData,
     Covid19USStateTrendData
-} from 'covid19-trend-map'
+} from 'covid19-trend-map';
 
-type DataItem = {
+type Feature = {
     attributes: any;
     geometry: {
         x: number;
         y: number;
     };
+}
+
+type DataItem = Feature & {
     confirmed: number[];
     deaths: number[];
     newCases: number[];
@@ -30,12 +33,7 @@ type DataItem = {
     newCasesPer100k: number[];
 }
 
-type Covid19TrendFeature = {
-    attributes: any;
-    geometry: {
-        x: number;
-        y: number;
-    };
+type Covid19TrendFeature = Feature & {
     path: number[][]
     frame: {
         xmin: number;

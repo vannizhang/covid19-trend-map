@@ -1,5 +1,5 @@
 export default {
-    'webmap-id':'3ba87408b7fa45f2b2af653ed48bd678',
+    'webmap-id':'1bff921ddf7044c3b5ba34e8494a2073',
     'covid19-data-us-states-url': 'https://covid19.vannizhang.com/us-states.json',
     'covid19-data-us-counties-url': 'https://covid19.vannizhang.com/us-counties.json',
     'us-counties-layer-visible-scale': {
