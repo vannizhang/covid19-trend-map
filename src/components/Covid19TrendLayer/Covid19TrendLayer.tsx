@@ -16,9 +16,20 @@ import {
     Covid19USStateTrendData
 } from 'covid19-trend-map'
 
+type DataItem = {
+    attributes: any;
+    geometry: {
+        x: number;
+        y: number;
+    };
+    confirmed: number[];
+    deaths: number[];
+    newCases: number[];
+}
+
 type Props = {
     activeTrendData: TrendData;
-    data: Covid19USCountyTrendData[] | Covid19USStateTrendData[];
+    data: DataItem[];
     visibleScale?: {
         min: number;
         max: number;
@@ -100,30 +111,24 @@ const Covid19TrendLayer:React.FC<Props> = ({
                 };
 
                 const values = numbersByTrendName[activeTrendData] || newCases;
-
                 const path = values.map((val, idx)=>[ idx, val ]);
-                const numOfDays = values.length;
-                const size = 20;
 
-                // Normalize the graph:
-                //  - Grab the min/max values of y
+                const xmin = 0;
+                const ymin = 0;
+                const xmax = values.length;
+
                 let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
-                let ymin = path.reduce((prev, curr) => Math.min(prev, curr[1]), Infinity);
+                
                 // console.log(ymin, ymax)
 
-                // If values are between 0 and 14, do nothing
-                // 14 is the size of the graph in x (14 days)
-                if (
-                    (ymax - ymin) < numOfDays && 
-                    (ymax - ymin) > 0
-                ){
-                    ymax = numOfDays;
-                    ymin = 0;
-                } 
-                else if ((ymax - ymin) >= numOfDays) {
+                if ( ymax < xmax ){
+                    // console.log('use xmax as ymax', ymax, xmax);
+                    ymax = xmax;
+
+                } else {
                     // normalize the graph otherwise
                     // by normalizing the y values
-                    const ratio = Math.floor((numOfDays / (ymax - ymin)) * 1000) / 1000;
+                    const ratio = Math.floor(( xmax / ymax ) * 1000) / 1000;
                     // console.log(ratio)
 
                     path.forEach((p) => {
@@ -131,7 +136,8 @@ const Covid19TrendLayer:React.FC<Props> = ({
                     });
                     
                     ymax = Math.ceil(ymax * ratio);
-                    ymin = 0
+
+                    console.log(ymax);
                 }
 
                 // Create the CIM symbol:
@@ -148,11 +154,11 @@ const Covid19TrendLayer:React.FC<Props> = ({
                                     enable: true,
                                     scaleSymbolsProportionally: false,
                                     respectFrame: false,
-                                    size,
+                                    size: 20,
                                     frame: {
-                                        xmin: 0,
+                                        xmin,
                                         ymin,
-                                        xmax: numOfDays,
+                                        xmax,
                                         ymax
                                     },
                                     markerGraphics: [{

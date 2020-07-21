@@ -3,11 +3,11 @@ export default {
     'covid19-data-us-states-url': 'https://covid19.vannizhang.com/us-states.json',
     'covid19-data-us-counties-url': 'https://covid19.vannizhang.com/us-counties.json',
     'us-counties-layer-visible-scale': {
-        'min': 5000001,
+        'min': 7500000,
         'max': 0
     },
     'us-states-layer-visible-scale': {
         'min': 0,
-        'max': 5000001
+        'max': 7500001
     }
 };
