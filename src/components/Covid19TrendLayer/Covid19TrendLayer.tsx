@@ -61,6 +61,8 @@ type Covid19TrendLayerProps = {
     features: Covid19TrendFeature[]
 } & Props;
 
+const ShowNormalizedData = true;
+
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     features,
     visibleScale,
@@ -222,38 +224,47 @@ const Covid19TrendLayerContainer: React.FC<ContainerProps> = ({
             } = d;
 
             const numbersByTrendName: { [key in TrendData]: number[] } = {
-                'confirmed': confirmedPer100k,
-                'death': deathsPer100k,
-                'new-cases': newCasesPer100k
+                'confirmed': ShowNormalizedData ? confirmedPer100k : confirmed,
+                'death': ShowNormalizedData ? deathsPer100k :  deaths,
+                'new-cases': ShowNormalizedData ? newCasesPer100k : newCases
             };
 
             const values = numbersByTrendName[activeTrendData] || newCases;
             const path = values.map((val, idx)=>[ idx, val ]);
+            // console.log(attributes, values)
 
             const xmin = 0;
-            const ymin = 0;
             const xmax = values.length;
 
             let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
+            let ymin = path.reduce((prev, curr) => Math.min(prev, curr[1]), Infinity);
+
+            // console.log('use xmax as ymax', ymax, ymin, path);
 
             if ( ymax < xmax ){
-                // console.log('use xmax as ymax', ymax, xmax);
                 ymax = xmax;
+                ymin = 0;
+
+                path.forEach((p) => {
+                    p[1] = Math.round(p[1] * .66);
+                });
 
             } else {
                 // normalize the graph otherwise
                 // by normalizing the y values
-                const ratio = Math.floor(( xmax / 2000 ) * 1000) / 1000;
+                const ratio = Math.floor(( xmax / ymax ) * 100000) / 100000;
                 // console.log('ratio', ratio)
 
                 path.forEach((p) => {
-                    p[1] = p[1] * ratio;
+                    p[1] = Math.round(p[1] * ratio * .66);
                 });
                 
-                ymax = Math.ceil(2000 * ratio);
-
+                ymax = Math.ceil(ymax * ratio);
+                ymin = ymin * ratio
                 // console.log(ymax);
             };
+
+            // console.log(ymax, ymin, path)
 
             return {
                 attributes,

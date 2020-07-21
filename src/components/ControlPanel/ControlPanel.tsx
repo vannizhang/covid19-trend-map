@@ -15,7 +15,7 @@ const SwitchBtnData: {
         value: 'new-cases'
     },
     {
-        label: 'WEEKLY DEATHS',
+        label: 'TOATL DEATHS',
         value: 'death'
     },
     {

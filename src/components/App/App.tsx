@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import MapView from '../MapView/MapView';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
+import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import ControlPanel from '../ControlPanel/ControlPanel';
 
 import {
@@ -66,7 +67,6 @@ const App = () => {
                     key='US-Counties'
                     data={covid19USCountiesData}
                     activeTrendData={activeTrendData}
-                    // showNormalizedData={showNormalizedData}
                     size={18}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 /> */}
@@ -75,9 +75,28 @@ const App = () => {
                     key='US-States'
                     data={covid19USStatesData}
                     activeTrendData={activeTrendData}
-                    // showNormalizedData={showNormalizedData}
                     size={24}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                />
+
+                <QueryTaskLayer 
+                    key='query-4-US-Counties'
+                    itemId='7566e0221e5646f99ea249a197116605'
+                    outFields={['FIPS']}
+                    visibleScale={AppConfig["us-counties-layer-visible-scale"]}
+                    onSelect={(countyFeature)=>{
+                        console.log(countyFeature);
+                    }}
+                />
+
+                <QueryTaskLayer 
+                    key='query-4-US-States'
+                    itemId='99fd67933e754a1181cc755146be21ca'
+                    outFields={['STATE_NAME']}
+                    visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                    onSelect={(stateFeature)=>{
+                        console.log(stateFeature);
+                    }}
                 />
             </MapView>
 

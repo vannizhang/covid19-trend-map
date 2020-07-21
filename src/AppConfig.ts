@@ -7,7 +7,7 @@ export default {
         'max': 0
     },
     'us-states-layer-visible-scale': {
-        'min': 0,
+        'min': 73957190,
         'max': 7500001
     }
 };
