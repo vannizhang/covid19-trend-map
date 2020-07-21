@@ -24,7 +24,9 @@ const SwitchBtnData: {
     }
 ];
 
-const TextColorActive = '#A10D22';
+const SwitchBtnTextColor = '#A10D22';
+const BackgroundColor = '#E8E2D2';
+const BackgroundColor4ActiveItem = '#EFEADB';
 
 const ControlPanel: React.FC<Props> = ({
     activeTrendData,
@@ -44,12 +46,13 @@ const ControlPanel: React.FC<Props> = ({
                     style={{
                         'width': '150px',
                         'height': '100%',
-                        'color': TextColorActive,
+                        'color': SwitchBtnTextColor,
+                        'backgroundColor': activeTrendData === value ? BackgroundColor4ActiveItem : 'transparent',
                         'display': 'flex',
                         'alignItems': 'center',
                         'justifyContent': 'center',
                         'boxSizing':'border-box',
-                        'borderBottom': `solid 4px ${ activeTrendData === value ? TextColorActive : 'transparent' }`,
+                        'borderBottom': `solid 4px ${ activeTrendData === value ? SwitchBtnTextColor : 'transparent' }`,
                         'borderRight': `solid 1px #E0D8C1`,
                         'cursor': 'pointer'
                     }}
@@ -96,8 +99,8 @@ const ControlPanel: React.FC<Props> = ({
                 'display': 'flex',
                 'height': '60px',
                 'boxSizing':'border-box',
-                'boxShadow': '0 0 10px 0 #B1A483',
-                'backgroundColor': '#E8E2D2'
+                'boxShadow': `0 0 10px 2px #B1A483`,
+                'backgroundColor': BackgroundColor
             }}
         >
             { getSwitchBtns() }
