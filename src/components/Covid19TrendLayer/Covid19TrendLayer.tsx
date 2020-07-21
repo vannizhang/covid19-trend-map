@@ -30,9 +30,22 @@ type DataItem = {
     newCasesPer100k: number[];
 }
 
+type Covid19TrendFeature = {
+    attributes: any;
+    geometry: {
+        x: number;
+        y: number;
+    };
+    path: number[][]
+    frame: {
+        xmin: number;
+        ymin: number;
+        xmax: number;
+        ymax: number;
+    }
+}
+
 type Props = {
-    activeTrendData: TrendData;
-    data: DataItem[];
     size?: number;
     visibleScale?: {
         min: number;
@@ -41,9 +54,17 @@ type Props = {
     mapView?:IMapView;
 }
 
-const Covid19TrendLayer:React.FC<Props> = ({
-    activeTrendData,
-    data,
+type ContainerProps = {
+    activeTrendData: TrendData;
+    data: DataItem[];
+} & Props;
+
+type Covid19TrendLayerProps = {
+    features: Covid19TrendFeature[]
+} & Props;
+
+const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
+    features,
     visibleScale,
     size = 20,
     mapView
@@ -99,54 +120,13 @@ const Covid19TrendLayer:React.FC<Props> = ({
             trendLayer.removeAll();
 
             // Iterate over each feature
-            for (const feature of data) {
+            for (const feature of features) {
 
                 const {
-                    attributes,
                     geometry,
-                    confirmed,
-                    deaths,
-                    newCases,
-                    confirmedPer100k,
-                    deathsPer100k,
-                    newCasesPer100k
+                    path,
+                    frame
                 } = feature;
-
-                const numbersByTrendName: { [key in TrendData]: number[] } = {
-                    'confirmed': confirmedPer100k,
-                    'death': deathsPer100k,
-                    'new-cases': newCasesPer100k
-                };
-
-                const values = numbersByTrendName[activeTrendData] || newCases;
-                const path = values.map((val, idx)=>[ idx, val ]);
-
-                const xmin = 0;
-                const ymin = 0;
-                const xmax = values.length;
-
-                let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
-                
-                // console.log(ymin, ymax)
-
-                if ( ymax < xmax ){
-                    // console.log('use xmax as ymax', ymax, xmax);
-                    ymax = xmax;
-
-                } else {
-                    // normalize the graph otherwise
-                    // by normalizing the y values
-                    const ratio = Math.floor(( xmax / ymax ) * 1000) / 1000;
-                    // console.log(ratio)
-
-                    path.forEach((p) => {
-                        p[1] = p[1] * ratio;
-                    });
-                    
-                    ymax = Math.ceil(ymax * ratio);
-
-                    console.log(ymax);
-                }
 
                 // Create the CIM symbol:
                 //  - set the size value
@@ -163,12 +143,7 @@ const Covid19TrendLayer:React.FC<Props> = ({
                                     scaleSymbolsProportionally: false,
                                     respectFrame: false,
                                     size,
-                                    frame: {
-                                        xmin,
-                                        ymin,
-                                        xmax,
-                                        ymax
-                                    },
+                                    frame,
                                     markerGraphics: [{
                                         type: "CIMMarkerGraphic",
                                         geometry: {
@@ -213,31 +188,103 @@ const Covid19TrendLayer:React.FC<Props> = ({
     }, [mapView]);
 
     useEffect(()=>{
-        if(trendLayer && data){
+        if(trendLayer && features){
             draw();
         }
-    }, [trendLayer, data, activeTrendData]);
+    }, [trendLayer, features]);
 
     return null;
 }
 
-// const Covid19TrendLayerContainer: React.FC<Props> = ({
-//     activeTrendData,
-//     data,
-//     visibleScale,
-//     size = 20,
-//     mapView
-// })=>{
+const Covid19TrendLayerContainer: React.FC<ContainerProps> = ({
+    activeTrendData,
+    data,
+    visibleScale,
+    size = 20,
+    mapView
+})=>{
 
-//     const getValuesToRender = ()=>{
+    const getFeaturesToRender = (): Covid19TrendFeature[]=>{
 
-//     }
+        if(!data || !data.length){
+            return [];
+        }
 
-//     return (
-//         <Covid19TrendLayer 
+        const features =  data.map(d=>{
+
+            const {
+                attributes,
+                geometry,
+                confirmed,
+                deaths,
+                newCases,
+                confirmedPer100k,
+                deathsPer100k,
+                newCasesPer100k
+            } = d;
+
+            const numbersByTrendName: { [key in TrendData]: number[] } = {
+                'confirmed': confirmedPer100k,
+                'death': deathsPer100k,
+                'new-cases': newCasesPer100k
+            };
+
+            const values = numbersByTrendName[activeTrendData] || newCases;
+            const path = values.map((val, idx)=>[ idx, val ]);
+
+            const xmin = 0;
+            const ymin = 0;
+            const xmax = values.length;
+
+            let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
             
-//         />
-//     );
-// }
+            // console.log(ymin, ymax)
 
-export default Covid19TrendLayer
+            if ( ymax < xmax ){
+                // console.log('use xmax as ymax', ymax, xmax);
+                ymax = xmax;
+
+            } else {
+                // normalize the graph otherwise
+                // by normalizing the y values
+                const ratio = Math.floor(( xmax / ymax ) * 1000) / 1000;
+                // console.log(ratio)
+
+                path.forEach((p) => {
+                    p[1] = p[1] * ratio;
+                });
+                
+                ymax = Math.ceil(ymax * ratio);
+
+                // console.log(ymax);
+            };
+
+            return {
+                attributes,
+                geometry,
+                path,
+                frame: {
+                    xmin,
+                    ymin,
+                    xmax,
+                    ymax
+                }
+            }
+        });
+
+        return features;
+    }
+
+    return (
+        <Covid19TrendLayer 
+            features={getFeaturesToRender()}
+            {...{
+                visibleScale,
+                size,
+                mapView
+            }}
+        />
+    );
+}
+
+export default Covid19TrendLayerContainer;
