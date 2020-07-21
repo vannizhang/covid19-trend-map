@@ -22,6 +22,10 @@ import {
     urlFns
 } from 'helper-toolkit-ts';
 
+import {
+    fetchCovid19Data
+} from '../../utils/queryCovid19Data';
+
 const UrlSearchParams = urlFns.parseQuery();
 // console.log(UrlSearchParams.trend)
 
@@ -84,8 +88,12 @@ const App = () => {
                     itemId='7566e0221e5646f99ea249a197116605'
                     outFields={['FIPS']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                    onSelect={(countyFeature)=>{
-                        console.log(countyFeature);
+                    onSelect={async(countyFeature)=>{
+                        const data = await fetchCovid19Data({
+                            countyFIPS: countyFeature.attributes['FIPS']
+                        });
+
+                        console.log(data);
                     }}
                 />
 
@@ -94,8 +102,12 @@ const App = () => {
                     itemId='99fd67933e754a1181cc755146be21ca'
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
-                    onSelect={(stateFeature)=>{
-                        console.log(stateFeature);
+                    onSelect={async(stateFeature)=>{
+                        const data = await fetchCovid19Data({
+                            stateName: stateFeature.attributes['STATE_NAME']
+                        });
+
+                        console.log(data);
                     }}
                 />
             </MapView>
