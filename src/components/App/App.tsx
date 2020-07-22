@@ -67,17 +67,17 @@ const App = () => {
             <MapView 
                 webmapId={AppConfig["webmap-id"]}
             >
-                {/* <Covid19TrendLayer 
+                <Covid19TrendLayer 
                     key='US-Counties'
-                    data={covid19USCountiesData}
+                    features={covid19USCountiesData}
                     activeTrendData={activeTrendData}
                     size={18}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                /> */}
+                />
 
                 <Covid19TrendLayer 
                     key='US-States'
-                    data={covid19USStatesData}
+                    features={covid19USStatesData}
                     activeTrendData={activeTrendData}
                     size={24}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}

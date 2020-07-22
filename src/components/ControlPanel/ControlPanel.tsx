@@ -18,12 +18,12 @@ const SwitchBtnData: {
         value: 'new-cases'
     },
     {
-        label: 'TOATL DEATHS',
-        value: 'death'
+        label: 'CASES',
+        value: 'confirmed'
     },
     {
-        label: 'TOATL CASES',
-        value: 'confirmed'
+        label: 'DEATHS',
+        value: 'death'
     }
 ];
 
@@ -45,13 +45,13 @@ const ControlPanel: React.FC<Props> = ({
                     style={{
                         'width': '150px',
                         'height': '100%',
-                        'color': ThemeStyle["theme-color"],
-                        'backgroundColor': activeTrendData === value ? ThemeStyle["background-color-bright"] : 'transparent',
+                        'color': ThemeStyle["theme-color-red"],
+                        'backgroundColor': activeTrendData === value ? ThemeStyle["theme-color-khaki-bright"] : 'transparent',
                         'display': 'flex',
                         'alignItems': 'center',
                         'justifyContent': 'center',
                         'boxSizing':'border-box',
-                        'borderBottom': `solid 4px ${ activeTrendData === value ? ThemeStyle["theme-color"] : 'transparent' }`,
+                        'borderBottom': `solid 4px ${ activeTrendData === value ? ThemeStyle["theme-color-red"] : 'transparent' }`,
                         'borderRight': `solid 1px #E0D8C1`,
                         'cursor': 'pointer'
                     }}
@@ -95,16 +95,39 @@ const ControlPanel: React.FC<Props> = ({
                 'position': 'absolute',
                 'top': '10px',
                 'right': '10px',
-                'display': 'flex',
-                'height': '60px',
-                'boxSizing':'border-box',
                 'boxShadow': `0 0 10px 2px #B1A483`,
-                'backgroundColor': ThemeStyle["background-color"]
             }}
         >
-            { getSwitchBtns() }
-            { getInfoBtn() }
+            <div
+                style={{
+                    'backgroundColor': ThemeStyle["theme-color-red"],
+                    'color': ThemeStyle["theme-color-khaki-bright"],
+                    'height': '20px',
+                    'lineHeight': '20px',
+                    'width': '100%',
+                    'textAlign': 'center'
+                }}
+            >
+                <span className='avenir-bold' style={{
+                    'fontSize': '0.785rem'
+                }}>CORONAVIRUS TRENDS PER 100,000 PEOPLE, SINCE FEBRUARY, UPDATED DAILY</span>
+            </div>
+
+            <div
+                style={{
+                    'display': 'flex',
+                    'height': '60px',
+                    'width': '100%',
+                    'boxSizing':'border-box',
+                    
+                    'backgroundColor': ThemeStyle["theme-color-khaki"]
+                }}
+            >
+                { getSwitchBtns() }
+                { getInfoBtn() }
+            </div>
         </div>
+
     )
 }
 
