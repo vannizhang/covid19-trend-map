@@ -11,3 +11,9 @@ export default {
         'max': 7500001
     }
 };
+
+export const ThemeStyle = {
+    'theme-color': '#A10D22',
+    'background-color': '#E8E2D2',
+    'background-color-bright': '#EFEADB',
+};

@@ -1,5 +1,8 @@
 import React from 'react'
-import { TrendData } from 'covid19-trend-map'
+import { TrendData } from 'covid19-trend-map';
+import {
+    ThemeStyle
+} from '../../AppConfig';
 
 type Props = {
     activeTrendData: TrendData;
@@ -24,10 +27,6 @@ const SwitchBtnData: {
     }
 ];
 
-const SwitchBtnTextColor = '#A10D22';
-const BackgroundColor = '#E8E2D2';
-const BackgroundColor4ActiveItem = '#EFEADB';
-
 const ControlPanel: React.FC<Props> = ({
     activeTrendData,
     trendDataOnChange
@@ -46,13 +45,13 @@ const ControlPanel: React.FC<Props> = ({
                     style={{
                         'width': '150px',
                         'height': '100%',
-                        'color': SwitchBtnTextColor,
-                        'backgroundColor': activeTrendData === value ? BackgroundColor4ActiveItem : 'transparent',
+                        'color': ThemeStyle["theme-color"],
+                        'backgroundColor': activeTrendData === value ? ThemeStyle["background-color-bright"] : 'transparent',
                         'display': 'flex',
                         'alignItems': 'center',
                         'justifyContent': 'center',
                         'boxSizing':'border-box',
-                        'borderBottom': `solid 4px ${ activeTrendData === value ? SwitchBtnTextColor : 'transparent' }`,
+                        'borderBottom': `solid 4px ${ activeTrendData === value ? ThemeStyle["theme-color"] : 'transparent' }`,
                         'borderRight': `solid 1px #E0D8C1`,
                         'cursor': 'pointer'
                     }}
@@ -100,7 +99,7 @@ const ControlPanel: React.FC<Props> = ({
                 'height': '60px',
                 'boxSizing':'border-box',
                 'boxShadow': `0 0 10px 2px #B1A483`,
-                'backgroundColor': BackgroundColor
+                'backgroundColor': ThemeStyle["background-color"]
             }}
         >
             { getSwitchBtns() }
