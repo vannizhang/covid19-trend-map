@@ -9,11 +9,14 @@ import MapView from '../MapView/MapView';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import ControlPanel from '../ControlPanel/ControlPanel';
+import ChartPanel from '../ChartPanel/ChartPanel';
+import BottomPanel from '../BottomPanel/BottomPanel';
 
 import {
     TrendData,
     Covid19USCountyTrendData,
-    Covid19USStateTrendData
+    Covid19USStateTrendData,
+    Covid19CasesByTimeFeature
 } from 'covid19-trend-map'
 
 import AppConfig from '../../AppConfig';
@@ -41,6 +44,8 @@ const App = () => {
 
     const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19USStateTrendData[]>();
 
+    const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
+
     const fetchData = async()=>{
 
         try {
@@ -67,13 +72,13 @@ const App = () => {
             <MapView 
                 webmapId={AppConfig["webmap-id"]}
             >
-                <Covid19TrendLayer 
+                {/* <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
                     activeTrendData={activeTrendData}
                     size={18}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                />
+                /> */}
 
                 <Covid19TrendLayer 
                     key='US-States'
@@ -93,7 +98,7 @@ const App = () => {
                             countyFIPS: countyFeature.attributes['FIPS']
                         });
 
-                        console.log(data);
+                        setCovid19CasesByTimeQueryResults(data);
                     }}
                 />
 
@@ -107,7 +112,7 @@ const App = () => {
                             stateName: stateFeature.attributes['STATE_NAME']
                         });
 
-                        console.log(data);
+                        setCovid19CasesByTimeQueryResults(data);
                     }}
                 />
             </MapView>
@@ -116,6 +121,16 @@ const App = () => {
                 activeTrendData={activeTrendData}
                 trendDataOnChange={setActiveTrendData}
             />
+
+            <BottomPanel>
+                
+                <ChartPanel 
+                    activeTrend={activeTrendData}
+                    data={covid19CasesByTimeQueryResults}
+                />
+            </BottomPanel>
+
+
         </>
     )
 }

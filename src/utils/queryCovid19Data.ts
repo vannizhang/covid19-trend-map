@@ -1,21 +1,15 @@
 import axios from 'axios';
 
-export type Covid19CasesByTimeFeature = {
-    attributes: {
-        dt: string;
-        Confirmed: number;
-        Deaths: number;
-        NewCases: number;
-        Population: number;
-    }
-};
-
-const USCountiesCovid19CasesByTimeFeatureServiceURL = 'https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer/1';
+import {
+    Covid19CasesByTimeFeature
+} from 'covid19-trend-map';
 
 type FetchCovid19DataOptions = {
     countyFIPS?: string;
     stateName?: string;
 }
+
+const USCountiesCovid19CasesByTimeFeatureServiceURL = 'https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer/1';
 
 export const fetchCovid19Data = async({
     countyFIPS,

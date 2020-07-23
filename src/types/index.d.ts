@@ -3,6 +3,17 @@ declare module '*.png';
 declare module '*.svg';
 
 declare module 'covid19-trend-map' {
+
+    type Covid19CasesByTimeFeature = {
+        attributes: {
+            dt: string;
+            Confirmed: number;
+            Deaths: number;
+            NewCases: number;
+            Population: number;
+        }
+    };
+    
     type TrendData = 'confirmed' | 'death' | 'new-cases';
 
     type PathData = {
@@ -51,6 +62,7 @@ declare module 'covid19-trend-map' {
         TrendData,
         Covid19TrendPaths,
         Covid19USCountyTrendData,
-        Covid19USStateTrendData
+        Covid19USStateTrendData,
+        Covid19CasesByTimeFeature
     }
 }
