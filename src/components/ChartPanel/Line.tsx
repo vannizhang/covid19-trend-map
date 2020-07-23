@@ -75,7 +75,7 @@ const Line:React.FC<LineProps> = ({
             .attr("d", valueline)
             .style('fill', 'none')
             .style('stroke', strokeColor)
-            .style('stroke-width', 1.5);
+            .style('stroke-width', 2);
     };
 
     const remove = ()=>{

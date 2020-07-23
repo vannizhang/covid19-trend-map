@@ -122,13 +122,17 @@ const App = () => {
                 trendDataOnChange={setActiveTrendData}
             />
 
-            <BottomPanel>
-                
-                <ChartPanel 
-                    activeTrend={activeTrendData}
-                    data={covid19CasesByTimeQueryResults}
-                />
-            </BottomPanel>
+            {
+                covid19CasesByTimeQueryResults ? (
+                    <BottomPanel>
+
+                        <ChartPanel 
+                            activeTrend={activeTrendData}
+                            data={covid19CasesByTimeQueryResults}
+                        />
+                    </BottomPanel>
+                ) : null
+            }
 
 
         </>

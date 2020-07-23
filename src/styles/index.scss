@@ -1,1 +1,16 @@
 @import '~calcite-web/dist/css/calcite-web.min.css';
+
+.axis {
+    path, line {
+        fill: none;
+        stroke: rgba(0,0,0,.1);
+        shape-rendering: crispEdges; 
+        opacity: .5;
+    }
+}
+
+.axis.y {
+    text {
+        fill: #A10D22;
+    }
+}

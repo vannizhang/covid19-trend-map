@@ -16,6 +16,8 @@ import {
     max
 } from 'd3';
 
+import { ThemeStyle } from '../../AppConfig';
+
 type Props = {
     activeTrend: TrendData;
     data: Covid19CasesByTimeFeature[]
@@ -120,8 +122,8 @@ const ChartPanel:React.FC<Props> = ({
         <div
             style={{
                 'width': '100%',
-                'height': '200px',
-                'backgroundColor': 'rgba(0,0,0,0.5)'
+                'height': '180px',
+                'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
             }}
         >
             <SvgContainer
@@ -132,12 +134,12 @@ const ChartPanel:React.FC<Props> = ({
                 <Axis />
 
                 <Bar 
-                    fillColor={'steelblue'}
+                    fillColor={'#c9c2ad'}
                     data={getDataForBars()}
                 />
 
                 <Line 
-                    strokeColor={'#efefef'}
+                    strokeColor={ThemeStyle["theme-color-red"]}
                     data={getDataForLine()}
                 />
 

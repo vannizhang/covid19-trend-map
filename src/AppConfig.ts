@@ -15,5 +15,6 @@ export default {
 export const ThemeStyle = {
     'theme-color-red': '#A10D22',
     'theme-color-khaki': '#E8E2D2',
-    'theme-color-khaki-bright': '#EFEADB'
+    'theme-color-khaki-bright': '#EFEADB',
+    'floating-panel-box-shadow': '#B1A483'
 };
