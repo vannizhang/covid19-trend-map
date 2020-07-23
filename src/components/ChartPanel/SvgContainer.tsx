@@ -9,6 +9,8 @@ import {
     scaleLinear
 } from 'd3';
 
+import useWindowSize from '@rehooks/window-size';
+
 const margin = {
     top: 20, 
     right: 30, 
@@ -49,6 +51,8 @@ const SvgContainer:React.FC<Props> = ({
     yDomain,
     children
 }) => {
+
+    const windowSize = useWindowSize();
 
     const containerRef = useRef<HTMLDivElement>();
     const dimensionRef = useRef<Dimension>();
@@ -120,6 +124,27 @@ const SvgContainer:React.FC<Props> = ({
         });
     };
 
+    const resizeHandler = ()=>{
+
+        const container = containerRef.current;
+
+        if(!container || !svgContainerData || !scales){
+            return;
+        }
+
+        // const { svg } = svgContainerData;
+        const { x } = scales;
+
+        // const newContainerWidth = window.innerWidth - 720;
+        const newWidth = container.offsetWidth - margin.left - margin.right;
+
+        dimensionRef.current.width = newWidth;
+
+        x.range([0, newWidth ]);
+
+        scalesOnUpdateEndHandler();
+    }
+
     useEffect(()=>{
         init();
     }, []);
@@ -132,6 +157,10 @@ const SvgContainer:React.FC<Props> = ({
         }
 
     }, [ yDomain ]);
+
+    React.useEffect(()=>{
+        resizeHandler();
+    }, [ windowSize ]);
 
     return (
         <>

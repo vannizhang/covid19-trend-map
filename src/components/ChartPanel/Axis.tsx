@@ -67,7 +67,9 @@ const Axis:React.FC<Props> = ({
             .ticks(5)
             .tickSizeInner(-(width))
             .tickPadding(5)
-            .tickFormat(num=>numberFns.abbreviateNumber(num))
+            .tickFormat(num=>{
+                return numberFns.abbreviateNumber(+num, 0)
+            })
 
         const yAxisLabel = mainGroup.selectAll('.y.axis');
 
