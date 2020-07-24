@@ -19,5 +19,5 @@ export const ThemeStyle = {
     'theme-color-khaki': '#E8E2D2',
     'theme-color-khaki-bright': '#EFEADB',
     'floating-panel-box-shadow': '#B1A483',
-    'icon-color': '#B2A584'
+    'theme-color-khaki-dark': '#B2A584'
 };

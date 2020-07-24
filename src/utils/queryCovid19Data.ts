@@ -11,10 +11,20 @@ type FetchCovid19DataOptions = {
 
 const USCountiesCovid19CasesByTimeFeatureServiceURL = 'https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer/1';
 
+const cachedQueryResults: {
+    [key:string]: Covid19CasesByTimeFeature[]
+} = {};
+
 export const fetchCovid19Data = async({
     countyFIPS,
     stateName
 }:FetchCovid19DataOptions):Promise<Covid19CasesByTimeFeature[]>=>{
+
+    const key4CachedResults = countyFIPS || stateName;
+
+    if(cachedQueryResults[key4CachedResults]){
+        return cachedQueryResults[key4CachedResults];
+    }
 
     const requestUrl = `${USCountiesCovid19CasesByTimeFeatureServiceURL}/query`;
 
@@ -61,6 +71,9 @@ export const fetchCovid19Data = async({
 
         if(data && data.features){
             // console.log(data.features)
+
+            cachedQueryResults[key4CachedResults] = data.features;
+
             return data.features
         }
 

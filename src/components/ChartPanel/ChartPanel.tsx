@@ -134,7 +134,7 @@ const ChartPanel:React.FC<Props> = ({
                 <Axis />
 
                 <Bar 
-                    fillColor={'#c9c2ad'}
+                    fillColor={ThemeStyle["theme-color-khaki-dark"]}
                     data={getDataForBars()}
                 />
 

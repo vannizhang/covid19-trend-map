@@ -133,6 +133,7 @@ const App = () => {
 
                         <SummaryInfoPanel 
                             locationName={covid19CasesByTimeQueryLocationName}
+                            data={covid19CasesByTimeQueryResults}
                             closeBtnOnClick={setCovid19CasesByTimeQueryResults.bind(this, null)}
                         />
 
