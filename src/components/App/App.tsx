@@ -11,6 +11,7 @@ import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import ControlPanel from '../ControlPanel/ControlPanel';
 import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
+import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 
 import {
     TrendData,
@@ -46,6 +47,8 @@ const App = () => {
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
 
+    const [ covid19CasesByTimeQueryLocationName, setcovid19CasesByTimeQueryLocationName ] = useState<string>();
+
     const fetchData = async()=>{
 
         try {
@@ -72,13 +75,13 @@ const App = () => {
             <MapView 
                 webmapId={AppConfig["webmap-id"]}
             >
-                {/* <Covid19TrendLayer 
+                <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
                     activeTrendData={activeTrendData}
                     size={18}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                /> */}
+                />
 
                 <Covid19TrendLayer 
                     key='US-States'
@@ -94,10 +97,12 @@ const App = () => {
                     outFields={['FIPS']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                     onSelect={async(countyFeature)=>{
+                        const countyName = `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
+                        setcovid19CasesByTimeQueryLocationName(countyName);
+
                         const data = await fetchCovid19Data({
                             countyFIPS: countyFeature.attributes['FIPS']
                         });
-
                         setCovid19CasesByTimeQueryResults(data);
                     }}
                 />
@@ -108,10 +113,13 @@ const App = () => {
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     onSelect={async(stateFeature)=>{
-                        const data = await fetchCovid19Data({
-                            stateName: stateFeature.attributes['STATE_NAME']
-                        });
 
+                        const stateName = stateFeature.attributes['STATE_NAME'];
+                        setcovid19CasesByTimeQueryLocationName(stateName);
+
+                        const data = await fetchCovid19Data({
+                            stateName
+                        });
                         setCovid19CasesByTimeQueryResults(data);
                     }}
                 />
@@ -125,6 +133,11 @@ const App = () => {
             {
                 covid19CasesByTimeQueryResults ? (
                     <BottomPanel>
+
+                        <SummaryInfoPanel 
+                            locationName={covid19CasesByTimeQueryLocationName}
+                            closeBtnOnClick={setCovid19CasesByTimeQueryResults.bind(this, null)}
+                        />
 
                         <ChartPanel 
                             activeTrend={activeTrendData}

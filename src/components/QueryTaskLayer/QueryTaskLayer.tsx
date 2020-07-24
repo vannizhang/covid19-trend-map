@@ -69,7 +69,7 @@ const QueryTaskLayer:React.FC<Props> = ({
                 where: '1=1',
                 geometry: mapView.toMap(event),
                 returnGeometry: true,
-                outFields: outFields || ['*']
+                outFields: ['*']
             });
     
             if(results.features && results.features.length){

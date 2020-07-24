@@ -43,7 +43,7 @@ const ChartPanel:React.FC<Props> = ({
     const fieldName = FieldNameByActiveTrend[activeTrend];
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
-    const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
+    const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(true);
 
     const getXDomain = ()=>{
         const xDomain = data.map(d=>d.attributes.dt);
@@ -122,7 +122,7 @@ const ChartPanel:React.FC<Props> = ({
         <div
             style={{
                 'width': '100%',
-                'height': '180px',
+                'height': '170px',
                 'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
             }}
         >

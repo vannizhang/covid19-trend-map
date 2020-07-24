@@ -55,7 +55,7 @@ export const fetchCovid19Data = async({
         };
 
     try {
-        const {data} = await axios.get(requestUrl, { 
+        const { data } = await axios.get(requestUrl, { 
             params: new URLSearchParams(params)
         });
 
