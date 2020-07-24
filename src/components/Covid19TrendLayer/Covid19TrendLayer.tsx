@@ -12,10 +12,8 @@ import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 
 import {
     PathData,
-    TrendData,
-    Covid19TrendPaths,
-    Covid19USCountyTrendData,
-    Covid19USStateTrendData
+    Covid19TrendName,
+    Covid19TrendPaths
 } from 'covid19-trend-map';
 
 type Feature = {
@@ -29,7 +27,7 @@ type Feature = {
 type Covid19TrendFeature = Feature & Covid19TrendPaths
 
 type Props = {
-    activeTrendData: TrendData;
+    activeTrend: Covid19TrendName;
     size?: number;
     visibleScale?: {
         min: number;
@@ -43,7 +41,7 @@ type Covid19TrendLayerProps = {
 } & Props;
 
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
-    activeTrendData,
+    activeTrend,
     features,
     visibleScale,
     size = 20,
@@ -109,13 +107,13 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                     pathNewCases
                 } = feature;
 
-                const pathDataByTrendName: { [key in TrendData]: PathData } = {
+                const pathDataByTrendName: { [key in Covid19TrendName]: PathData } = {
                     'confirmed': pathConfirmed,
                     'death': pathDeaths,
                     'new-cases': pathNewCases
                 };
 
-                const pathData = pathDataByTrendName[activeTrendData];
+                const pathData = pathDataByTrendName[activeTrend];
 
                 const {
                     frame,
@@ -185,7 +183,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
         if(trendLayer && features){
             draw();
         }
-    }, [trendLayer, features, activeTrendData]);
+    }, [trendLayer, features, activeTrend]);
 
     return null;
 }

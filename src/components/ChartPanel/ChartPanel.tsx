@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 
 import {
-    TrendData,
+    Covid19TrendName,
     Covid19CasesByTimeFeature
 } from 'covid19-trend-map';
 
@@ -19,7 +19,7 @@ import {
 import { ThemeStyle } from '../../AppConfig';
 
 type Props = {
-    activeTrend: TrendData;
+    activeTrend: Covid19TrendName;
     data: Covid19CasesByTimeFeature[]
 }
 
@@ -29,7 +29,7 @@ export type ChartDataItem = {
 }
 
 // field names for Covid19CasesByTime Features
-export const FieldNameByActiveTrend:{ [ key in TrendData]: string } = {
+export const FieldNameByActiveTrend:{ [ key in Covid19TrendName]: string } = {
     'new-cases': 'NewCases',
     'death': 'Deaths',
     'confirmed': 'Confirmed'

@@ -14,7 +14,7 @@ declare module 'covid19-trend-map' {
         }
     };
     
-    type TrendData = 'confirmed' | 'death' | 'new-cases';
+    type Covid19TrendName = 'confirmed' | 'death' | 'new-cases';
 
     type PathData = {
         path: number[][];
@@ -59,7 +59,7 @@ declare module 'covid19-trend-map' {
 
     export {
         PathData,
-        TrendData,
+        Covid19TrendName,
         Covid19TrendPaths,
         Covid19USCountyTrendData,
         Covid19USStateTrendData,

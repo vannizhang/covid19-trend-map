@@ -14,7 +14,7 @@ import BottomPanel from '../BottomPanel/BottomPanel';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 
 import {
-    TrendData,
+    Covid19TrendName,
     Covid19USCountyTrendData,
     Covid19USStateTrendData,
     Covid19CasesByTimeFeature
@@ -33,13 +33,11 @@ import {
 const UrlSearchParams = urlFns.parseQuery();
 // console.log(UrlSearchParams.trend)
 
-const DefaultTrend:TrendData = UrlSearchParams.trend;
+const DefaultTrend:Covid19TrendName = UrlSearchParams.trend;
 
 const App = () => {
 
-    const [ activeTrendData, setActiveTrendData ] = useState<TrendData>(DefaultTrend || 'new-cases');
-
-    // const [ showNormalizedData, setShowNormalizedData ] = useState<boolean>(true);
+    const [ activeTrend, setActiveTrend ] = useState<Covid19TrendName>(DefaultTrend || 'new-cases');
 
     const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19USCountyTrendData[]>();
 
@@ -78,7 +76,7 @@ const App = () => {
                 <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
-                    activeTrendData={activeTrendData}
+                    activeTrend={activeTrend}
                     size={18}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
@@ -86,7 +84,7 @@ const App = () => {
                 <Covid19TrendLayer 
                     key='US-States'
                     features={covid19USStatesData}
-                    activeTrendData={activeTrendData}
+                    activeTrend={activeTrend}
                     size={24}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                 />
@@ -126,8 +124,8 @@ const App = () => {
             </MapView>
 
             <ControlPanel 
-                activeTrendData={activeTrendData}
-                trendDataOnChange={setActiveTrendData}
+                activeTrend={activeTrend}
+                activeTrendOnChange={setActiveTrend}
             />
 
             {
@@ -140,7 +138,7 @@ const App = () => {
                         />
 
                         <ChartPanel 
-                            activeTrend={activeTrendData}
+                            activeTrend={activeTrend}
                             data={covid19CasesByTimeQueryResults}
                         />
                     </BottomPanel>

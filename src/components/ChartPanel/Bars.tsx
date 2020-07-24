@@ -11,11 +11,6 @@ import {
     ChartDataItem
 } from './ChartPanel';
 
-import {
-    TrendData,
-    Covid19CasesByTimeFeature
-} from 'covid19-trend-map';
-
 const BarRectGroupClassName = `bar-rect-group-${generate()}`;
 const BarRectClassName = `bar-rect-${generate()}`;
 
@@ -23,11 +18,6 @@ type Props = {
     svgContainerData?: SvgContainerData;
     scales?: Scales;
 };
-
-type BarContainerProps = {
-    activeTrend: TrendData;
-    data: Covid19CasesByTimeFeature[]
-} & Props;
 
 type BarProps = {
     data: ChartDataItem[],
@@ -103,39 +93,5 @@ const Bar:React.FC<BarProps> = ({
 
     return null;
 };
-
-// const BarsContainer:React.FC<BarContainerProps> = ({
-//     activeTrend,
-//     data,
-//     svgContainerData,
-//     scales
-// })=>{
-
-//     const getData = ()=>{
-
-//         if(!data || !data.length){
-//             return [];
-//         }
-
-//         return data.map(d=>{
-
-//             const fieldName = FieldNameByActiveTrend[activeTrend];
-
-//             return {
-//                 x: d.attributes.dt, 
-//                 y: d.attributes[fieldName]
-//             }
-//         });
-//     }
-
-//     return (
-//         <Bar 
-//             data={getData()}
-//             fillColor={'steelblue'}
-//             svgContainerData={svgContainerData}
-//             scales={scales}
-//         />
-//     )
-// }
 
 export default Bar;

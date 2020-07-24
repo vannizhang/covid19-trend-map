@@ -15,20 +15,10 @@ import {
     ChartDataItem
 } from './ChartPanel';
 
-import {
-    TrendData,
-    Covid19CasesByTimeFeature
-} from 'covid19-trend-map';
-
 type Props = {
     svgContainerData?: SvgContainerData;
     scales?: Scales;
 };
-
-type LineContainerProps = {
-    activeTrend: TrendData;
-    data: Covid19CasesByTimeFeature[]
-} & Props;
 
 type LineProps = {
     data: ChartDataItem[];
@@ -102,38 +92,5 @@ const Line:React.FC<LineProps> = ({
 
     return null;
 };
-
-// const LineContainer:React.FC<LineContainerProps> = ({
-//     data,
-//     activeTrend,
-//     svgContainerData,
-//     scales
-// })=>{
-
-//     const getData = ()=>{
-
-//         if(!data || !data.length){
-//             return [];
-//         }
-
-//         return data.map(d=>{
-//             const fieldName = FieldNameByActiveTrend[activeTrend];
-
-//             return {
-//                 x: d.attributes.dt, 
-//                 y: d.attributes[fieldName]
-//             }
-//         });
-//     }
-
-//     return (
-//         <Line 
-//             data={getData()}
-//             strokeColor={'#fff'}
-//             svgContainerData={svgContainerData}
-//             scales={scales}
-//         />
-//     )
-// }
 
 export default Line;

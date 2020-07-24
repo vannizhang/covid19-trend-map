@@ -1,17 +1,17 @@
 import React from 'react'
-import { TrendData } from 'covid19-trend-map';
+import { Covid19TrendName } from 'covid19-trend-map';
 import {
     ThemeStyle
 } from '../../AppConfig';
 
 type Props = {
-    activeTrendData: TrendData;
-    trendDataOnChange: (vale:TrendData)=>void;
+    activeTrend: Covid19TrendName;
+    activeTrendOnChange: (val:Covid19TrendName)=>void;
 }
 
 const SwitchBtnData: {
     label: string;
-    value: TrendData
+    value: Covid19TrendName
 }[] = [
     {
         label: 'WEEKLY CASES',
@@ -28,8 +28,8 @@ const SwitchBtnData: {
 ];
 
 const ControlPanel: React.FC<Props> = ({
-    activeTrendData,
-    trendDataOnChange
+    activeTrend,
+    activeTrendOnChange
 }) => {
     
     const getSwitchBtns = ()=>{
@@ -46,16 +46,16 @@ const ControlPanel: React.FC<Props> = ({
                         'width': '150px',
                         'height': '100%',
                         'color': ThemeStyle["theme-color-red"],
-                        'backgroundColor': activeTrendData === value ? ThemeStyle["theme-color-khaki-bright"] : 'transparent',
+                        'backgroundColor': activeTrend === value ? ThemeStyle["theme-color-khaki-bright"] : 'transparent',
                         'display': 'flex',
                         'alignItems': 'center',
                         'justifyContent': 'center',
                         'boxSizing':'border-box',
-                        'borderBottom': `solid 4px ${ activeTrendData === value ? ThemeStyle["theme-color-red"] : 'transparent' }`,
+                        'borderBottom': `solid 4px ${ activeTrend === value ? ThemeStyle["theme-color-red"] : 'transparent' }`,
                         'borderRight': `solid 1px #E0D8C1`,
                         'cursor': 'pointer'
                     }}
-                    onClick={trendDataOnChange.bind(this, value)}
+                    onClick={activeTrendOnChange.bind(this, value)}
                 >
                     <span className='avenir-bold'>{label}</span>
                 </div>
