@@ -5,18 +5,22 @@ import { numberFns } from 'helper-toolkit-ts'
 import { 
     select,
     axisBottom,
-    axisLeft
+    axisLeft,
+    scaleTime,
+    timeFormat
 } from 'd3';
 
 import {
     Scales,
     SvgContainerData
-} from './SvgContainer'
+} from './SvgContainer';
 
 interface Props {
     svgContainerData?: SvgContainerData;
     scales?: Scales;
 };
+
+const formatTime = timeFormat("%b");
 
 const Axis:React.FC<Props> = ({
     svgContainerData,
@@ -27,15 +31,31 @@ const Axis:React.FC<Props> = ({
 
         const { dimension, g } = svgContainerData;
 
-        const { height } = dimension;
+        const { height, width } = dimension;
 
         const mainGroup = select(g);
 
         const { x } = scales;
 
-        const xAxis = axisBottom(x)
+        const domain = x.domain();
+        const startDateParts = domain[0].split('-').map(d=>+d);
+        const startDate = new Date(startDateParts[0], startDateParts[1] - 1, startDateParts[2]);
+
+        const endDateParts = domain[domain.length - 1].split('-').map(d=>+d);
+        const endDate = new Date(endDateParts[0], endDateParts[1] - 1, endDateParts[2]);
+        
+        const xScale = scaleTime()
+            .range([0, width])
+            .domain([startDate, endDate])
+
+        const xAxis = axisBottom(xScale)
+            // .ticks(timeMonth)
+            .tickFormat((date:Date)=>{
+                return formatTime(date);
+            })
+            // .tickValues(d=>{})
             // .tickSizeInner(-(height))
-            .tickPadding(7)
+            // .tickPadding(9)
 
         const xAxisLabel = mainGroup.selectAll('.x.axis');
 
@@ -86,7 +106,7 @@ const Axis:React.FC<Props> = ({
     React.useEffect(()=>{
 
         if( svgContainerData && scales ){
-            // drawXAxis();
+            drawXAxis();
             drawYAxis();
         }
 
