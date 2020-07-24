@@ -13,18 +13,8 @@ import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import {
     PathData,
     Covid19TrendName,
-    Covid19TrendPaths
+    Covid19TrendData
 } from 'covid19-trend-map';
-
-type Feature = {
-    attributes: any;
-    geometry: {
-        x: number;
-        y: number;
-    };
-}
-
-type Covid19TrendFeature = Feature & Covid19TrendPaths
 
 type Props = {
     activeTrend: Covid19TrendName;
@@ -37,7 +27,7 @@ type Props = {
 }
 
 type Covid19TrendLayerProps = {
-    features: Covid19TrendFeature[]
+    features: Covid19TrendData[]
 } & Props;
 
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({

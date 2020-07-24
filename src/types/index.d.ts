@@ -32,25 +32,8 @@ declare module 'covid19-trend-map' {
         pathNewCases: PathData;
     }
 
-    type Covid19USCountyTrendData = {
-        attributes: {
-            NAME: string;
-            STATE: string;
-            FIPS: string;
-        }
-        geometry: {
-            x: number;
-            y: number;
-        };
-    } & Covid19TrendPaths;
-
-    type Covid19USStateTrendData = {
-        attributes: {
-            STATE_NAME: string;
-            STATE_FIPS: string;
-            STATE_ABBR: string;
-            POPULATION: number;
-        }
+    type Covid19TrendData = {
+        attributes: any
         geometry: {
             x: number;
             y: number;
@@ -61,8 +44,9 @@ declare module 'covid19-trend-map' {
         PathData,
         Covid19TrendName,
         Covid19TrendPaths,
-        Covid19USCountyTrendData,
-        Covid19USStateTrendData,
+        Covid19TrendData,
+        // Covid19USCountyTrendData,
+        // Covid19USStateTrendData,
         Covid19CasesByTimeFeature
     }
 }

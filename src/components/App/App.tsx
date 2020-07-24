@@ -15,8 +15,7 @@ import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 
 import {
     Covid19TrendName,
-    Covid19USCountyTrendData,
-    Covid19USStateTrendData,
+    Covid19TrendData,
     Covid19CasesByTimeFeature
 } from 'covid19-trend-map'
 
@@ -39,9 +38,9 @@ const App = () => {
 
     const [ activeTrend, setActiveTrend ] = useState<Covid19TrendName>(DefaultTrend || 'new-cases');
 
-    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19USCountyTrendData[]>();
+    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
 
-    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19USStateTrendData[]>();
+    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
 
@@ -50,11 +49,11 @@ const App = () => {
     const fetchData = async()=>{
 
         try {
-            const queryResUSCounties = await axios.get<Covid19USCountyTrendData[]>(AppConfig["covid19-data-us-counties-url"]);
+            const queryResUSCounties = await axios.get<Covid19TrendData[]>(AppConfig["covid19-data-us-counties-url"]);
             setCovid19USCountiesData(queryResUSCounties.data);
             // console.log(queryResUSCounties)
 
-            const queryResUSStates = await axios.get<Covid19USStateTrendData[]>(AppConfig["covid19-data-us-states-url"]);
+            const queryResUSStates = await axios.get<Covid19TrendData[]>(AppConfig["covid19-data-us-states-url"]);
             setCovid19USStatesData(queryResUSStates.data);
             // console.log(queryResUSStates)
 
