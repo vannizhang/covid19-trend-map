@@ -12,7 +12,7 @@ import {
 import useWindowSize from '@rehooks/window-size';
 
 const margin = {
-    top: 5, 
+    top: 15, 
     right: 20, 
     bottom: 30, 
     left: 40

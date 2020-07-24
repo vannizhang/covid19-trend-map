@@ -56,10 +56,11 @@ const SummaryInfoPanel:React.FC<Props> = ({
         <div
             style={{
                 'width': '100%',
-                'padding': '.5rem 1.35rem',
+                'padding': '.4rem 1.35rem',
                 'display': 'flex',
                 'alignItems': 'center',
-                'boxSizing': 'border-box'
+                'boxSizing': 'border-box',
+                'backgroundColor': ThemeStyle["theme-color-khaki"],
             }}
         >
             <div
