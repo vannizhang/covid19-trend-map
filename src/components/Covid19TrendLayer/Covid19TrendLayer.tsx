@@ -92,15 +92,15 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
                 const {
                     geometry,
-                    pathConfirmed,
-                    pathDeaths,
-                    pathNewCases
+                    confirmed,
+                    deaths,
+                    newCases
                 } = feature;
 
                 const pathDataByTrendName: { [key in Covid19TrendName]: PathData } = {
-                    'confirmed': pathConfirmed,
-                    'death': pathDeaths,
-                    'new-cases': pathNewCases
+                    'confirmed': confirmed,
+                    'death': deaths,
+                    'new-cases': newCases
                 };
 
                 const pathData = pathDataByTrendName[activeTrend];

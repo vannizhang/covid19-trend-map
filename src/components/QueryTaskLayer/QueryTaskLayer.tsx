@@ -7,7 +7,7 @@ import { loadModules } from 'esri-loader';
 
 import IMapView from 'esri/views/MapView';
 import IFeatureLayer from 'esri/layers/FeatureLayer';
-import IPoint from 'esri/geometry/Point';
+// import IPoint from 'esri/geometry/Point';
 import IGraphic from 'esri/Graphic';
 
 type Props = {
@@ -69,7 +69,7 @@ const QueryTaskLayer:React.FC<Props> = ({
                 where: '1=1',
                 geometry: mapView.toMap(event),
                 returnGeometry: true,
-                outFields: ['*']
+                outFields: outFields || ['*']
             });
     
             if(results.features && results.features.length){

@@ -90,8 +90,8 @@ const App = () => {
 
                 <QueryTaskLayer 
                     key='query-4-US-Counties'
-                    itemId='7566e0221e5646f99ea249a197116605'
-                    outFields={['FIPS']}
+                    itemId={AppConfig["us-counties-feature-layer-item-id"]}
+                    outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                     onSelect={async(countyFeature)=>{
                         const countyName = `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
@@ -106,7 +106,7 @@ const App = () => {
 
                 <QueryTaskLayer 
                     key='query-4-US-States'
-                    itemId='99fd67933e754a1181cc755146be21ca'
+                    itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     onSelect={async(stateFeature)=>{

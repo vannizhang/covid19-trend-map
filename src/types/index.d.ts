@@ -27,9 +27,9 @@ declare module 'covid19-trend-map' {
     }
 
     type Covid19TrendPaths = {
-        pathConfirmed: PathData;
-        pathDeaths: PathData;
-        pathNewCases: PathData;
+        confirmed: PathData;
+        deaths: PathData;
+        newCases: PathData;
     }
 
     type Covid19TrendData = {
@@ -45,8 +45,6 @@ declare module 'covid19-trend-map' {
         Covid19TrendName,
         Covid19TrendPaths,
         Covid19TrendData,
-        // Covid19USCountyTrendData,
-        // Covid19USStateTrendData,
         Covid19CasesByTimeFeature
     }
 }
