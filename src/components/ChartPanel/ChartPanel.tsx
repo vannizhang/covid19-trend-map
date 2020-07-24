@@ -109,6 +109,8 @@ const ChartPanel:React.FC<Props> = ({
 
             y = Math.round(y);
 
+            y = y < 0 ? 0 : y;
+
             values.push({
                 x,
                 y

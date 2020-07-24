@@ -29,12 +29,16 @@ import {
     fetchCovid19Data
 } from '../../utils/queryCovid19Data';
 
+import useMapCenterLocationFromUrl from '../../hooks/useMapLocationFromUrl';
+
 const UrlSearchParams = urlFns.parseQuery();
 // console.log(UrlSearchParams.trend)
 
 const DefaultTrend:Covid19TrendName = UrlSearchParams.trend;
 
 const App = () => {
+
+    const { locationFromURL, saveLocationInURL } = useMapCenterLocationFromUrl();
 
     const [ activeTrend, setActiveTrend ] = useState<Covid19TrendName>(DefaultTrend || 'new-cases');
 
@@ -71,6 +75,8 @@ const App = () => {
         <>
             <MapView 
                 webmapId={AppConfig["webmap-id"]}
+                initialMapCenterLocation={locationFromURL}
+                onStationary={saveLocationInURL}
             >
                 <Covid19TrendLayer 
                     key='US-Counties'

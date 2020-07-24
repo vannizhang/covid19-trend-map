@@ -5,13 +5,22 @@ import React, {
 import { loadModules, loadCss } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import IWebMap from "esri/WebMap";
+import IwatchUtils from 'esri/core/watchUtils';
+
+import {
+    MapCenterLocation
+} from '../../hooks/useMapLocationFromUrl'
 
 interface Props {
     webmapId: string;
+    initialMapCenterLocation?: MapCenterLocation;
+    onStationary: (data:MapCenterLocation)=>void;
 };
 
 const MapView:React.FC<Props> = ({
     webmapId,
+    initialMapCenterLocation,
+    onStationary,
     children
 })=>{
 
@@ -20,7 +29,7 @@ const MapView:React.FC<Props> = ({
     const [ mapView, setMapView] = React.useState<IMapView>(null);
 
     const initMapView = async()=>{
-        
+  
         type Modules = [typeof IMapView, typeof IWebMap];
 
         try {
@@ -32,8 +41,14 @@ const MapView:React.FC<Props> = ({
                 'esri/WebMap',
             ]) as Promise<Modules>);
 
+            const { lat, lon, zoom } = initialMapCenterLocation || {};
+
+            const center = lon && lat  ? [ lon, lat ] : undefined;
+
             const view = new MapView({
                 container: mapDivRef.current,
+                center,
+                zoom,
                 map: new WebMap({
                     portalItem: {
                         id: webmapId
@@ -50,10 +65,51 @@ const MapView:React.FC<Props> = ({
         }
     };
 
+    const addWatchEvent = async()=>{
+        type Modules = [typeof IwatchUtils];
+
+        try {
+            const [ 
+                watchUtils 
+            ] = await (loadModules([
+                'esri/core/watchUtils'
+            ]) as Promise<Modules>);
+
+            watchUtils.whenTrue(mapView, 'stationary', ()=>{
+                // console.log('mapview is stationary', mapView.center, mapView.zoom);
+
+                if(mapView.zoom === -1){
+                    return;
+                }
+
+                const centerLocation = {
+                    lat: mapView.center && mapView.center.latitude 
+                        ? +mapView.center.latitude.toFixed(3) 
+                        : 0,
+                    lon: mapView.center && mapView.center.longitude 
+                        ? +mapView.center.longitude.toFixed(3) 
+                        : 0,
+                    zoom: mapView.zoom
+                }
+
+                onStationary(centerLocation);
+            });
+
+        } catch(err){   
+            console.error(err);
+        }
+    };
+
     useEffect(()=>{
         loadCss();
         initMapView();
     }, []);
+
+    React.useEffect(()=>{
+        if(mapView){
+            addWatchEvent();
+        }
+    }, [ mapView ]);
 
     return (
         <>
