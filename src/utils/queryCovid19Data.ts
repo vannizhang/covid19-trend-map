@@ -32,7 +32,8 @@ export const fetchCovid19Data = async({
         ? {
             f: 'json',
             where: `FIPS='${countyFIPS}'`,
-            outFields: 'dt,Confirmed,Deaths,NewCases,Population'
+            outFields: 'dt,Confirmed,Deaths,NewCases,Population',
+            orderByFields: 'dt'
         }
         : {
             f: 'json',
