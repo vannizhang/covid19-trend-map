@@ -43,7 +43,7 @@ const ChartPanel:React.FC<Props> = ({
     const fieldName = FieldNameByActiveTrend[activeTrend];
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
-    const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(true);
+    const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
 
     const getXDomain = ()=>{
         const xDomain = data.map(d=>d.attributes.dt);

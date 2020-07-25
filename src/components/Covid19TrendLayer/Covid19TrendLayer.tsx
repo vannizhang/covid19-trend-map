@@ -9,6 +9,7 @@ import ICIMSymbol from 'esri/symbols/CIMSymbol';
 import IGraphic from 'esri/Graphic';
 import IPoint from 'esri/geometry/Point';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
+import IwatchUtils from 'esri/core/watchUtils';
 
 import {
     PathData,
@@ -42,14 +43,17 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
     const init = async()=>{
         type Modules = [
-            typeof IGraphicsLayer
+            typeof IGraphicsLayer,
+            typeof IwatchUtils
         ];
 
         try {
             const [ 
                 GraphicsLayer,
+                watchUtils
             ] = await (loadModules([
                 'esri/layers/GraphicsLayer',
+                'esri/core/watchUtils'
             ]) as Promise<Modules>);
 
             const layer = new GraphicsLayer({
@@ -61,12 +65,16 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
             setTrendLayer(layer);
 
+            // watchUtils.watch(layer, 'loadStatus', (status)=>{
+            //     console.log('loadStatus', status)
+            // })
+
         } catch(err){
             console.error(err);
         }
     };
 
-    const draw = async()=>{
+    const draw = async(features:Covid19TrendData[])=>{
 
         type Modules = [
             typeof ICIMSymbol,
@@ -85,11 +93,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                 'esri/geometry/Point'
             ]) as Promise<Modules>);
 
-            trendLayer.removeAll();
-
-            // Iterate over each feature
-            for (const feature of features) {
-
+            const graphics = features.map(feature=>{
                 const {
                     geometry,
                     confirmed,
@@ -154,14 +158,40 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                     symbol
                 })
 
-                // Add the symbol on the county's centroid
-                trendLayer.add(graphic);
-            }
+                return graphic;
+            });
+
+            trendLayer.addMany(graphics);
 
         } catch(err){   
             console.error(err);
         }
     };
+
+    // const processLargeArrayAsync = (items: any[], fn:Function, chunk?:number)=>{
+    //     chunk = chunk || 100;
+
+    //     let index = 0;
+
+    //     const doChunk = ()=>{
+    //         let cnt = chunk;
+    //         while (cnt-- && index < items.length) {
+    //             // callback called with args (value, index, array)
+
+    //             const itemsToProcess = items.slice(index, index + chunk);
+
+    //             fn.call(this, itemsToProcess);
+    //             index += chunk;
+    //         }
+
+    //         if (index < items.length) {
+    //             // set Timeout for async iteration
+    //             setTimeout(doChunk, 1);
+    //         }
+    //     };
+
+    //     doChunk();
+    // }
 
     useEffect(()=>{
         if(mapView){
@@ -171,7 +201,11 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
     useEffect(()=>{
         if(trendLayer && features){
-            draw();
+            // draw();
+
+            trendLayer.removeAll();
+            draw(features);
+            // processLargeArrayAsync(features, draw, 200)
         }
     }, [trendLayer, features, activeTrend]);
 
