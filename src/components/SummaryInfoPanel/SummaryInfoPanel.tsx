@@ -6,12 +6,14 @@ import { numberFns } from 'helper-toolkit-ts';
 type Props = {
     locationName?: string;
     data: Covid19CasesByTimeFeature[];
+    isMobile?: boolean;
     closeBtnOnClick: ()=>void;
-}
+};
 
 const SummaryInfoPanel:React.FC<Props> = ({
     locationName,
     data,
+    isMobile = false,
     closeBtnOnClick
 }) => {
 
@@ -31,9 +33,9 @@ const SummaryInfoPanel:React.FC<Props> = ({
             <div
                 className='font-size--2 avenir-bold text-theme-color-khaki'
                 style={{
-                    'display': 'flex',
+                    'display': isMobile ? 'block' : 'flex',
                     'alignItems': 'center',
-                    'padding': '0 1rem'
+                    'padding': `0 ${isMobile ? '0' : '1rem' }`
                 }}
             >
                 <div className='margin-right-1'>
@@ -52,12 +54,26 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
     }
 
+    const getCloseBtnStyleForMobileDevice = ():React.CSSProperties=>{
+
+        if(!isMobile){
+            return null;
+        }
+
+        return {
+            'position': 'absolute',
+            'top': '.5rem',
+            'right': '.5rem'
+        }
+    }
+
     return (
         <div
             style={{
+                'position': 'relative',
                 'width': '100%',
                 'padding': '.4rem 1.35rem',
-                'display': 'flex',
+                'display': isMobile ? 'block' : 'flex',
                 'alignItems': 'center',
                 'boxSizing': 'border-box',
                 'backgroundColor': ThemeStyle["theme-color-khaki"],
@@ -82,7 +98,8 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
             <div
                 style={{
-                    'cursor': 'pointer'
+                    'cursor': 'pointer',
+                    ...getCloseBtnStyleForMobileDevice()
                 }}
                 onClick={closeBtnOnClick}
             >

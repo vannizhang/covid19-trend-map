@@ -5,6 +5,7 @@ import {
 } from '../../AppConfig';
 
 type Props = {
+    isMobile?: boolean;
     activeTrend: Covid19TrendName;
     activeTrendOnChange: (val:Covid19TrendName)=>void;
 }
@@ -28,6 +29,7 @@ const SwitchBtnData: {
 ];
 
 const ControlPanel: React.FC<Props> = ({
+    isMobile,
     activeTrend,
     activeTrendOnChange
 }) => {
@@ -43,7 +45,8 @@ const ControlPanel: React.FC<Props> = ({
                 <div
                     key={value}
                     style={{
-                        'width': '150px',
+                        'width': isMobile ? 'auto' : '150px',
+                        'flexGrow': isMobile ? 1 : 0,
                         'height': '100%',
                         'color': ThemeStyle["theme-color-red"],
                         'backgroundColor': activeTrend === value ? ThemeStyle["theme-color-khaki-bright"] : 'transparent',
@@ -57,7 +60,7 @@ const ControlPanel: React.FC<Props> = ({
                     }}
                     onClick={activeTrendOnChange.bind(this, value)}
                 >
-                    <span className='avenir-bold'>{label}</span>
+                    <span className='avenir-bold font-size--3'>{label}</span>
                 </div>
             )
         })
@@ -95,6 +98,7 @@ const ControlPanel: React.FC<Props> = ({
                 'position': 'absolute',
                 'top': '10px',
                 'right': '10px',
+                'left': isMobile ? '10px' : 'unset',
                 'boxShadow': `0 0 10px 2px #B1A483`,
             }}
         >
@@ -102,7 +106,7 @@ const ControlPanel: React.FC<Props> = ({
                 style={{
                     'backgroundColor': ThemeStyle["theme-color-red"],
                     'color': ThemeStyle["theme-color-khaki-bright"],
-                    'height': '20px',
+                    'height': isMobile ? 'auto' : '20px',
                     'lineHeight': '20px',
                     'width': '100%',
                     'textAlign': 'center'

@@ -22,7 +22,7 @@ import {
 import AppConfig from '../../AppConfig';
 
 import {
-    urlFns
+    urlFns, miscFns
 } from 'helper-toolkit-ts';
 
 import {
@@ -30,6 +30,8 @@ import {
 } from '../../utils/queryCovid19Data';
 
 import useMapCenterLocationFromUrl from '../../hooks/useMapLocationFromUrl';
+
+const isMobile = miscFns.isMobileDevice();
 
 const UrlSearchParams = urlFns.parseQuery();
 // console.log(UrlSearchParams.trend)
@@ -129,6 +131,7 @@ const App = () => {
             </MapView>
 
             <ControlPanel 
+                isMobile={isMobile}
                 activeTrend={activeTrend}
                 activeTrendOnChange={setActiveTrend}
             />
@@ -140,6 +143,7 @@ const App = () => {
                         <SummaryInfoPanel 
                             locationName={covid19CasesByTimeQueryLocationName}
                             data={covid19CasesByTimeQueryResults}
+                            isMobile={isMobile}
                             closeBtnOnClick={setCovid19CasesByTimeQueryResults.bind(this, null)}
                         />
 
