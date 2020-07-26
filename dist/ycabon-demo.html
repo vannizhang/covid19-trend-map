@@ -1,0 +1,119 @@
+<!doctype html><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"><title>MapView</title><link rel="stylesheet" href="https://js.arcgis.com/next/esri/css/main.css"><style type="text/css" media="screen">#viewDiv,body,html{width:100%;height:100%;padding:0;margin:0}</style><script src="https://js.arcgis.com/next/"></script><script>require([
+      "esri/Map",
+      "esri/layers/FeatureLayer",
+      "esri/views/MapView"
+    ], (
+      Map,
+      FeatureLayer,
+      MapView
+    ) => (async () => {
+      map = new Map({
+        basemap: "topo"
+      });
+      view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 4,
+        center: [-100, 40]
+      });
+      await view.when();
+      
+      // Data for the chart symbols
+      const data = new FeatureLayer({
+        url: "https://services9.arcgis.com/6Hv9AANartyT7fJW/arcgis/rest/services/JHU_last14/FeatureServer/0"
+      });
+      
+      // Request for the data.
+      const {
+        features
+      } = await data.queryFeatures({
+        where: "1=1",
+        maxAllowableOffset: 10000,
+        returnGeometry: true,
+        returnCentroid: true,
+        outFields: ["*"],
+        outSpatialReference: view.spatialReference
+      });
+      
+      // Iterate over each feature
+      for (const feature of features) {
+        
+        // Create a line path where:
+        //   - x is the index of the day
+        //   - y is the value
+        const path = Array.from({
+            // The service shows the last 14 days
+            length: 14
+          },
+          (v, i) => [i, feature.attributes["Day_" + (i + 1)]]
+        );
+        
+        // Normalize the graph:
+        
+        //  - Grab the min/max values of y
+        let ymax = path.reduce((prev, curr) => Math.max(prev, curr[1]), Number.NEGATIVE_INFINITY);
+        let ymin = path.reduce((prev, curr) => Math.min(prev, curr[1]), Infinity);
+        
+        // If values are between 0 and 14, do nothing
+        // 14 is the size of the graph in x (14 days)
+        if ((ymax - ymin) < 14 && (ymax - ymin) > 0) {
+          ymax = 14;
+          ymin = 0;
+        } else if ((ymax - ymin) >= 30) {
+          // normalize the graph otherwise
+          // by normalizing the y values
+          ratio = 30 / (ymax - ymin)
+          path.forEach((p) => {
+            p[1] = p[1] * ratio;
+          });
+          ymax = ymax * ratio;
+          ymin = ymin * ratio
+        }
+        
+        // Create the CIM symbol:
+        //  - set the size value
+        //  - assign the generated path to the marker's geometry
+        const symbol = {
+          type: "CIMPointSymbol",
+          symbolLayers: [{
+            type: "CIMVectorMarker",
+            enable: true,
+            scaleSymbolsProportionally: false,
+            respectFrame: false,
+            size: ymax - ymin,
+            frame: {
+              xmin: 0,
+              ymin,
+              xmax: 14,
+              ymax
+            },
+            markerGraphics: [{
+              type: "CIMMarkerGraphic",
+              geometry: {
+                paths: [path]
+              },
+              symbol: {
+                type: "CIMLineSymbol",
+                symbolLayers: [{
+                  type: "CIMSolidStroke",
+                  width: 1,
+                  color: [0, 0, 0, 255]
+                }]
+              }
+            }]
+          }]
+        };
+        
+        // Add the symbol on the county's centroid
+        view.graphics.add({
+          geometry: feature.geometry.centroid,
+          symbol: {
+            type: "cim",
+            data: {
+              type: "CIMSymbolReference",
+              symbol
+            }
+          }
+        });
+      }
+    })());</script><link href="vendor.eb1f408a20715108ed43.css" rel="stylesheet"><link href="main.cd4d867707e0c7e034e4.css" rel="stylesheet"><div id="viewDiv"></div><script src="vendor.d9798e6ba35c1c64ea5c.js"></script><script src="main.e93361bf123a067fe37a.js"></script>

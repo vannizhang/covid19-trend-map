@@ -94,6 +94,24 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
+            new HtmlWebpackPlugin({
+                template: './src/ycabon-demo.html',
+                filename: 'ycabon-demo.html',
+                minify: {
+                    html5                          : true,
+                    collapseWhitespace             : true,
+                    minifyCSS                      : true,
+                    minifyJS                       : true,
+                    minifyURLs                     : false,
+                    removeComments                 : true,
+                    removeEmptyAttributes          : true,
+                    removeOptionalTags             : true,
+                    removeRedundantAttributes      : true,
+                    removeScriptTypeAttributes     : true,
+                    removeStyleLinkTypeAttributese : true,
+                    useShortDoctype                : true
+                }
+            }),
             new CleanWebpackPlugin(),
             !devMode ? new BundleAnalyzerPlugin() : false
         ].filter(Boolean),
