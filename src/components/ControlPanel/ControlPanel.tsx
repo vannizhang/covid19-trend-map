@@ -60,7 +60,7 @@ const ControlPanel: React.FC<Props> = ({
                     }}
                     onClick={activeTrendOnChange.bind(this, value)}
                 >
-                    <span className='avenir-bold font-size--3'>{label}</span>
+                    <span className={`avenir-bold ${isMobile ? 'font-size--3' : ''}`}>{label}</span>
                 </div>
             )
         })
