@@ -41,6 +41,8 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
     const [ trendLayer, setTrendLayer ] = useState<IGraphicsLayer>();
 
+    const [ isLayerInVisibleScale, setIsLayerInVisibleScale ] = useState<boolean>(false);
+
     const init = async()=>{
         type Modules = [
             typeof IGraphicsLayer,
@@ -65,9 +67,10 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
             setTrendLayer(layer);
 
-            // watchUtils.watch(layer, 'loadStatus', (status)=>{
-            //     console.log('loadStatus', status)
-            // })
+            watchUtils.whenTrue(mapView, 'stationary', ()=>{
+                const isInVisibleScale = (mapView.scale < visibleScale.min && mapView.scale > visibleScale.max);
+                setIsLayerInVisibleScale(isInVisibleScale);
+            })
 
         } catch(err){
             console.error(err);
@@ -201,13 +204,29 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
     useEffect(()=>{
         if(trendLayer && features){
-            // draw();
 
             trendLayer.removeAll();
-            draw(features);
+            // draw(features);
+
+            if(isLayerInVisibleScale){
+                draw(features);
+            }
+
             // processLargeArrayAsync(features, draw, 200)
         }
-    }, [trendLayer, features, activeTrend]);
+    }, [ trendLayer, features, activeTrend ]);
+
+    
+    useEffect(()=>{
+        if( 
+            features &&
+            isLayerInVisibleScale && 
+            !trendLayer.graphics.length
+        ){
+            draw(features);
+        }
+    }, [ isLayerInVisibleScale ]);
+
 
     return null;
 }

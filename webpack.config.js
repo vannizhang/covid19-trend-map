@@ -112,7 +112,7 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
-            new CleanWebpackPlugin(),
+            !devMode ? new CleanWebpackPlugin() : false,
             !devMode ? new BundleAnalyzerPlugin() : false
         ].filter(Boolean),
         optimization: {

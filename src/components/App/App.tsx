@@ -84,7 +84,7 @@ const App = () => {
                     key='US-Counties'
                     features={covid19USCountiesData}
                     activeTrend={activeTrend}
-                    size={18}
+                    size={20}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
 
