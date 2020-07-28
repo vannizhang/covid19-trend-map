@@ -12,12 +12,16 @@ import ControlPanel from '../ControlPanel/ControlPanel';
 import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
+import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer'; 
 
 import {
     Covid19TrendName,
     Covid19TrendData,
-    Covid19CasesByTimeFeature
-} from 'covid19-trend-map'
+    Covid19CasesByTimeFeature,
+    QueryLocation4Covid19TrendData
+} from 'covid19-trend-map';
+
+import IGraphic from 'esri/Graphic';
 
 import AppConfig from '../../AppConfig';
 
@@ -50,7 +54,8 @@ const App = () => {
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
 
-    const [ covid19CasesByTimeQueryLocationName, setcovid19CasesByTimeQueryLocationName ] = useState<string>();
+    // user can click map to select US State or County that will be used to query covid19 trend data
+    const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
 
     const fetchData = async()=>{
 
@@ -69,6 +74,39 @@ const App = () => {
 
     };
 
+    const countyOnSelect = async(countyFeature:IGraphic)=>{
+
+        setcovid19CasesByTimeQueryLocation({
+            graphic: countyFeature,
+            locationName:  `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
+        });
+
+        const data = await fetchCovid19Data({
+            countyFIPS: countyFeature.attributes['FIPS']
+        });
+        setCovid19CasesByTimeQueryResults(data);
+    };
+
+    const stateOnSelect = async(stateFeature:IGraphic)=>{
+
+        const stateName = stateFeature.attributes['STATE_NAME'];
+
+        setcovid19CasesByTimeQueryLocation({
+            graphic: stateFeature,
+            locationName: stateFeature.attributes['STATE_NAME']
+        });
+
+        const data = await fetchCovid19Data({
+            stateName
+        });
+        setCovid19CasesByTimeQueryResults(data);
+    };
+
+    const resetQueryResults = ()=>{
+        setCovid19CasesByTimeQueryResults(undefined);
+        setcovid19CasesByTimeQueryLocation(undefined)
+    }
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -80,6 +118,10 @@ const App = () => {
                 initialMapCenterLocation={locationFromURL}
                 onStationary={saveLocationInURL}
             >
+                <QueryTaskResultLayer 
+                    queryResult={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.graphic : undefined}
+                />
+
                 <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
@@ -101,15 +143,7 @@ const App = () => {
                     itemId={AppConfig["us-counties-feature-layer-item-id"]}
                     outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                    onSelect={async(countyFeature)=>{
-                        const countyName = `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
-                        setcovid19CasesByTimeQueryLocationName(countyName);
-
-                        const data = await fetchCovid19Data({
-                            countyFIPS: countyFeature.attributes['FIPS']
-                        });
-                        setCovid19CasesByTimeQueryResults(data);
-                    }}
+                    onSelect={countyOnSelect}
                 />
 
                 <QueryTaskLayer 
@@ -117,16 +151,7 @@ const App = () => {
                     itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
-                    onSelect={async(stateFeature)=>{
-
-                        const stateName = stateFeature.attributes['STATE_NAME'];
-                        setcovid19CasesByTimeQueryLocationName(stateName);
-
-                        const data = await fetchCovid19Data({
-                            stateName
-                        });
-                        setCovid19CasesByTimeQueryResults(data);
-                    }}
+                    onSelect={stateOnSelect}
                 />
             </MapView>
 
@@ -141,10 +166,10 @@ const App = () => {
                     <BottomPanel>
 
                         <SummaryInfoPanel 
-                            locationName={covid19CasesByTimeQueryLocationName}
+                            locationName={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.locationName : undefined }
                             data={covid19CasesByTimeQueryResults}
                             isMobile={isMobile}
-                            closeBtnOnClick={setCovid19CasesByTimeQueryResults.bind(this, null)}
+                            closeBtnOnClick={resetQueryResults}
                         />
 
                         <ChartPanel 

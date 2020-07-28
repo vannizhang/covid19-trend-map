@@ -4,6 +4,8 @@ declare module '*.svg';
 
 declare module 'covid19-trend-map' {
 
+    import IGraphic from 'esri/Graphic';
+
     type Covid19CasesByTimeFeature = {
         attributes: {
             dt: string;
@@ -40,11 +42,17 @@ declare module 'covid19-trend-map' {
         };
     } & Covid19TrendPaths;
 
+    type QueryLocation4Covid19TrendData = {
+        graphic: IGraphic;
+        locationName: string;
+    }
+
     export {
         PathData,
         Covid19TrendName,
         Covid19TrendPaths,
         Covid19TrendData,
-        Covid19CasesByTimeFeature
+        Covid19CasesByTimeFeature,
+        QueryLocation4Covid19TrendData
     }
 }
