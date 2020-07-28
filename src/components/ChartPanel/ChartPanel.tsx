@@ -11,6 +11,8 @@ import SvgContainer from './SvgContainer';
 import Axis from './Axis';
 import Bar from './Bars';
 import Line from './Line';
+import MouseEventsRect from './MouseEventsRect';
+import Tooltip from './Tooltip';
 
 import {
     max
@@ -44,6 +46,8 @@ const ChartPanel:React.FC<Props> = ({
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
     const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
+
+    const [ itemOnHover, setItemOnHover ] = useState<Covid19CasesByTimeFeature>();
 
     const getXDomain = ()=>{
         const xDomain = data.map(d=>d.attributes.dt);
@@ -143,6 +147,15 @@ const ChartPanel:React.FC<Props> = ({
                 <Line 
                     strokeColor={ThemeStyle["theme-color-red"]}
                     data={getDataForLine()}
+                />
+
+                <Tooltip 
+                    data={itemOnHover}
+                />
+
+                <MouseEventsRect 
+                    data={data}
+                    onHover={setItemOnHover}
                 />
 
             </SvgContainer>
