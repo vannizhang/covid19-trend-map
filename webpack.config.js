@@ -97,6 +97,7 @@ module.exports =  (env, options)=> {
             new HtmlWebpackPlugin({
                 template: './src/ycabon-demo.html',
                 filename: 'ycabon-demo.html',
+                chunks: [],
                 minify: {
                     html5                          : true,
                     collapseWhitespace             : true,
