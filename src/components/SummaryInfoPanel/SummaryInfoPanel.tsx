@@ -76,7 +76,8 @@ const SummaryInfoPanel:React.FC<Props> = ({
                 }}
             >
                 <div className='margin-right-1'>
-                    <span className='text-theme-color-red'>Biggest Weekly Jump</span> { getBiggestWeeklyIncrease() }
+                    <div className='text-theme-color-red'>Biggest Weekly Jump</div>
+                    { getBiggestWeeklyIncrease() }
                 </div>
 
                 <div className='margin-right-1'>

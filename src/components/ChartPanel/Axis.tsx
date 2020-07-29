@@ -84,7 +84,7 @@ const Axis:React.FC<Props> = ({
         const mainGroup = select(g);
 
         const yAxis = axisLeft(y)
-            .ticks(5)
+            .ticks(3)
             .tickSizeInner(-(width))
             .tickPadding(5)
             .tickFormat(num=>{

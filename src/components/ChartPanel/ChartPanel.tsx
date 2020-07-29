@@ -60,7 +60,8 @@ const ChartPanel:React.FC<Props> = ({
                 ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000 )
                 : d.attributes[fieldName] 
         });
-        const yDomain = [ 0, max(values) ];
+        const yMax = max(values) || 1;
+        const yDomain = [ 0, yMax ];
         return yDomain;
     }
 
