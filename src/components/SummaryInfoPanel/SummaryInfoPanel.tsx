@@ -2,6 +2,7 @@ import React from 'react'
 import { ThemeStyle } from '../../AppConfig'
 import { Covid19CasesByTimeFeature } from 'covid19-trend-map';
 import { numberFns } from 'helper-toolkit-ts';
+import { parse, getISODay, format } from 'date-fns';
 
 type Props = {
     locationName?: string;
@@ -16,6 +17,42 @@ const SummaryInfoPanel:React.FC<Props> = ({
     isMobile = false,
     closeBtnOnClick
 }) => {
+
+    const getBiggestWeeklyIncrease = ()=>{
+
+        let featureWithBiggestWeeklyIncrease = data[0];
+        let biggestWeeklyIncrease = Number.NEGATIVE_INFINITY;
+
+        const dateForFirstFeature = parse(data[0].attributes.dt, 'yyyy-MM-dd', new Date())
+
+        let dayForFirstFeature = getISODay(dateForFirstFeature);
+
+        for( let i = 0, len= data.length; i < len; i++){
+
+            let dayOfWeek = ( i % 7 ) + dayForFirstFeature;
+
+            dayOfWeek = dayOfWeek > 7 ? dayOfWeek - 7 : dayOfWeek;
+
+            if(dayOfWeek === 1){
+                const { Confirmed } = data[i].attributes;
+
+                const feature7DaysAgo = i - 6 >= 0 
+                    ? data[i-6] 
+                    : data[0];
+                
+                const weeklyIncrease = Confirmed - feature7DaysAgo.attributes.Confirmed;
+
+                if(weeklyIncrease > biggestWeeklyIncrease){
+                    biggestWeeklyIncrease = weeklyIncrease;
+                    featureWithBiggestWeeklyIncrease = data[i];
+                }
+            }
+        }
+
+        const dateWithBiggestWeeklyIncrease = parse(featureWithBiggestWeeklyIncrease.attributes.dt, 'yyyy-MM-dd', new Date())
+
+        return format(dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy');
+    };
 
     const getSummaryInfo = ()=>{
         const feature7DaysAgo = data[data.length - 7]
@@ -38,6 +75,10 @@ const SummaryInfoPanel:React.FC<Props> = ({
                     'padding': `0 ${isMobile ? '0' : '1rem' }`
                 }}
             >
+                <div className='margin-right-1'>
+                    <span className='text-theme-color-red'>Biggest Weekly Jump</span> { getBiggestWeeklyIncrease() }
+                </div>
+
                 <div className='margin-right-1'>
                     <span className='text-theme-color-red'>Population</span> { population }
                 </div>

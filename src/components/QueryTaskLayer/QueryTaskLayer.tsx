@@ -18,6 +18,7 @@ type Props = {
         min: number;
         max: number;
     }
+    onStart: ()=>void;
     onSelect: (feature:IGraphic)=>void;
 }
 
@@ -26,6 +27,7 @@ const QueryTaskLayer:React.FC<Props> = ({
     outFields,
     mapView,
     visibleScale,
+    onStart,
     onSelect
 }) => {
 
@@ -65,16 +67,16 @@ const QueryTaskLayer:React.FC<Props> = ({
         if( mapView.scale < layer.minScale && 
             mapView.scale > layer.maxScale
         ){
+            onStart();
+
             const results = await layer.queryFeatures({
                 where: '1=1',
                 geometry: mapView.toMap(event),
                 returnGeometry: true,
                 outFields: outFields || ['*']
             });
-    
-            if(results.features && results.features.length){
-                onSelect(results.features[0]);
-            }
+
+            onSelect(results.features && results.features.length ? results.features[0] : undefined);
         }
     }
 

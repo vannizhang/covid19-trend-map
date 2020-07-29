@@ -143,6 +143,7 @@ const App = () => {
                     itemId={AppConfig["us-counties-feature-layer-item-id"]}
                     outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
+                    onStart={setCovid19CasesByTimeQueryResults.bind(this, undefined)}
                     onSelect={countyOnSelect}
                 />
 
@@ -151,6 +152,7 @@ const App = () => {
                     itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                    onStart={setCovid19CasesByTimeQueryResults.bind(this, undefined)}
                     onSelect={stateOnSelect}
                 />
             </MapView>
