@@ -11,11 +11,19 @@ import IPoint from 'esri/geometry/Point';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import IwatchUtils from 'esri/core/watchUtils';
 
+// import IFeatureLayer from 'esri/layers/FeatureLayer';
+// import IUniqueValueRenderer from 'esri/renderers/UniqueValueRenderer';
+// // import IUniqueValueInfo from 'esri/renderers/support/UniqueValueInfo';
+
+// import ISimpleRenderer from 'esri/renderers/SimpleRenderer';
+// import ISimpleMarkerSymbol from 'esri/symbols/SimpleMarkerSymbol';
+
 import {
     PathData,
     Covid19TrendName,
     Covid19TrendData
 } from 'covid19-trend-map';
+import AppConfig from '../../AppConfig';
 
 type Props = {
     activeTrend: Covid19TrendName;
@@ -24,6 +32,8 @@ type Props = {
         min: number;
         max: number;
     }
+    // itemId?: string;
+    // field?: string;
     mapView?:IMapView;
 }
 
@@ -171,31 +181,6 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
         }
     };
 
-    // const processLargeArrayAsync = (items: any[], fn:Function, chunk?:number)=>{
-    //     chunk = chunk || 100;
-
-    //     let index = 0;
-
-    //     const doChunk = ()=>{
-    //         let cnt = chunk;
-    //         while (cnt-- && index < items.length) {
-    //             // callback called with args (value, index, array)
-
-    //             const itemsToProcess = items.slice(index, index + chunk);
-
-    //             fn.call(this, itemsToProcess);
-    //             index += chunk;
-    //         }
-
-    //         if (index < items.length) {
-    //             // set Timeout for async iteration
-    //             setTimeout(doChunk, 1);
-    //         }
-    //     };
-
-    //     doChunk();
-    // }
-
     useEffect(()=>{
         if(mapView){
             init();
@@ -211,8 +196,6 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
             if(isLayerInVisibleScale){
                 draw(features);
             }
-
-            // processLargeArrayAsync(features, draw, 200)
         }
     }, [ trendLayer, features, activeTrend ]);
 
@@ -230,5 +213,177 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
     return null;
 }
+
+// const Covid19TrendFeatureLayer:React.FC<Covid19TrendLayerProps> = ({
+//     activeTrend,
+//     features,
+//     visibleScale,
+//     size = 20,
+//     itemId,
+//     field,
+//     mapView
+// })=>{
+
+//     const [ trendLayer, setTrendLayer ] = useState<IFeatureLayer>();
+
+//     const [ isLayerInVisibleScale, setIsLayerInVisibleScale ] = useState<boolean>(false);
+
+//     const init = async()=>{
+//         type Modules = [
+//             typeof IFeatureLayer,
+//             typeof IwatchUtils
+//         ];
+
+//         try {
+//             const [ 
+//                 FeatureLayer,
+//                 watchUtils
+//             ] = await (loadModules([
+//                 'esri/layers/FeatureLayer',
+//                 'esri/core/watchUtils'
+//             ]) as Promise<Modules>);
+
+//             const layer = new FeatureLayer({
+//                 portalItem: {
+//                     id: itemId
+//                 },
+//                 minScale: visibleScale && visibleScale.min,
+//                 maxScale: visibleScale && visibleScale.max
+//             });
+
+//             mapView.map.add(layer);
+
+//             setTrendLayer(layer);
+
+//             // watchUtils.whenTrue(mapView, 'stationary', ()=>{
+//             //     const isInVisibleScale = (mapView.scale < visibleScale.min && mapView.scale > visibleScale.max);
+//             //     setIsLayerInVisibleScale(isInVisibleScale);
+//             // })
+
+//         } catch(err){
+//             console.error(err);
+//         }
+//     };
+
+//     const draw = async(features:Covid19TrendData[])=>{
+
+//         type Modules = [
+//             typeof ICIMSymbol,
+//             typeof IUniqueValueRenderer,
+//         ];
+
+//         try {
+//             const [ 
+//                 CIMSymbol,
+//                 UniqueValueRenderer,
+//             ] = await (loadModules([
+//                 'esri/symbols/CIMSymbol',
+//                 'esri/renderers/UniqueValueRenderer'
+//             ]) as Promise<Modules>);
+
+//             const uniqueValueInfos = features.map(feature=>{
+//                 const {
+//                     attributes,
+//                     confirmed,
+//                     deaths,
+//                     newCases
+//                 } = feature;
+
+//                 const pathDataByTrendName: { [key in Covid19TrendName]: PathData } = {
+//                     'confirmed': confirmed,
+//                     'death': deaths,
+//                     'new-cases': newCases
+//                 };
+
+//                 const pathData = pathDataByTrendName[activeTrend];
+
+//                 const {
+//                     frame,
+//                     path
+//                 } = pathData;
+
+//                 // Create the CIM symbol:
+//                 //  - set the size value
+//                 //  - assign the generated path to the marker's geometry
+//                 const symbol = new CIMSymbol({
+//                     data: {
+//                         type: 'CIMSymbolReference',
+//                         symbol: {
+//                             type: "CIMPointSymbol",
+//                             symbolLayers: [
+//                                 {
+//                                     type: "CIMVectorMarker",
+//                                     enable: true,
+//                                     scaleSymbolsProportionally: false,
+//                                     respectFrame: false,
+//                                     size,
+//                                     frame,
+//                                     markerGraphics: [{
+//                                         type: "CIMMarkerGraphic",
+//                                         geometry: {
+//                                             paths: [path]
+//                                         },
+//                                         symbol: {
+//                                             type: "CIMLineSymbol",
+//                                             symbolLayers: [{
+//                                                 type: "CIMSolidStroke",
+//                                                 width: 1,
+//                                                 color: [161, 13, 34, 255]
+//                                             }]
+//                                         }
+//                                     }]
+//                                 }
+//                             ]
+//                         }
+//                     }
+//                 });
+
+//                 return {
+//                     symbol,
+//                     value: attributes[field]
+//                 }
+//             });
+
+//             trendLayer.renderer = new UniqueValueRenderer({
+//                 field,
+//                 uniqueValueInfos
+//             });
+
+//         } catch(err){   
+//             console.error(err);
+//         }
+//     };
+
+//     useEffect(()=>{
+//         if(mapView){
+//             init();
+//         }
+//     }, [mapView]);
+
+//     useEffect(()=>{
+//         if(trendLayer && features){
+
+//             // trendLayer.removeAll();
+//             // draw(features);
+
+//             draw(features);
+
+//             // processLargeArrayAsync(features, draw, 200)
+//         }
+//     }, [ trendLayer, features, activeTrend ]);
+
+    
+//     // useEffect(()=>{
+//     //     if( 
+//     //         features &&
+//     //         isLayerInVisibleScale && 
+//     //         !trendLayer.graphics.length
+//     //     ){
+//     //         draw(features);
+//     //     }
+//     // }, [ isLayerInVisibleScale ]);
+
+//     return null;
+// }
 
 export default Covid19TrendLayer;
