@@ -60,11 +60,16 @@ const App = () => {
     const fetchData = async()=>{
 
         try {
-            const queryResUSCounties = await axios.get<Covid19TrendData[]>(AppConfig["covid19-data-us-counties-url"]);
+
+            const HostUrl = AppConfig["static-files-host"];
+            const Url4CountiesJSON = HostUrl + AppConfig["covid19-data-us-counties-json"];
+            const Url4StatesJSON = HostUrl + AppConfig["covid19-data-us-states-json"];
+
+            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
             setCovid19USCountiesData(queryResUSCounties.data);
             // console.log(queryResUSCounties)
 
-            const queryResUSStates = await axios.get<Covid19TrendData[]>(AppConfig["covid19-data-us-states-url"]);
+            const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);
             // console.log(queryResUSStates)
 
