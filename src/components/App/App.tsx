@@ -83,6 +83,11 @@ const App = () => {
 
     const countyOnSelect = async(countyFeature:IGraphic)=>{
 
+        if(!countyFeature){
+            resetQueryResults();
+            return false;
+        }
+
         setcovid19CasesByTimeQueryLocation({
             graphic: countyFeature,
             locationName:  `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
@@ -95,6 +100,11 @@ const App = () => {
     };
 
     const stateOnSelect = async(stateFeature:IGraphic)=>{
+
+        if(!stateFeature){
+            resetQueryResults();
+            return false;
+        }
 
         const stateName = stateFeature.attributes['STATE_NAME'];
 
@@ -115,8 +125,9 @@ const App = () => {
     }
 
     const resetQueryResults = ()=>{
+        setIsLoading(false);
         setCovid19CasesByTimeQueryResults(undefined);
-        setcovid19CasesByTimeQueryLocation(undefined)
+        setcovid19CasesByTimeQueryLocation(undefined);
     }
 
     useEffect(() => {
