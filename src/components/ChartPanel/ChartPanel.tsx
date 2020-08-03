@@ -125,14 +125,13 @@ const ChartPanel:React.FC<Props> = ({
         return values;
     }
 
-    return data && data.length ? (
-        <div
-            style={{
-                'width': '100%',
-                'height': '170px',
-                'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
-            }}
-        >
+    const getContent = ()=>{
+
+        if(!data || !data.length){
+            return null;
+        }
+
+        return (
             <SvgContainer
                 xDomain={getXDomain()}
                 yDomain={getYDomain()}
@@ -160,10 +159,22 @@ const ChartPanel:React.FC<Props> = ({
                 />
 
             </SvgContainer>
+        );
+    }
 
+    return (
+        <div
+            style={{
+                'width': '100%',
+                'height': '170px',
+                'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
+            }}
+        >
+
+            { getContent() }
         </div>
     
-    ) : null
+    )
 }
 
 export default ChartPanel;

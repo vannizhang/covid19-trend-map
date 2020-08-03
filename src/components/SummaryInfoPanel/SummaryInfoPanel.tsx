@@ -55,6 +55,11 @@ const SummaryInfoPanel:React.FC<Props> = ({
     };
 
     const getSummaryInfo = ()=>{
+
+        if(!data || !data.length){
+            return null
+        }
+
         const feature7DaysAgo = data[data.length - 7]
         const latestFeature = data[data.length - 1];
 

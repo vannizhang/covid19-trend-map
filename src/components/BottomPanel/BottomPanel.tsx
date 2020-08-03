@@ -1,9 +1,36 @@
 import React from 'react'
 import { ThemeStyle } from '../../AppConfig'
 
-const BottomPanel:React.FC = ({
+type Props = {
+    showLoadingIndicator: boolean;
+}
+
+const BottomPanel:React.FC<Props> = ({
+    showLoadingIndicator,
     children
 }) => {
+
+    const getLoadingIndicator = ()=>{
+
+        return (
+            <div
+                style={{
+                    'position': 'relative',
+                    'display': 'flex',
+                    'justifyContent': 'center',
+                    'alignItems': 'center',
+                    'width': '100%',
+                    'height': '225px'
+                }}
+            >
+                <div className="loader is-active">
+                    <div className="loader-bars"></div>
+                    {/* <div className="loader-text">Loading...</div> */}
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div
             style={{
@@ -11,14 +38,16 @@ const BottomPanel:React.FC = ({
                 'left': '15px',
                 'right': '15px',
                 'bottom': '25px',
-                // 'width': '100%',
-                // 'padding': '1rem 1rem 1.5rem',
                 'boxSizing': 'border-box',
                 'boxShadow': `0 0 10px 2px ${ThemeStyle["floating-panel-box-shadow"]}`,
                 'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
             }}
         >
-            { children }
+            { 
+                showLoadingIndicator 
+                    ? getLoadingIndicator() 
+                    : children 
+            }
         </div>
     )
 }

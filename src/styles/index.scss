@@ -1,5 +1,7 @@
 @import '~calcite-web/dist/css/calcite-web.min.css';
 
+$theme-color-red: #A10D22;
+
 .axis {
     path, line {
         fill: none;
@@ -28,3 +30,41 @@
 .text-theme-color-khaki {
     color: #B2A584;
 };
+
+.loader {
+    margin-top: -25px;
+}
+
+.loader-bars:before, .loader-bars:after, .loader-bars { 
+    background: #A10D22;
+}
+
+@-webkit-keyframes load {
+	0%,
+	80%,
+	100% {
+		opacity: .75;
+		box-shadow: 0 0 $theme-color-red;
+		height: 2rem
+	}
+	40% {
+		opacity: 1;
+		box-shadow: 0 -0.5rem $theme-color-red;
+		height: 2.5rem
+	}
+}
+
+@keyframes load {
+	0%,
+	80%,
+	100% {
+		opacity: .75;
+		box-shadow: 0 0 $theme-color-red;
+		height: 2rem
+	}
+	40% {
+		opacity: 1;
+		box-shadow: 0 -0.5rem $theme-color-red;
+		height: 2.5rem
+	}
+}

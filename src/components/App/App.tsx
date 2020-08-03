@@ -57,6 +57,8 @@ const App = () => {
     // user can click map to select US State or County that will be used to query covid19 trend data
     const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
 
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
+
     const fetchData = async()=>{
 
         try {
@@ -65,13 +67,13 @@ const App = () => {
             const Url4CountiesJSON = HostUrl + AppConfig["covid19-data-us-counties-json"];
             const Url4StatesJSON = HostUrl + AppConfig["covid19-data-us-states-json"];
 
-            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
-            setCovid19USCountiesData(queryResUSCounties.data);
-            // console.log(queryResUSCounties)
-
             const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);
             // console.log(queryResUSStates)
+
+            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
+            setCovid19USCountiesData(queryResUSCounties.data);
+            // console.log(queryResUSCounties)
 
         } catch(err){
             console.error(err);
@@ -107,6 +109,11 @@ const App = () => {
         setCovid19CasesByTimeQueryResults(data);
     };
 
+    const queryOnStartHandler = ()=>{
+        setCovid19CasesByTimeQueryResults(undefined);
+        setIsLoading(true);
+    }
+
     const resetQueryResults = ()=>{
         setCovid19CasesByTimeQueryResults(undefined);
         setcovid19CasesByTimeQueryLocation(undefined)
@@ -115,6 +122,12 @@ const App = () => {
     useEffect(() => {
         fetchData();
     }, []);
+
+    useEffect(() => {
+        if(covid19CasesByTimeQueryResults){
+            setIsLoading(false);
+        }
+    }, [covid19CasesByTimeQueryResults]);
 
     return (
         <>
@@ -148,7 +161,7 @@ const App = () => {
                     itemId={AppConfig["us-counties-feature-layer-item-id"]}
                     outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                    onStart={setCovid19CasesByTimeQueryResults.bind(this, undefined)}
+                    onStart={queryOnStartHandler}
                     onSelect={countyOnSelect}
                 />
 
@@ -157,7 +170,7 @@ const App = () => {
                     itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
-                    onStart={setCovid19CasesByTimeQueryResults.bind(this, undefined)}
+                    onStart={queryOnStartHandler}
                     onSelect={stateOnSelect}
                 />
             </MapView>
@@ -169,8 +182,10 @@ const App = () => {
             />
 
             {
-                covid19CasesByTimeQueryResults ? (
-                    <BottomPanel>
+                covid19CasesByTimeQueryResults || isLoading ? (
+                    <BottomPanel
+                        showLoadingIndicator={isLoading}
+                    >
 
                         <SummaryInfoPanel 
                             locationName={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.locationName : undefined }
