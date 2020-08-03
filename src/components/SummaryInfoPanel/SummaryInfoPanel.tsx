@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeStyle } from '../../AppConfig'
+import AppConfig, { ThemeStyle } from '../../AppConfig'
 import { Covid19CasesByTimeFeature } from 'covid19-trend-map';
 import { numberFns } from 'helper-toolkit-ts';
 import { parse, getISODay, format } from 'date-fns';
@@ -71,30 +71,48 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
         const population = numberFns.numberWithCommas(latestFeature.attributes.Population);
 
+        const blockStyle:React.CSSProperties ={
+            'padding': isMobile ? '0' : '0 .65rem',
+            'borderRight': isMobile ? 'none' : `solid 1px rgba(178, 165, 132, .5)`,
+            'display': isMobile ? 'block' : 'flex',
+            'alignItems': 'center'
+        }
+
         return (
             <div
                 className='font-size--2 avenir-bold text-theme-color-khaki'
                 style={{
                     'display': isMobile ? 'block' : 'flex',
-                    'alignItems': 'center',
+                    'alignItems': 'strech',
                     'padding': `0 ${isMobile ? '0' : '1rem' }`
                 }}
             >
-                <div className='margin-right-1'>
-                    <div className='text-theme-color-red'>Biggest Weekly Jump</div>
-                    { getBiggestWeeklyIncrease() }
+                <div style={{
+                    ...blockStyle,
+                    'display': 'block'
+                }}>
+                    <span>
+                        <span className='text-theme-color-red'>Biggest Weekly Jump</span> { isMobile ? null : <br/>} { getBiggestWeeklyIncrease() }
+                    </span>
                 </div>
 
-                <div className='margin-right-1'>
-                    <span className='text-theme-color-red'>Population</span> { population }
+                <div style={blockStyle}>
+                    <span><span className='text-theme-color-red'>Population</span> { population }</span>
                 </div>
 
-                <div className='margin-right-1'>
-                    <span className='text-theme-color-red'>{newCasesThisWeek}</span> new cases and <span className='text-theme-color-red'>{deathsThisWeek}</span> deaths this week
+                <div style={blockStyle}>
+                    <span>
+                        <span className='text-theme-color-red'>{newCasesThisWeek}</span> new cases and <span className='text-theme-color-red'>{deathsThisWeek}</span> deaths this week
+                    </span>
                 </div>
 
-                <div className='margin-right-1'>
-                    <span className='text-theme-color-red'>{cumulativeCases}</span> cumulative cases and <span className='text-theme-color-red'>{cumulativeDeaths}</span> deaths
+                <div style={{
+                    ...blockStyle,
+                    'borderRight': 'none'
+                }}>
+                    <span>
+                        <span className='text-theme-color-red'>{cumulativeCases}</span> cumulative cases and <span className='text-theme-color-red'>{cumulativeDeaths}</span> deaths
+                    </span>
                 </div>
             </div>
         )
@@ -129,7 +147,8 @@ const SummaryInfoPanel:React.FC<Props> = ({
             <div
                 style={{
                     'color': ThemeStyle["theme-color-red"],
-                    'textTransform': 'uppercase'
+                    'textTransform': 'uppercase',
+                    'maxWidth': isMobile ? '320px' : 'auto'
                 }}
             >
                 <span className='avenir-bold font-size-2'>{locationName}</span>
