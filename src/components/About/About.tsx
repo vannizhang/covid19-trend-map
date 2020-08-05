@@ -45,7 +45,7 @@ const About:React.FC<Props> = ({
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="24" width="24"><path d="M18.01 6.697L12.707 12l5.303 5.303-.707.707L12 12.707 6.697 18.01l-.707-.707L11.293 12 5.99 6.697l.707-.707L12 11.293l5.303-5.303z"/></svg>
                 </div>
 
-                <div className='block-group block-group-3-up'>
+                <div className='block-group block-group-3-up tablet-block-group-1-up phone-block-group-1-up'>
                     <div className='block'>
                         <h4 className='header-red avenir-bold'>WEEKLY CASES</h4>
                         <p>These lines mark the weekly averages of new cases, per 100,000 population, per week—useful for showing the local fluctuations of cases throughout the outbreak. When seen together regional patterns emerge. The Y-axis of these charts are scaled to fit the maximum weekly increase when new cases are greater than 25 per 100,000. Please see the note on the Y-axis below for an explanation.</p>
