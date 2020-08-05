@@ -1,5 +1,5 @@
 # COVID-19 Trends Map
-[view live](https://livingatlas.arcgis.com/covidtrends/?@=-94.464,40.252,4)
+[view it live](https://livingatlas.arcgis.com/covidtrends/?@=-94.464,40.252,4)
 ![screenshot](./screenshot.png)
 
 ### Weekly Cases
