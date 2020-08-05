@@ -45,7 +45,7 @@ const ControlPanel: React.FC<Props> = ({
                 <div
                     key={value}
                     style={{
-                        'width': isMobile ? 'auto' : '150px',
+                        'width': isMobile ? 'auto' : '120px',
                         'flexGrow': isMobile ? 1 : 0,
                         'height': '100%',
                         'color': ThemeStyle["theme-color-red"],
@@ -60,7 +60,12 @@ const ControlPanel: React.FC<Props> = ({
                     }}
                     onClick={activeTrendOnChange.bind(this, value)}
                 >
-                    <span className={`avenir-bold ${isMobile ? 'font-size--3' : ''}`}>{label}</span>
+                    <span 
+                        className={`avenir-bold`}
+                        style={{
+                            'fontSize': '12px'
+                        }}
+                    >{label}</span>
                 </div>
             )
         })
@@ -71,7 +76,7 @@ const ControlPanel: React.FC<Props> = ({
         return (
             <div
                 style={{
-                    'width': '60px',
+                    'width': '40px',
                     'height': '100%',
                     'display': 'flex',
                     'alignItems': 'center',
@@ -99,6 +104,7 @@ const ControlPanel: React.FC<Props> = ({
                 'top': '10px',
                 'right': '10px',
                 'left': isMobile ? '10px' : 'unset',
+                'maxWidth': '400px',
                 'boxShadow': `0 0 10px 2px #B1A483`,
             }}
         >
@@ -106,7 +112,7 @@ const ControlPanel: React.FC<Props> = ({
                 style={{
                     'backgroundColor': ThemeStyle["theme-color-red"],
                     'color': ThemeStyle["theme-color-khaki-bright"],
-                    'height': isMobile ? 'auto' : '20px',
+                    // 'height': isMobile ? 'auto' : '20px',
                     'lineHeight': '20px',
                     'width': '100%',
                     'textAlign': 'center'
