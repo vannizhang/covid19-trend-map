@@ -4,6 +4,14 @@ object-assign
 @license MIT
 */
 
+/*!
+ * Calcite Web - Calcite Design Components in CSS, JS and HTML
+ * @version v1.2.5
+ * @license Apache-2.0
+ * @copyright 2018 Esri
+ * @link https://github.com/Esri/calcite-web
+ */
+
 /** @license React v0.19.1
  * scheduler.production.min.js
  *
