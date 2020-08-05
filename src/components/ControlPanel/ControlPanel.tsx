@@ -8,6 +8,7 @@ type Props = {
     isMobile?: boolean;
     activeTrend: Covid19TrendName;
     activeTrendOnChange: (val:Covid19TrendName)=>void;
+    infoBtnOnClick: ()=>void;
 }
 
 const SwitchBtnData: {
@@ -31,7 +32,8 @@ const SwitchBtnData: {
 const ControlPanel: React.FC<Props> = ({
     isMobile,
     activeTrend,
-    activeTrendOnChange
+    activeTrendOnChange,
+    infoBtnOnClick
 }) => {
     
     const getSwitchBtns = ()=>{
@@ -83,6 +85,7 @@ const ControlPanel: React.FC<Props> = ({
                     'justifyContent': 'center',
                     'cursor': 'pointer'
                 }}
+                onClick={infoBtnOnClick}
             >
                 <svg 
                     viewBox="0 0 24 24" 

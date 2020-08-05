@@ -13,6 +13,7 @@ import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer'; 
+import About from '../About/About';
 
 import {
     Covid19TrendName,
@@ -58,6 +59,8 @@ const App = () => {
     const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
 
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
+
+    const [ isAboutModalOpen, setIsAboutModalOpen ] = useState<boolean>(false);
 
     const fetchData = async()=>{
 
@@ -190,6 +193,7 @@ const App = () => {
                 isMobile={isMobile}
                 activeTrend={activeTrend}
                 activeTrendOnChange={setActiveTrend}
+                infoBtnOnClick={setIsAboutModalOpen.bind(this, true)}
             />
 
             {
@@ -213,7 +217,10 @@ const App = () => {
                 ) : null
             }
 
-
+            <About 
+                isOpen={isAboutModalOpen}
+                closeBtnOnClicked={setIsAboutModalOpen.bind(this, false)}
+            />
         </>
     )
 }

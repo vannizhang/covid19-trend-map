@@ -3,10 +3,10 @@
 ![screenshot](./screenshot.png)
 
 ### Weekly Cases
-These lines mark the weekly averages of each day’s rolling 7-day average of new cases, per 100,000 population. Useful for showing the local fluctuations of cases throughout the outbreak. When seen together regional patterns of spread emerge. The Y-axis of these charts are scaled to fit the maximum weekly increase when new cases are greater than 25 per 100,000. Please see the note on the Y-axis below for an explanation.
+These lines mark the weekly averages of new cases, per 100,000 population, per week—useful for showing the local fluctuations of cases throughout the outbreak. When seen together regional patterns emerge. The Y-axis of these charts are scaled to fit the maximum weekly increase when new cases are greater than 25 per 100,000. Please see the note on the Y-axis below for an explanation.
 
 ### Cases
-These lines track the ongoing cumulative number of cases, per 100,000 population. Because it is a cumulative count, the lines will never trend downward, though their rate of increase over time can provide an impression of the local history of the outbreak. An upward-bending line indicates a slow start and rapidly rising outbreak. A generally diagonal line indicates a consistent rate of transmission. An s-shaped line indicates a local “flattening of the curve” associated with a decrease in local cases. A stair-stepped line indicates multiple waves of transmission.
+These lines track the ongoing cumulative number of cases, per 100,000 population, per week. Because it is a cumulative count, the lines will never trend downward, though their rate of increase over time can provide an impression of the local history of the outbreak. An upward-bending line indicates a slow start and rapidly rising outbreak. A generally diagonal line indicates a consistent rate of transmission. An s-shaped line indicates a local “flattening of the curve” associated with a decrease in local cases. A stair-stepped line indicates multiple waves of transmission.
 
 ### Deaths
 These lines track the ongoing cumulative number of deaths, per 100,000 population. Interpretations of these lines is consistent with the description of cases, above. Given the incubation and illness period of the virus, this line will show a similar pattern, though with a lag, compared to cases.

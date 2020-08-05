@@ -1,0 +1,48 @@
+.modal-overlay{
+    background: rgba(177, 164, 131, 0.6);
+}
+
+.about-modal{
+    .modal-content {
+        position: relative;
+        background: rgb(239, 234, 219);
+        color: rgb(140, 126, 82);
+        font-size: .85rem;
+        padding: 2.5rem;
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+
+            svg {
+                // fill: rgb(140, 126, 82);
+                stroke: rgb(140, 126, 82);
+            } 
+        }
+
+        .header-red {
+            font-size: 16px;
+            color: rgb(159, 12, 32);
+            // font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .header-khaki {
+            font-size: 16px;
+            color: rgb(140, 126, 82);
+            // font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        h4 {
+            margin-bottom: .15rem;
+        }
+
+        a {
+            color: rgb(140, 126, 82);
+            font-weight: 700;
+        }
+    }
+}
