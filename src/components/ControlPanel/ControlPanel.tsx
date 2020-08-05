@@ -76,7 +76,7 @@ const ControlPanel: React.FC<Props> = ({
         return (
             <div
                 style={{
-                    'width': '40px',
+                    'width': '60px',
                     'height': '100%',
                     'display': 'flex',
                     'alignItems': 'center',
@@ -104,7 +104,7 @@ const ControlPanel: React.FC<Props> = ({
                 'top': '10px',
                 'right': '10px',
                 'left': isMobile ? '10px' : 'unset',
-                'maxWidth': '400px',
+                'maxWidth': '420px',
                 'boxShadow': `0 0 10px 2px #B1A483`,
             }}
         >
@@ -119,8 +119,8 @@ const ControlPanel: React.FC<Props> = ({
                 }}
             >
                 <span className='avenir-bold' style={{
-                    'fontSize': '0.785rem'
-                }}>CORONAVIRUS TRENDS PER 100,000 PEOPLE, SINCE FEBRUARY, UPDATED DAILY</span>
+                    'fontSize': '11px'
+                }}>COVID-19 TRENDS PER 100,000 PEOPLE, SINCE FEBRUARY, UPDATED DAILY</span>
             </div>
 
             <div
