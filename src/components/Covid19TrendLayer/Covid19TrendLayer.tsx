@@ -139,8 +139,8 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                                 {
                                     type: "CIMVectorMarker",
                                     enable: true,
-                                    scaleSymbolsProportionally: false,
-                                    respectFrame: false,
+                                    scaleSymbolsProportionally: true,
+                                    respectFrame: true,
                                     size,
                                     frame,
                                     markerGraphics: [{

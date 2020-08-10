@@ -1,6 +1,7 @@
 import React, {
     useEffect,
-    useState
+    useState,
+    useRef
 } from 'react'
 
 import { loadModules } from 'esri-loader';
@@ -33,6 +34,15 @@ const QueryTaskLayer:React.FC<Props> = ({
 
     const [ layer, setLayer ] = useState<IFeatureLayer>();
 
+    const mouseMoveDelay = useRef<number>();
+
+    const isLayerInVisibleRange = ()=>{
+        return ( 
+            mapView.scale < layer.minScale && 
+            mapView.scale > layer.maxScale
+        );
+    }
+
     const init = async()=>{
 
         type Modules = [
@@ -64,9 +74,10 @@ const QueryTaskLayer:React.FC<Props> = ({
     const queryFeatures = async(event:__esri.MapViewClickEvent)=>{
         // console.log(mapView.scale)
 
-        if( mapView.scale < layer.minScale && 
-            mapView.scale > layer.maxScale
-        ){
+        const isVisible = isLayerInVisibleRange();
+
+        if(isVisible){
+
             onStart();
 
             const results = await layer.queryFeatures({
@@ -90,6 +101,29 @@ const QueryTaskLayer:React.FC<Props> = ({
         if(layer && mapView){
             mapView.on("click", (event)=>{
                 queryFeatures(event);
+            });
+
+            mapView.on("pointer-move", (event)=>{
+
+                clearTimeout(mouseMoveDelay.current);
+
+                // mapView.toScreen(event.)
+                console.log(event.x, event.y)
+
+                if(isLayerInVisibleRange()){
+
+                    mouseMoveDelay.current = window.setTimeout(async()=>{
+                        const results = await layer.queryFeatures({
+                            where: '1=1',
+                            geometry: mapView.toMap(event),
+                            returnGeometry: false,
+                            outFields: outFields || ['*']
+                        });
+    
+                        console.log(results.features[0]);
+    
+                    }, 200);
+                }
             });
         }
     }, [layer])
