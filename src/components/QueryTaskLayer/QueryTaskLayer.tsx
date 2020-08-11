@@ -108,7 +108,7 @@ const QueryTaskLayer:React.FC<Props> = ({
                 clearTimeout(mouseMoveDelay.current);
 
                 // mapView.toScreen(event.)
-                console.log(event.x, event.y)
+                // console.log(event.x, event.y)
 
                 if(isLayerInVisibleRange()){
 

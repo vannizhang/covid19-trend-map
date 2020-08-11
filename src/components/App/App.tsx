@@ -5,15 +5,16 @@ import React, {
 
 import axios from 'axios';
 
+import About from '../About/About';
 import MapView from '../MapView/MapView';
-import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
-import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
-import ControlPanel from '../ControlPanel/ControlPanel';
 import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
+import ControlPanel from '../ControlPanel/ControlPanel';
+import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
+import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer'; 
-import About from '../About/About';
+import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
 
 import {
     Covid19TrendName,
@@ -61,6 +62,8 @@ const App = () => {
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
     const [ isAboutModalOpen, setIsAboutModalOpen ] = useState<boolean>(false);
+
+    const [ showTrendCategories, setShowTrendCategories ] = useState<boolean>(false);
 
     const fetchData = async()=>{
 
@@ -159,6 +162,8 @@ const App = () => {
                     features={covid19USCountiesData}
                     activeTrend={activeTrend}
                     size={20}
+                    hasTrendCategoriesAttribute={true}
+                    showTrendCategories={showTrendCategories}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
 
@@ -194,6 +199,13 @@ const App = () => {
                 activeTrend={activeTrend}
                 activeTrendOnChange={setActiveTrend}
                 infoBtnOnClick={setIsAboutModalOpen.bind(this, true)}
+            />
+
+            <TrendCategoriesToggle 
+                showTrendCategories={showTrendCategories}
+                onToggle={()=>{
+                    setShowTrendCategories(!showTrendCategories);
+                }}
             />
 
             {

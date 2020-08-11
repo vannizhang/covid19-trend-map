@@ -18,6 +18,8 @@ declare module 'covid19-trend-map' {
     
     type Covid19TrendName = 'confirmed' | 'death' | 'new-cases';
 
+    type COVID19TrendCategoryType = 'Emergent' | 'Spreading' | 'Epidemic' | 'Controlled' | 'End Stage' | 'Zero Cases';
+
     type PathData = {
         path: number[][];
         frame: {
@@ -50,6 +52,7 @@ declare module 'covid19-trend-map' {
     export {
         PathData,
         Covid19TrendName,
+        COVID19TrendCategoryType,
         Covid19TrendPaths,
         Covid19TrendData,
         Covid19CasesByTimeFeature,

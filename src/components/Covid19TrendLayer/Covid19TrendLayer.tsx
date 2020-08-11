@@ -23,7 +23,10 @@ import {
     Covid19TrendName,
     Covid19TrendData
 } from 'covid19-trend-map';
-import AppConfig from '../../AppConfig';
+
+import AppConfig, {
+    TrendColor
+} from '../../AppConfig';
 
 type Props = {
     activeTrend: Covid19TrendName;
@@ -31,7 +34,10 @@ type Props = {
     visibleScale?: {
         min: number;
         max: number;
-    }
+    },
+    // indicate if attributes contains 'trend category type' value from https://www.arcgis.com/home/item.html?id=49c25e0ce50340e08fcfe51fe6f26d1e#overview
+    hasTrendCategoriesAttribute?: boolean;
+    showTrendCategories?:boolean;
     // itemId?: string;
     // field?: string;
     mapView?:IMapView;
@@ -46,6 +52,8 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     features,
     visibleScale,
     size = 20,
+    hasTrendCategoriesAttribute = false,
+    showTrendCategories = false,
     mapView
 }) => {
 
@@ -108,6 +116,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
             const graphics = features.map(feature=>{
                 const {
+                    attributes,
                     geometry,
                     confirmed,
                     deaths,
@@ -126,6 +135,16 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                     frame,
                     path
                 } = pathData;
+
+                let color = [161, 13, 34, 255];
+
+                if( showTrendCategories && hasTrendCategoriesAttribute) {
+                    color = ( attributes && attributes.trendType ) 
+                        ? TrendColor[attributes.trendType] 
+                        : [200,200,200,255];
+                }
+
+                // console.log(color)
 
                 // Create the CIM symbol:
                 //  - set the size value
@@ -153,7 +172,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                                             symbolLayers: [{
                                                 type: "CIMSolidStroke",
                                                 width: 1,
-                                                color: [161, 13, 34, 255]
+                                                color
                                             }]
                                         }
                                     }]
@@ -197,7 +216,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                 draw(features);
             }
         }
-    }, [ trendLayer, features, activeTrend ]);
+    }, [ trendLayer, features, activeTrend, showTrendCategories ]);
 
     
     useEffect(()=>{
