@@ -4,6 +4,7 @@ import { COVID19TrendCategoryType } from 'covid19-trend-map'
 
 type Props = {
     showTrendCategories: boolean;
+    showNoDataAtStateLevelMessage: boolean;
     onToggle: ()=>void;
 }
 
@@ -50,6 +51,7 @@ const Height = '22px';
 
 const TrendCategoriesToggle:React.FC<Props> = ({
     showTrendCategories,
+    showNoDataAtStateLevelMessage,
     onToggle
 }) => {
 
@@ -90,8 +92,8 @@ const TrendCategoriesToggle:React.FC<Props> = ({
                 style={{
                     'display': 'flex',
                     'alignItems': 'center',
-                    'backgroundColor':  ThemeStyle["theme-color-khaki"],
-                    'padding': '0 .1rem',
+                    'backgroundColor':  ThemeStyle["theme-color-khaki-bright"],
+                    // 'padding': '0 .1rem',
                     'cursor': 'pointer'
                 }}
                 onClick={onToggle}
@@ -102,6 +104,23 @@ const TrendCategoriesToggle:React.FC<Props> = ({
     };
 
     const getTrendCategoriesLegend = ()=>{
+
+        if( showTrendCategories && showNoDataAtStateLevelMessage ){
+            return (
+                <div
+                    style={{
+                        'backgroundColor': ThemeStyle["theme-color-khaki-bright"],
+                        'color': ThemeStyle["theme-color-khaki-dark"],
+                        'width': '540px',
+                        'boxSizing': 'border-box',
+                        'border': `1px solid ${ThemeStyle["theme-color-khaki"]}`,
+                        'padding': '0 .25rem'
+                    }}
+                >
+                    <span className='avenir-demi'>Trend categories are available at the county level. Please zoom in.</span>
+                </div>
+            )
+        }
 
         const legends = LegendData.map(d=>{
 
@@ -117,7 +136,7 @@ const TrendCategoriesToggle:React.FC<Props> = ({
                         // 'padding': '.3rem .5rem',
                         'textAlign': 'center',
                         'textTransform': 'uppercase',
-                        'lineHeight': Height
+                        
                     }}
                     title={d.tooltip}
                 >
@@ -147,7 +166,7 @@ const TrendCategoriesToggle:React.FC<Props> = ({
                     'display': 'felx',
                     'alignItems': 'center',
                     'height': '100%',
-                    'lineHeight': Height
+                    // 'lineHeight': Height
                 }}
             >
                 <span className='avenir-demi'>SHOW TREND CATEGORIES</span>
@@ -163,7 +182,8 @@ const TrendCategoriesToggle:React.FC<Props> = ({
                 'right': '10px',
                 'height': Height,
                 'display': 'flex',
-                'fontSize': '12px'
+                'fontSize': '12px',
+                'lineHeight': Height
             }}
         >
             {

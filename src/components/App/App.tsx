@@ -65,6 +65,8 @@ const App = () => {
 
     const [ showTrendCategories, setShowTrendCategories ] = useState<boolean>(false);
 
+    const [ isStateLayerVisible, setIsStateLayerVisible ] = useState<boolean>(true);
+
     const fetchData = async()=>{
 
         try {
@@ -173,6 +175,9 @@ const App = () => {
                     activeTrend={activeTrend}
                     size={24}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
+                    isLayerInVisibleScaleOnChange={(isVisible)=>{
+                        setIsStateLayerVisible(isVisible);
+                    }}
                 />
 
                 <QueryTaskLayer 
@@ -203,6 +208,7 @@ const App = () => {
 
             <TrendCategoriesToggle 
                 showTrendCategories={showTrendCategories}
+                showNoDataAtStateLevelMessage={isStateLayerVisible}
                 onToggle={()=>{
                     setShowTrendCategories(!showTrendCategories);
                 }}
