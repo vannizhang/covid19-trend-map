@@ -23,6 +23,7 @@ import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggl
 import {
     Covid19TrendName,
     Covid19TrendData,
+    Covid19LatestNumbers,
     Covid19CasesByTimeFeature,
     QueryLocation4Covid19TrendData
 } from 'covid19-trend-map';
@@ -73,6 +74,8 @@ const App = () => {
 
     const [ tooltipPosition, setTooltipPosition ] = useState<TooltipPosition>();
     const [ tooltipData, setTooltipData ] = useState<TooltipData>();
+
+    const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
     
     const fetchData = async()=>{
 
@@ -81,6 +84,7 @@ const App = () => {
             const HostUrl = AppConfig["static-files-host"];
             const Url4CountiesJSON = HostUrl + AppConfig["covid19-data-us-counties-json"];
             const Url4StatesJSON = HostUrl + AppConfig["covid19-data-us-states-json"];
+            const Url4LatestNumbers = HostUrl + AppConfig["covid19-latest-numbers-json"];
 
             const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);
@@ -89,6 +93,9 @@ const App = () => {
             const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
             setCovid19USCountiesData(queryResUSCounties.data);
             // console.log(queryResUSCounties)
+
+            const latestNumbers = await axios.get<Covid19LatestNumbers>(Url4LatestNumbers);
+            setCovid19LatestNumbers(latestNumbers.data)
 
         } catch(err){
             console.error(err);
@@ -143,7 +150,27 @@ const App = () => {
         setIsLoading(false);
         setCovid19CasesByTimeQueryResults(undefined);
         setcovid19CasesByTimeQueryLocation(undefined);
-    }
+    };
+
+    // when pointer hove US Counties or State Polygons
+    const featureOnHoverHandler = (locationName:string, FIPS:string)=>{
+
+        let tooltipData:TooltipData;
+
+        if(locationName && FIPS){
+
+            const latestNumbers4SelectedFeature = covid19LatestNumbers[FIPS];
+
+            tooltipData = {
+                locationName,
+                confirmed: latestNumbers4SelectedFeature.Confirmed,
+                deaths: latestNumbers4SelectedFeature.Deaths,
+                weeklyNewCases: latestNumbers4SelectedFeature.NewCases
+            };
+        }
+
+        setTooltipData(tooltipData);
+    };
 
     useEffect(() => {
         fetchData();
@@ -199,16 +226,15 @@ const App = () => {
                     pointerOnMove={setTooltipPosition}
                     featureOnHover={(feature)=>{
 
-                        const tooltipData = feature 
-                            ? {
-                                locationName: `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`,
-                                confirmed: 0,
-                                deaths: 0,
-                                weeklyNewCases: 0
-                            } 
+                        const locationName = feature 
+                            ? `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}` 
                             : undefined;
 
-                        setTooltipData(tooltipData);
+                        const FIPS = feature 
+                            ? feature.attributes['FIPS'] 
+                            : undefined;
+
+                        featureOnHoverHandler(locationName, FIPS);
                     }}
                 />
 
@@ -221,16 +247,16 @@ const App = () => {
                     onSelect={stateOnSelect}
                     pointerOnMove={setTooltipPosition}
                     featureOnHover={(feature)=>{
-                        const tooltipData = feature 
-                        ? {
-                            locationName: feature.attributes['STATE_NAME'],
-                            confirmed: 0,
-                            deaths: 0,
-                            weeklyNewCases: 0
-                        }
-                        : undefined;
 
-                        setTooltipData(tooltipData);
+                        const locationName = feature 
+                            ? `${feature.attributes['STATE_NAME']}` 
+                            : undefined;
+
+                        const FIPS = feature 
+                            ? feature.attributes['STATE_FIPS'] 
+                            : undefined;
+
+                        featureOnHoverHandler(locationName, FIPS);
                     }}
                 />
             </MapView>

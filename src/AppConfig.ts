@@ -9,6 +9,7 @@ export default {
     'static-files-host': 'https://static.vannizhang.com/covid19/',
     'covid19-data-us-states-json': 'us-states-paths.json',
     'covid19-data-us-counties-json': 'us-counties-paths.json',
+    'covid19-latest-numbers-json': 'latest-numbers.json',
     'us-counties-layer-visible-scale': {
         'min': 7500000,
         'max': 0

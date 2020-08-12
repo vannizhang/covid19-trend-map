@@ -60,16 +60,28 @@ const SummaryInfoPanel:React.FC<Props> = ({
             return null
         }
 
-        const feature7DaysAgo = data[data.length - 7]
-        const latestFeature = data[data.length - 1];
+        // const feature7DaysAgo = data[data.length - 7]
+        const indexOfLatestFeature = data.length - 1;
+        const latestFeature = data[indexOfLatestFeature];
 
-        const cumulativeCases = numberFns.numberWithCommas(latestFeature.attributes.Confirmed);
-        const cumulativeDeaths = numberFns.numberWithCommas(latestFeature.attributes.Deaths);
+        const { dt, Confirmed, Deaths, Population } = latestFeature.attributes;
 
-        const newCasesThisWeek = numberFns.numberWithCommas(latestFeature.attributes.Confirmed - feature7DaysAgo.attributes.Confirmed);
-        const deathsThisWeek = numberFns.numberWithCommas(latestFeature.attributes.Deaths - feature7DaysAgo.attributes.Deaths);
+        const [ year, month, day ] = dt.split('-');
+        const date = new Date(+year, +month - 1, +day);
+    
+        const dayOfWeek = date.getDay();
+    
+        const featureOfLastSunday = dayOfWeek === 0 
+            ? data[ indexOfLatestFeature - 6 ]
+            : data[ indexOfLatestFeature - dayOfWeek ];
 
-        const population = numberFns.numberWithCommas(latestFeature.attributes.Population);
+        const cumulativeCases = numberFns.numberWithCommas(Confirmed);
+        const cumulativeDeaths = numberFns.numberWithCommas(Deaths);
+
+        const newCasesThisWeek = numberFns.numberWithCommas(Confirmed - featureOfLastSunday.attributes.Confirmed);
+        const deathsThisWeek = numberFns.numberWithCommas(Deaths - featureOfLastSunday.attributes.Deaths);
+
+        const population = numberFns.numberWithCommas(Population);
 
         const blockStyle:React.CSSProperties ={
             'padding': isMobile ? '0' : '0 .65rem',

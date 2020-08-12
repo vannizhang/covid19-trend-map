@@ -15,7 +15,7 @@ declare module 'covid19-trend-map' {
             Population: number;
         }
     };
-    
+
     type Covid19TrendName = 'confirmed' | 'death' | 'new-cases';
 
     type COVID19TrendCategoryType = 'Emergent' | 'Spreading' | 'Epidemic' | 'Controlled' | 'End Stage' | 'Zero Cases';
@@ -49,6 +49,17 @@ declare module 'covid19-trend-map' {
         locationName: string;
     }
 
+    type Covid19LatestNumbersFeature = {
+        Confirmed: number;
+        Deaths: number;
+        NewCases: number;
+        Population: number;
+    };
+
+    type Covid19LatestNumbers = {
+        [key: string]: Covid19LatestNumbersFeature
+    }
+
     export {
         PathData,
         Covid19TrendName,
@@ -56,6 +67,8 @@ declare module 'covid19-trend-map' {
         Covid19TrendPaths,
         Covid19TrendData,
         Covid19CasesByTimeFeature,
-        QueryLocation4Covid19TrendData
+        QueryLocation4Covid19TrendData,
+        Covid19LatestNumbersFeature,
+        Covid19LatestNumbers
     }
 }

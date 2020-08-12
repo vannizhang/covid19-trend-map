@@ -1,12 +1,11 @@
 import React,{
-    useRef,
-    useState,
-    useEffect
+    useRef
 } from 'react';
 import {
     useWindowSize,
 } from '@react-hook/window-size';
-import { ThemeStyle } from '../../AppConfig'
+import { ThemeStyle } from '../../AppConfig';
+import { numberFns } from'helper-toolkit-ts'
 
 export type TooltipPosition = {
     x: number;
@@ -96,17 +95,17 @@ const Tooltip:React.FC<Props> = ({
             
             <div className='text-theme-color-khaki avenir-demi font-size--2'>
                 <span>
-                    <span className='text-theme-color-red'>0</span> new cases this week
+                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
                 </span>
                 <br/>
 
                 <span>
-                    <span className='text-theme-color-red'>0</span> cumulative cases
+                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.confirmed)}</span> cumulative cases
                 </span>
                 <br/>
 
                 <span>
-                    <span className='text-theme-color-red'>0</span> deaths
+                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> deaths
                 </span>
 
             </div>
