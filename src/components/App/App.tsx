@@ -36,7 +36,7 @@ import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer';
 import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
 
 import {
-    Covid19TrendName,
+    // Covid19TrendName,
     Covid19TrendData,
     Covid19LatestNumbers,
     Covid19CasesByTimeFeature,
@@ -48,19 +48,8 @@ import IGraphic from 'esri/Graphic';
 import AppConfig from '../../AppConfig';
 
 import {
-    urlFns, miscFns
-} from 'helper-toolkit-ts';
-
-import {
     fetchCovid19Data
 } from '../../utils/queryCovid19Data';
-
-import useMapCenterLocationFromUrl from '../../hooks/useMapLocationFromUrl';
-
-const isMobile = miscFns.isMobileDevice();
-
-// const UrlSearchParams = urlFns.parseQuery();
-// const DefaultTrend:Covid19TrendName = UrlSearchParams.trend;
 
 const App = () => {
 
@@ -69,8 +58,6 @@ const App = () => {
     const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
     const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
     const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
-
-    const { locationFromURL, saveLocationInURL } = useMapCenterLocationFromUrl();
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
     // user can click map to select US State or County that will be used to query covid19 trend data
@@ -175,10 +162,6 @@ const App = () => {
     };
 
     useEffect(() => {
-        console.log('App is updating')
-    });
-
-    useEffect(() => {
         fetchData();
     }, []);
 
@@ -192,8 +175,6 @@ const App = () => {
         <>
             <MapView 
                 webmapId={AppConfig["webmap-id"]}
-                initialMapCenterLocation={locationFromURL}
-                onStationary={saveLocationInURL}
             >
                 <QueryTaskResultLayer 
                     queryResult={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.graphic : undefined}
@@ -271,9 +252,7 @@ const App = () => {
                 />
             </MapView>
 
-            <ControlPanel 
-                isMobile={isMobile}
-            />
+            <ControlPanel />
 
             <TrendCategoriesToggle/>
 
@@ -286,7 +265,6 @@ const App = () => {
                         <SummaryInfoPanel 
                             locationName={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.locationName : undefined }
                             data={covid19CasesByTimeQueryResults}
-                            isMobile={isMobile}
                             closeBtnOnClick={resetQueryResults}
                         />
 

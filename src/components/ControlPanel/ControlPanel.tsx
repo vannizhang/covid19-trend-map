@@ -10,14 +10,11 @@ import {
 } from 'react-redux';
 
 import {
+    isMobileSeletor,
     activeTrendSelector,
     activeTrendUpdated,
     isAboutModalOpenToggled
 } from '../../store/reducers/UI'
-
-type Props = {
-    isMobile?: boolean;
-}
 
 const SwitchBtnData: {
     label: string;
@@ -37,13 +34,12 @@ const SwitchBtnData: {
     }
 ];
 
-const ControlPanel: React.FC<Props> = ({
-    isMobile
-}) => {
+const ControlPanel = () => {
 
     const dispatch = useDispatch();
     const activeTrend = useSelector(activeTrendSelector);
-
+    const isMobile = useSelector(isMobileSeletor);
+    
     const getSwitchBtns = ()=>{
         return SwitchBtnData.map(d=>{
 

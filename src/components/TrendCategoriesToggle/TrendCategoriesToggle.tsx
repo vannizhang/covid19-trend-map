@@ -12,7 +12,8 @@ import {
 
 import {
     showTrendCategoriesSelector,
-    showTrendCategoriesToggled
+    showTrendCategoriesToggled,
+    isMobileSeletor
 } from '../../store/reducers/UI'
 
 const LegendData:{
@@ -61,6 +62,7 @@ const TrendCategoriesToggle= () => {
     const dispatch = useDispatch()
     const isStateLayerVisilbe = useSelector(isStateLayerVisilbeSelector);
     const showTrendCategories = useSelector(showTrendCategoriesSelector);
+    const isMobile = useSelector(isMobileSeletor);
 
     const getCheckbox = ()=>{
 
@@ -120,7 +122,7 @@ const TrendCategoriesToggle= () => {
                     style={{
                         'backgroundColor': ThemeStyle["theme-color-khaki-bright"],
                         'color': ThemeStyle["theme-color-khaki-dark"],
-                        'width': '540px',
+                        'width': isMobile ? 'auto' : '540px',
                         'boxSizing': 'border-box',
                         'border': `1px solid ${ThemeStyle["theme-color-khaki"]}`,
                         'padding': '0 .25rem'
@@ -157,7 +159,8 @@ const TrendCategoriesToggle= () => {
         return (
             <div
                 style={{
-                    'display': 'flex'
+                    'display': 'flex',
+                    'flexWrap': isMobile ? 'wrap' : 'nowrap',
                 }}
             >
                 { legends }
@@ -187,7 +190,7 @@ const TrendCategoriesToggle= () => {
         <div
             style={{
                 'position': 'absolute',
-                'top': '110px',
+                'top': isMobile ? '120px' : '110px',
                 'right': '10px',
                 'height': Height,
                 'display': 'flex',

@@ -7,22 +7,20 @@ import IMapView from 'esri/views/MapView';
 import IWebMap from "esri/WebMap";
 import IwatchUtils from 'esri/core/watchUtils';
 
-import {
+import useMapCenterLocationFromUrl, {
     MapCenterLocation
-} from '../../hooks/useMapLocationFromUrl'
+} from '../../hooks/useMapLocationFromUrl';
 
 interface Props {
     webmapId: string;
-    initialMapCenterLocation?: MapCenterLocation;
-    onStationary: (data:MapCenterLocation)=>void;
 };
 
 const MapView:React.FC<Props> = ({
     webmapId,
-    initialMapCenterLocation,
-    onStationary,
     children
 })=>{
+    
+    const { locationFromURL, saveLocationInURL } = useMapCenterLocationFromUrl();
 
     const mapDivRef = React.useRef<HTMLDivElement>();
 
@@ -41,7 +39,7 @@ const MapView:React.FC<Props> = ({
                 'esri/WebMap',
             ]) as Promise<Modules>);
 
-            const { lat, lon, zoom } = initialMapCenterLocation || {};
+            const { lat, lon, zoom } = locationFromURL || {};
 
             const center = lon && lat  ? [ lon, lat ] : undefined;
 
@@ -92,7 +90,7 @@ const MapView:React.FC<Props> = ({
                     zoom: mapView.zoom
                 }
 
-                onStationary(centerLocation);
+                saveLocationInURL(centerLocation);
             });
 
         } catch(err){   

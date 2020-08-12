@@ -1,5 +1,14 @@
-import React from 'react'
-import AppConfig, { ThemeStyle } from '../../AppConfig'
+import React from 'react';
+
+import {
+    useSelector
+} from 'react-redux';
+
+import {
+    isMobileSeletor
+} from '../../store/reducers/UI'
+
+import { ThemeStyle } from '../../AppConfig'
 import { Covid19CasesByTimeFeature } from 'covid19-trend-map';
 import { numberFns } from 'helper-toolkit-ts';
 import { parse, getISODay, format } from 'date-fns';
@@ -7,16 +16,16 @@ import { parse, getISODay, format } from 'date-fns';
 type Props = {
     locationName?: string;
     data: Covid19CasesByTimeFeature[];
-    isMobile?: boolean;
     closeBtnOnClick: ()=>void;
 };
 
 const SummaryInfoPanel:React.FC<Props> = ({
     locationName,
     data,
-    isMobile = false,
     closeBtnOnClick
 }) => {
+
+    const isMobile = useSelector(isMobileSeletor);
 
     const getBiggestWeeklyIncrease = ()=>{
 

@@ -11,7 +11,14 @@ import {
 } from '../configureStore';
 import { Covid19TrendName } from 'covid19-trend-map';
 
+import {
+    miscFns
+} from 'helper-toolkit-ts';
+
+const isMobile = miscFns.isMobileDevice();
+
 type UIState = {
+    isMobile: boolean;
     activeTrend: Covid19TrendName;
     isAboutModalOpen: boolean;
     isLoadingChartData: boolean;
@@ -31,6 +38,7 @@ type ActiveTrendUpdatedAction = {
 const slice = createSlice({
     name: 'map',
     initialState: {
+        isMobile,
         activeTrend: 'new-cases',
         isAboutModalOpen: false,
         // isLoadingChartData: false,
@@ -82,6 +90,11 @@ export const isAboutModalOpenSelector = createSelector(
 export const showTrendCategoriesSelector = createSelector(
     (state:RootState)=>state.UI.showTrendCategories,
     (showTrendCategories)=>showTrendCategories
+);
+
+export const isMobileSeletor = createSelector(
+    (state:RootState)=>state.UI.isMobile,
+    (isMobile)=>isMobile
 );
 
 export default reducer;
