@@ -1,6 +1,14 @@
 import React, {
     useState
-} from 'react'
+} from 'react';
+
+import {
+    useSelector
+} from 'react-redux';
+
+import {
+    activeTrendSelector
+} from '../../store/reducers/UI'
 
 import {
     Covid19TrendName,
@@ -21,7 +29,7 @@ import {
 import { ThemeStyle } from '../../AppConfig';
 
 type Props = {
-    activeTrend: Covid19TrendName;
+    // activeTrend: Covid19TrendName;
     data: Covid19CasesByTimeFeature[]
 }
 
@@ -38,9 +46,11 @@ export const FieldNameByActiveTrend:{ [ key in Covid19TrendName]: string } = {
 }
 
 const ChartPanel:React.FC<Props> = ({
-    activeTrend,
+    // activeTrend,
     data
 }) => {
+
+    const activeTrend = useSelector(activeTrendSelector);
 
     const fieldName = FieldNameByActiveTrend[activeTrend];
 

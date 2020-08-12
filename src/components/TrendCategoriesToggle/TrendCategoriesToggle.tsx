@@ -1,12 +1,19 @@
 import React from 'react'
-import { ThemeStyle, TrendColor } from '../../AppConfig'
-import { COVID19TrendCategoryType } from 'covid19-trend-map'
+import { ThemeStyle } from '../../AppConfig'
 
-type Props = {
-    showTrendCategories: boolean;
-    showNoDataAtStateLevelMessage: boolean;
-    onToggle: ()=>void;
-}
+import {
+    useSelector,
+    useDispatch
+} from 'react-redux';
+
+import {
+    isStateLayerVisilbeSelector
+} from '../../store/reducers/Map';
+
+import {
+    showTrendCategoriesSelector,
+    showTrendCategoriesToggled
+} from '../../store/reducers/UI'
 
 const LegendData:{
     value: string;
@@ -49,11 +56,11 @@ const LegendData:{
 
 const Height = '22px';
 
-const TrendCategoriesToggle:React.FC<Props> = ({
-    showTrendCategories,
-    showNoDataAtStateLevelMessage,
-    onToggle
-}) => {
+const TrendCategoriesToggle= () => {
+
+    const dispatch = useDispatch()
+    const isStateLayerVisilbe = useSelector(isStateLayerVisilbeSelector);
+    const showTrendCategories = useSelector(showTrendCategoriesSelector);
 
     const getCheckbox = ()=>{
 
@@ -96,7 +103,9 @@ const TrendCategoriesToggle:React.FC<Props> = ({
                     // 'padding': '0 .1rem',
                     'cursor': 'pointer'
                 }}
-                onClick={onToggle}
+                onClick={()=>{
+                    dispatch(showTrendCategoriesToggled())
+                }}
             >
                 { checkboxIcon }
             </div>
@@ -105,7 +114,7 @@ const TrendCategoriesToggle:React.FC<Props> = ({
 
     const getTrendCategoriesLegend = ()=>{
 
-        if( showTrendCategories && showNoDataAtStateLevelMessage ){
+        if( showTrendCategories && isStateLayerVisilbe ){
             return (
                 <div
                     style={{

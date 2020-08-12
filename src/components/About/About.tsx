@@ -4,17 +4,27 @@ import React, {
 } from 'react';
 import { modal, bus } from 'calcite-web/dist/js/calcite-web.min.js';
 
-type Props = {
-    isOpen?: boolean;
-    closeBtnOnClicked: ()=>void;
-}
+import {
+    useSelector,
+    useDispatch
+} from 'react-redux';
+
+import {
+    isAboutModalOpenSelector,
+    isAboutModalOpenToggled
+} from '../../store/reducers/UI';
 
 const ModalID = 'about';
 
-const About:React.FC<Props> = ({
-    isOpen,
-    closeBtnOnClicked
-}) => {
+const About:React.FC = () => {
+
+    const dispatch = useDispatch();
+
+    const isOpen = useSelector(isAboutModalOpenSelector);
+
+    const closeBtnOnClicked = ()=>{
+        dispatch(isAboutModalOpenToggled())
+    }
 
     useEffect(()=>{
         modal();

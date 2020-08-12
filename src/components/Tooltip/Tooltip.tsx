@@ -7,6 +7,15 @@ import {
 import { ThemeStyle } from '../../AppConfig';
 import { numberFns } from'helper-toolkit-ts'
 
+import {
+    useSelector
+} from 'react-redux';
+
+import {
+    tooltipDataSelector,
+    tooltipPositionSelector
+} from '../../store/reducers/Map'
+
 export type TooltipPosition = {
     x: number;
     y: number;
@@ -113,4 +122,17 @@ const Tooltip:React.FC<Props> = ({
     ) : null;
 }
 
-export default Tooltip
+const TooltipConatiner = ()=>{
+
+    const position = useSelector(tooltipPositionSelector);
+    const data = useSelector(tooltipDataSelector);
+
+    return (
+        <Tooltip 
+            position={position}
+            data={data}
+        />
+    )
+}
+
+export default TooltipConatiner;

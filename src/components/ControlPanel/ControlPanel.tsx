@@ -4,11 +4,19 @@ import {
     ThemeStyle
 } from '../../AppConfig';
 
+import {
+    useSelector,
+    useDispatch
+} from 'react-redux';
+
+import {
+    activeTrendSelector,
+    activeTrendUpdated,
+    isAboutModalOpenToggled
+} from '../../store/reducers/UI'
+
 type Props = {
     isMobile?: boolean;
-    activeTrend: Covid19TrendName;
-    activeTrendOnChange: (val:Covid19TrendName)=>void;
-    infoBtnOnClick: ()=>void;
 }
 
 const SwitchBtnData: {
@@ -30,12 +38,12 @@ const SwitchBtnData: {
 ];
 
 const ControlPanel: React.FC<Props> = ({
-    isMobile,
-    activeTrend,
-    activeTrendOnChange,
-    infoBtnOnClick
+    isMobile
 }) => {
-    
+
+    const dispatch = useDispatch();
+    const activeTrend = useSelector(activeTrendSelector);
+
     const getSwitchBtns = ()=>{
         return SwitchBtnData.map(d=>{
 
@@ -60,7 +68,9 @@ const ControlPanel: React.FC<Props> = ({
                         'borderRight': `solid 1px #E0D8C1`,
                         'cursor': 'pointer'
                     }}
-                    onClick={activeTrendOnChange.bind(this, value)}
+                    onClick={()=>{
+                        dispatch(activeTrendUpdated(value));
+                    }}
                 >
                     <span 
                         className={`avenir-bold`}
@@ -85,7 +95,9 @@ const ControlPanel: React.FC<Props> = ({
                     'justifyContent': 'center',
                     'cursor': 'pointer'
                 }}
-                onClick={infoBtnOnClick}
+                onClick={()=>{
+                    dispatch(isAboutModalOpenToggled())
+                }}
             >
                 <svg 
                     viewBox="0 0 24 24" 

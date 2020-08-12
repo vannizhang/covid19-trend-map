@@ -58,8 +58,10 @@
   },
   "dependencies": {
     "@react-hook/window-size": "^3.0.7",
+    "@reduxjs/toolkit": "^1.4.0",
     "@rehooks/window-size": "^1.0.2",
     "@types/d3": "^5.7.2",
+    "@types/react-redux": "^7.1.9",
     "axios": "^0.19.2",
     "calcite-web": "github:Esri/calcite-web#v1.2.5",
     "classnames": "^2.2.6",
@@ -69,6 +71,8 @@
     "helper-toolkit-ts": "^1.1.11",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
+    "redux": "^4.0.5",
     "shortid": "^2.2.15",
     "styled-components": "^5.1.0"
   }

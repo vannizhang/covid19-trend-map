@@ -3,12 +3,27 @@ import React, {
     useState
 } from 'react';
 
+import {
+    useDispatch
+} from 'react-redux';
+
 import axios from 'axios';
+
+import {
+    tooltipDataChanged,
+    tooltipPositionChanged,
+    isStateLayerVisilbeToggled
+} from '../../store/reducers/Map';
+
+import {
+    activeTrendUpdated,
+    isAboutModalOpenToggled,
+    showTrendCategoriesToggled
+} from '../../store/reducers/UI';
 
 import About from '../About/About';
 import MapView from '../MapView/MapView';
 import Tooltip, {
-    TooltipPosition, 
     TooltipData
 } from '../Tooltip/Tooltip';
 import ChartPanel from '../ChartPanel/ChartPanel';
@@ -44,39 +59,24 @@ import useMapCenterLocationFromUrl from '../../hooks/useMapLocationFromUrl';
 
 const isMobile = miscFns.isMobileDevice();
 
-const UrlSearchParams = urlFns.parseQuery();
-// console.log(UrlSearchParams.trend)
-
-const DefaultTrend:Covid19TrendName = UrlSearchParams.trend;
+// const UrlSearchParams = urlFns.parseQuery();
+// const DefaultTrend:Covid19TrendName = UrlSearchParams.trend;
 
 const App = () => {
 
-    const { locationFromURL, saveLocationInURL } = useMapCenterLocationFromUrl();
-
-    const [ activeTrend, setActiveTrend ] = useState<Covid19TrendName>(DefaultTrend || 'new-cases');
+    const dispatch = useDispatch();
 
     const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
-
     const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
+    const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
+
+    const { locationFromURL, saveLocationInURL } = useMapCenterLocationFromUrl();
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
-
     // user can click map to select US State or County that will be used to query covid19 trend data
     const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
-
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
-    const [ isAboutModalOpen, setIsAboutModalOpen ] = useState<boolean>(false);
-
-    const [ showTrendCategories, setShowTrendCategories ] = useState<boolean>(false);
-
-    const [ isStateLayerVisible, setIsStateLayerVisible ] = useState<boolean>(true);
-
-    const [ tooltipPosition, setTooltipPosition ] = useState<TooltipPosition>();
-    const [ tooltipData, setTooltipData ] = useState<TooltipData>();
-
-    const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
-    
     const fetchData = async()=>{
 
         try {
@@ -169,8 +169,14 @@ const App = () => {
             };
         }
 
-        setTooltipData(tooltipData);
+        // setTooltipData(tooltipData);
+
+        dispatch(tooltipDataChanged(tooltipData))
     };
+
+    useEffect(() => {
+        console.log('App is updating')
+    });
 
     useEffect(() => {
         fetchData();
@@ -196,23 +202,23 @@ const App = () => {
                 <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
-                    activeTrend={activeTrend}
                     size={20}
                     hasTrendCategoriesAttribute={true}
-                    showTrendCategories={showTrendCategories}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
 
                 <Covid19TrendLayer 
                     key='US-States'
                     features={covid19USStatesData}
-                    activeTrend={activeTrend}
                     size={24}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     isLayerInVisibleScaleOnChange={(isVisible)=>{
-                        setIsStateLayerVisible(isVisible);
+                        // setIsStateLayerVisible(isVisible);
+                        dispatch(isStateLayerVisilbeToggled(isVisible))
+
                         // hide tooltip to prevent showing the data from different layer which is no longer visible
-                        setTooltipData(undefined);
+                        // setTooltipData(undefined);
+                        dispatch(tooltipDataChanged(undefined))
                     }}
                 />
 
@@ -223,7 +229,9 @@ const App = () => {
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
                     onSelect={countyOnSelect}
-                    pointerOnMove={setTooltipPosition}
+                    pointerOnMove={(position)=>{
+                        dispatch(tooltipPositionChanged(position))
+                    }}
                     featureOnHover={(feature)=>{
 
                         const locationName = feature 
@@ -245,7 +253,9 @@ const App = () => {
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
                     onSelect={stateOnSelect}
-                    pointerOnMove={setTooltipPosition}
+                    pointerOnMove={(position)=>{
+                        dispatch(tooltipPositionChanged(position))
+                    }}
                     featureOnHover={(feature)=>{
 
                         const locationName = feature 
@@ -263,18 +273,9 @@ const App = () => {
 
             <ControlPanel 
                 isMobile={isMobile}
-                activeTrend={activeTrend}
-                activeTrendOnChange={setActiveTrend}
-                infoBtnOnClick={setIsAboutModalOpen.bind(this, true)}
             />
 
-            <TrendCategoriesToggle 
-                showTrendCategories={showTrendCategories}
-                showNoDataAtStateLevelMessage={isStateLayerVisible}
-                onToggle={()=>{
-                    setShowTrendCategories(!showTrendCategories);
-                }}
-            />
+            <TrendCategoriesToggle/>
 
             {
                 covid19CasesByTimeQueryResults || isLoading ? (
@@ -290,22 +291,15 @@ const App = () => {
                         />
 
                         <ChartPanel 
-                            activeTrend={activeTrend}
                             data={covid19CasesByTimeQueryResults}
                         />
                     </BottomPanel>
                 ) : null
             }
 
-            <Tooltip 
-                position={tooltipPosition}
-                data={tooltipData}
-            />
+            <Tooltip/>
 
-            <About 
-                isOpen={isAboutModalOpen}
-                closeBtnOnClicked={setIsAboutModalOpen.bind(this, false)}
-            />
+            <About/>
         </>
     )
 }

@@ -3,6 +3,16 @@ import React, {
     useState
 } from 'react';
 
+import {
+    useSelector
+} from 'react-redux';
+
+import {
+    showTrendCategoriesSelector,
+    activeTrendSelector
+} from '../../store/reducers/UI'
+
+
 import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import ICIMSymbol from 'esri/symbols/CIMSymbol';
@@ -24,12 +34,12 @@ import {
     Covid19TrendData
 } from 'covid19-trend-map';
 
-import AppConfig, {
+import {
     TrendColor
 } from '../../AppConfig';
 
 type Props = {
-    activeTrend: Covid19TrendName;
+    // activeTrend: Covid19TrendName;
     size?: number;
     visibleScale?: {
         min: number;
@@ -37,7 +47,6 @@ type Props = {
     },
     // indicate if attributes contains 'trend category type' value from https://www.arcgis.com/home/item.html?id=49c25e0ce50340e08fcfe51fe6f26d1e#overview
     hasTrendCategoriesAttribute?: boolean;
-    showTrendCategories?:boolean;
     // itemId?: string;
     // field?: string;
     mapView?:IMapView;
@@ -50,17 +59,19 @@ type Covid19TrendLayerProps = {
 } & Props;
 
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
-    activeTrend,
+    // activeTrend,
     features,
     visibleScale,
     size = 20,
     hasTrendCategoriesAttribute = false,
-    showTrendCategories = false,
     mapView,
 
     isLayerInVisibleScaleOnChange
 }) => {
 
+    const activeTrend = useSelector(activeTrendSelector);
+    const showTrendCategories = useSelector(showTrendCategoriesSelector);
+    
     const [ trendLayer, setTrendLayer ] = useState<IGraphicsLayer>();
 
     const [ isLayerInVisibleScale, setIsLayerInVisibleScale ] = useState<boolean>(false);
