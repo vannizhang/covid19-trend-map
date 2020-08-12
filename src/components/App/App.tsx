@@ -197,8 +197,7 @@ const App = () => {
                     onSelect={countyOnSelect}
                     pointerOnMove={setTooltipPosition}
                     featureOnHover={(feature)=>{
-                        console.log(feature.attributes);
-
+                        
                         const tooltipData = feature 
                             ? {
                                 locationName: `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`,

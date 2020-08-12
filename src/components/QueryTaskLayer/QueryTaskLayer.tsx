@@ -10,6 +10,7 @@ import IMapView from 'esri/views/MapView';
 import IFeatureLayer from 'esri/layers/FeatureLayer';
 // import IPoint from 'esri/geometry/Point';
 import IGraphic from 'esri/Graphic';
+import IFeatureLayerView from 'esri/views/layers/FeatureLayerView';
 import { TooltipPosition } from '../Tooltip/Tooltip';
 
 type Props = {
@@ -38,14 +39,14 @@ const QueryTaskLayer:React.FC<Props> = ({
     featureOnHover
 }) => {
 
-    const [ layer, setLayer ] = useState<IFeatureLayer>();
-
+    const layerRef = useRef<IFeatureLayer>();
+    const layerViewRef = useRef<IFeatureLayerView>();
     const mouseMoveDelay = useRef<number>();
 
     const isLayerInVisibleRange = ()=>{
         return ( 
-            mapView.scale < layer.minScale && 
-            mapView.scale > layer.maxScale
+            mapView.scale < layerRef.current.minScale && 
+            mapView.scale > layerRef.current.maxScale
         );
     }
 
@@ -67,10 +68,23 @@ const QueryTaskLayer:React.FC<Props> = ({
                     id: itemId
                 },
                 minScale: visibleScale && visibleScale.min,
-                maxScale: visibleScale && visibleScale.max
+                maxScale: visibleScale && visibleScale.max,
+                visible: true,
+                popupEnabled: false,
+                outFields,
+                opacity: 0
             });
 
-            setLayer(layer);
+            mapView.map.add(layer);
+
+            mapView.whenLayerView(layer).then(layerView=>{
+                // console.log(layerView)
+
+                layerRef.current = layer;
+                layerViewRef.current = layerView;
+
+                initEventListeners();
+            })
 
         } catch(err){
             console.error(err);
@@ -86,7 +100,7 @@ const QueryTaskLayer:React.FC<Props> = ({
 
             onStart();
 
-            const results = await layer.queryFeatures({
+            const results = await layerViewRef.current.queryFeatures({
                 where: '1=1',
                 geometry: mapView.toMap(event),
                 returnGeometry: true,
@@ -97,50 +111,51 @@ const QueryTaskLayer:React.FC<Props> = ({
         }
     }
 
+    const initEventListeners = ()=>{
+
+        mapView.on("click", (event)=>{
+            queryFeatures(event);
+        });
+
+        mapView.on("pointer-leave", ()=>{
+            pointerOnMove(undefined);
+        })
+
+        mapView.on("pointer-move", (event)=>{
+
+            clearTimeout(mouseMoveDelay.current);
+
+            // mapView.toScreen(event.)
+            // console.log(event.x, event.y)
+
+            if(isLayerInVisibleRange()){
+
+                const { x, y } = event;
+
+                pointerOnMove({ x, y });
+
+                mouseMoveDelay.current = window.setTimeout(async()=>{
+
+                    const results = await layerViewRef.current.queryFeatures({
+                        where: '1=1',
+                        geometry: mapView.toMap(event),
+                        returnGeometry: false,
+                        outFields: outFields || ['*']
+                    });
+                    // console.log(results)
+
+                    featureOnHover(results.features[0]);
+
+                }, 50);
+            }
+        });
+    }
+
     useEffect(() => {
         if(mapView){
             init();
         }
     }, [mapView]);
-
-    useEffect(() => {
-        if(layer && mapView){
-            mapView.on("click", (event)=>{
-                queryFeatures(event);
-            });
-
-            mapView.on("pointer-leave", ()=>{
-                pointerOnMove(undefined);
-            })
-
-            mapView.on("pointer-move", (event)=>{
-
-                clearTimeout(mouseMoveDelay.current);
-
-                // mapView.toScreen(event.)
-                // console.log(event.x, event.y)
-
-                if(isLayerInVisibleRange()){
-
-                    const { x, y } = event;
-
-                    pointerOnMove({ x, y });
-
-                    mouseMoveDelay.current = window.setTimeout(async()=>{
-                        const results = await layer.queryFeatures({
-                            where: '1=1',
-                            geometry: mapView.toMap(event),
-                            returnGeometry: false,
-                            outFields: outFields || ['*']
-                        });
-    
-                        featureOnHover(results.features[0]);
-    
-                    }, 200);
-                }
-            });
-        }
-    }, [layer])
 
     return null;
 }
