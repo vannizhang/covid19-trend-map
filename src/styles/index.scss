@@ -1,7 +1,8 @@
 @import '~calcite-web/dist/css/calcite-web.min.css';
 
-body {
+html, body {
 	background-color: #E8E2D2;
+	overflow: hidden;
 }
 
 $theme-color-red: #A10D22;

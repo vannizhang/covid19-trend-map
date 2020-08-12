@@ -7,6 +7,10 @@ import axios from 'axios';
 
 import About from '../About/About';
 import MapView from '../MapView/MapView';
+import Tooltip, {
+    TooltipPosition, 
+    TooltipData
+} from '../Tooltip/Tooltip';
 import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
@@ -66,6 +70,10 @@ const App = () => {
     const [ showTrendCategories, setShowTrendCategories ] = useState<boolean>(false);
 
     const [ isStateLayerVisible, setIsStateLayerVisible ] = useState<boolean>(true);
+
+    const [ tooltipPosition, setTooltipPosition ] = useState<TooltipPosition>();
+    const [ tooltipData, setTooltipData ] = useState<TooltipData>();
+    
 
     const fetchData = async()=>{
 
@@ -187,15 +195,43 @@ const App = () => {
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
                     onSelect={countyOnSelect}
+                    pointerOnMove={setTooltipPosition}
+                    featureOnHover={(feature)=>{
+                        console.log(feature.attributes);
+
+                        const tooltipData = feature 
+                            ? {
+                                locationName: `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`,
+                                confirmed: 0,
+                                deaths: 0,
+                                weeklyNewCases: 0
+                            } 
+                            : undefined;
+
+                        setTooltipData(tooltipData);
+                    }}
                 />
 
                 <QueryTaskLayer 
                     key='query-4-US-States'
                     itemId={AppConfig["us-states-feature-layer-item-id"]}
-                    outFields={['STATE_NAME']}
+                    outFields={['STATE_NAME', 'STATE_FIPS']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
                     onSelect={stateOnSelect}
+                    pointerOnMove={setTooltipPosition}
+                    featureOnHover={(feature)=>{
+                        const tooltipData = feature 
+                        ? {
+                            locationName: feature.attributes['STATE_NAME'],
+                            confirmed: 0,
+                            deaths: 0,
+                            weeklyNewCases: 0
+                        }
+                        : undefined;
+
+                        setTooltipData(tooltipData);
+                    }}
                 />
             </MapView>
 
@@ -234,6 +270,11 @@ const App = () => {
                     </BottomPanel>
                 ) : null
             }
+
+            <Tooltip 
+                position={tooltipPosition}
+                data={tooltipData}
+            />
 
             <About 
                 isOpen={isAboutModalOpen}

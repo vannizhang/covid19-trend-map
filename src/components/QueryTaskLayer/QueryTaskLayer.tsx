@@ -10,6 +10,7 @@ import IMapView from 'esri/views/MapView';
 import IFeatureLayer from 'esri/layers/FeatureLayer';
 // import IPoint from 'esri/geometry/Point';
 import IGraphic from 'esri/Graphic';
+import { TooltipPosition } from '../Tooltip/Tooltip';
 
 type Props = {
     itemId: string;
@@ -21,6 +22,9 @@ type Props = {
     }
     onStart: ()=>void;
     onSelect: (feature:IGraphic)=>void;
+
+    pointerOnMove: (position: TooltipPosition)=>void;
+    featureOnHover: (feature: IGraphic)=>void;
 }
 
 const QueryTaskLayer:React.FC<Props> = ({
@@ -29,7 +33,9 @@ const QueryTaskLayer:React.FC<Props> = ({
     mapView,
     visibleScale,
     onStart,
-    onSelect
+    onSelect,
+    pointerOnMove,
+    featureOnHover
 }) => {
 
     const [ layer, setLayer ] = useState<IFeatureLayer>();
@@ -103,6 +109,10 @@ const QueryTaskLayer:React.FC<Props> = ({
                 queryFeatures(event);
             });
 
+            mapView.on("pointer-leave", ()=>{
+                pointerOnMove(undefined);
+            })
+
             mapView.on("pointer-move", (event)=>{
 
                 clearTimeout(mouseMoveDelay.current);
@@ -112,6 +122,10 @@ const QueryTaskLayer:React.FC<Props> = ({
 
                 if(isLayerInVisibleRange()){
 
+                    const { x, y } = event;
+
+                    pointerOnMove({ x, y });
+
                     mouseMoveDelay.current = window.setTimeout(async()=>{
                         const results = await layer.queryFeatures({
                             where: '1=1',
@@ -120,7 +134,7 @@ const QueryTaskLayer:React.FC<Props> = ({
                             outFields: outFields || ['*']
                         });
     
-                        console.log(results.features[0]);
+                        featureOnHover(results.features[0]);
     
                     }, 200);
                 }
