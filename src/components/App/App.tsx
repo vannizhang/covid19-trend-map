@@ -74,7 +74,6 @@ const App = () => {
     const [ tooltipPosition, setTooltipPosition ] = useState<TooltipPosition>();
     const [ tooltipData, setTooltipData ] = useState<TooltipData>();
     
-
     const fetchData = async()=>{
 
         try {
@@ -185,6 +184,8 @@ const App = () => {
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     isLayerInVisibleScaleOnChange={(isVisible)=>{
                         setIsStateLayerVisible(isVisible);
+                        // hide tooltip to prevent showing the data from different layer which is no longer visible
+                        setTooltipData(undefined);
                     }}
                 />
 
@@ -197,7 +198,7 @@ const App = () => {
                     onSelect={countyOnSelect}
                     pointerOnMove={setTooltipPosition}
                     featureOnHover={(feature)=>{
-                        
+
                         const tooltipData = feature 
                             ? {
                                 locationName: `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`,
