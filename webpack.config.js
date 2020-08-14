@@ -94,9 +94,9 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
-            new HtmlWebpackPlugin({
-                template: './src/ycabon-demo.html',
-                filename: 'ycabon-demo.html',
+             new HtmlWebpackPlugin({
+                template: './src/debug-fixed-ymax.html',
+                filename: 'newcases-fixed-ymax.html',
                 chunks: [],
                 minify: {
                     html5                          : true,
