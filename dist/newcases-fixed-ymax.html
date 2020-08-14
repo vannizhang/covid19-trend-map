@@ -1,0 +1,254 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"><title>Fixed Y-Max</title><style>#viewDiv,body,html{padding:0;margin:0;height:100%;width:100%}</style><link rel="stylesheet" href="https://js.arcgis.com/4.16/esri/themes/light/main.css"><script src="https://js.arcgis.com/4.16/"></script><script>require([
+        "esri/WebMap", 
+        "esri/views/MapView",
+        'esri/Graphic',
+        'esri/symbols/CIMSymbol',
+        'esri/request'
+      ],  (WebMap, MapView, Graphic, CIMSymbol, esriRequest)=>{
+
+        (async()=>{
+
+            const geomLookup = {};
+
+            const map = new WebMap({
+                portalItem: {
+                    // autocasts as new PortalItem()
+                    id: "1bff921ddf7044c3b5ba34e8494a2073"
+                }
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map
+            });
+            
+            const USCountiesCentroidsRes = await esriRequest('https://raw.githubusercontent.com/vannizhang/useful-resources/master/data/US-County-Centroids.json?token=AAX7IHGMZUQNHRRIBDTMJYS7IA2WQ', {
+                responseType: "json"
+            });
+
+            USCountiesCentroidsRes.data.features.forEach(f=>{
+                const { FIPS } = f.attributes;
+                geomLookup[FIPS] = f.geometry;
+            });
+            
+            const USCountiesDataRes = await esriRequest('https://static.vannizhang.com/covid19/us-counties.json', {
+                responseType: "json"
+            });
+
+            const graphics = USCountiesDataRes.data
+            // .filter(d=>d.attributes.STATE === 'Alabama')
+            .map(d=>{
+
+                const { FIPS } = d.attributes;
+
+                const coords = geomLookup[FIPS];
+
+                const { newCases } = d;
+                const maxNewCases = newCases.reduce((prev, curr) => Math.max(prev, curr), Number.NEGATIVE_INFINITY);
+
+                const ymax = 200;
+                const xmax = 50;
+                const xRatio = xmax / newCases.length;
+
+                const path = newCases.map((val, index)=>{
+
+                    const x = Math.round(xRatio * index);
+                    const y = val <= 200 ? val : 200;
+
+                    return [x, y]
+                });
+
+                // console.log(paths)
+
+                const cimSymbol = new CIMSymbol({
+                    data: {
+                        type: 'CIMSymbolReference',
+                        symbol: {
+                            type: "CIMPointSymbol",
+                            symbolLayers: [
+                                {
+                                    type: "CIMVectorMarker",
+                                    anchorPoint: {
+                                        x: -0.5,
+                                        y: -0.5
+                                    },
+                                    anchorPointUnits: "Relative",
+                                    enable: true,
+                                    scaleSymbolsProportionally: false,
+                                    // respectFrame: true,
+                                    size: 100,
+                                    frame: {
+                                        xmin: 0,
+                                        ymin: 0,
+                                        xmax,
+                                        ymax
+                                    },
+                                    markerGraphics: [{
+                                        type: "CIMMarkerGraphic",
+                                        geometry: {
+                                            paths: [path]
+                                        },
+                                        symbol: {
+                                            type: "CIMLineSymbol",
+                                            symbolLayers: [{
+                                                type: "CIMSolidStroke",
+                                                width: maxNewCases > 150 ? 1 : 1,
+                                                color: [255,0,0,200]
+                                            }]
+                                        }
+                                    }]
+                                }
+                            ]
+                        }
+                    }
+                });
+
+                return new Graphic({
+                    geometry:         {
+                        type: "point", // autocasts as new Point()
+                        longitude: coords ? coords.x : 0,
+                        latitude: coords ? coords.y : 0
+                    },
+                    symbol: cimSymbol
+                });
+            });
+
+            view.graphics.addMany(graphics);
+
+
+
+        })();
+
+
+        
+        // var coloradoCenter = {
+        //   type: "point", // autocasts as new Point()
+        //   longitude: -105.54,
+        //   latitude: 39
+        // };
+        
+        // var cimSymbolA = new CIMSymbol({
+        //     data: {
+        //         type: 'CIMSymbolReference',
+        //         symbol: {
+        //             type: "CIMPointSymbol",
+        //             symbolLayers: [
+        //                 {
+        //                     type: "CIMVectorMarker",
+        //                     anchorPoint: {
+        //                         x: -0.5,
+        //                         y: -0.5
+        //                     },
+        //                     anchorPointUnits: "Relative",
+        //                     enable: true,
+        //                     scaleSymbolsProportionally: false,
+        //                     // respectFrame: true,
+        //                     size: 100,
+        //                     frame: {
+        //                         xmin: 0,
+        //                         ymin: 0,
+        //                         xmax: 40,
+        //                         ymax: 100
+        //                     },
+        //                     markerGraphics: [{
+        //                         type: "CIMMarkerGraphic",
+        //                         geometry: {
+        //                             paths: [
+        //                                 [
+        //                                     [0, 0],
+        //                                     [5, 80],
+        //                                     [10, 90],
+        //                                     [15, 100],
+        //                                     [20, 80],
+        //                                     [25, 90]
+        //                                 ]
+        //                             ]
+        //                         },
+        //                         symbol: {
+        //                             type: "CIMLineSymbol",
+        //                             symbolLayers: [{
+        //                                 type: "CIMSolidStroke",
+        //                                 width: 2,
+        //                                 color: [255,0,0,255]
+        //                             }]
+        //                         }
+        //                     }]
+        //                 }
+        //             ]
+        //         }
+        //     }
+        // });
+        
+        // var californiaCenter = {
+        //   type: "point", // autocasts as new Point()
+        //   longitude: -119.449,
+        //   latitude: 37.1661
+        // };
+        
+        
+        // var cimSymbolB = new CIMSymbol({
+        //     data: {
+        //         type: 'CIMSymbolReference',
+        //         symbol: {
+        //             type: "CIMPointSymbol",
+        //             symbolLayers: [
+        //                 {
+        //                     type: "CIMVectorMarker",
+        //                     anchorPoint: {
+        //                         x: -0.5,
+        //                         y: -0.5
+        //                     },
+        //                     anchorPointUnits: "Relative",
+        //                     enable: true,
+        //                     scaleSymbolsProportionally: false,
+        //                     // respectFrame: true,
+        //                     size: 100,
+        //                     frame: {
+        //                         xmin: 0,
+        //                         ymin: 0,
+        //                         xmax: 40,
+        //                         ymax: 200
+        //                     },
+        //                     markerGraphics: [{
+        //                         type: "CIMMarkerGraphic",
+        //                         geometry: {
+        //                             paths: [
+        //                                 [
+        //                                     [0, 0],
+        //                                     [5, 7],
+        //                                     [10, 18],
+        //                                     [15, 12],
+        //                                     [20, 22],
+        //                                     [25, 9]
+        //                                 ]
+        //                             ]
+        //                         },
+        //                         symbol: {
+        //                             type: "CIMLineSymbol",
+        //                             symbolLayers: [{
+        //                                 type: "CIMSolidStroke",
+        //                                 width: 1,
+        //                                 color: [255,0,0,255]
+        //                             }]
+        //                         }
+        //                     }]
+        //                 }
+        //             ]
+        //         }
+        //     }
+        // });
+        
+        
+        // var pointGraphicColorado = new Graphic({
+        //     geometry: coloradoCenter,
+        //     symbol: cimSymbolA
+        // });
+        
+        // var pointGraphicCalifornia = new Graphic({
+        //     geometry: californiaCenter,
+        //     symbol: cimSymbolB
+        // });
+        
+        // view.graphics.addMany([pointGraphicColorado, pointGraphicCalifornia]);
+        
+      });</script><div id="viewDiv"></div>
