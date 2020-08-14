@@ -51,44 +51,24 @@ import {
     fetchCovid19Data
 } from '../../utils/queryCovid19Data';
 
-const App = () => {
+type Props = {
+    covid19USCountiesData: Covid19TrendData[];
+    covid19USStatesData: Covid19TrendData[];
+    covid19LatestNumbers: Covid19LatestNumbers
+}
+
+const App:React.FC<Props> = ({
+    covid19USCountiesData,
+    covid19USStatesData,
+    covid19LatestNumbers
+}) => {
 
     const dispatch = useDispatch();
-
-    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
-    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
-    const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
     // user can click map to select US State or County that will be used to query covid19 trend data
     const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
-
-    const fetchData = async()=>{
-
-        try {
-
-            const HostUrl = AppConfig["static-files-host"];
-            const Url4CountiesJSON = HostUrl + AppConfig["covid19-data-us-counties-json"];
-            const Url4StatesJSON = HostUrl + AppConfig["covid19-data-us-states-json"];
-            const Url4LatestNumbers = HostUrl + AppConfig["covid19-latest-numbers-json"];
-
-            const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
-            setCovid19USStatesData(queryResUSStates.data);
-            // console.log(queryResUSStates)
-
-            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
-            setCovid19USCountiesData(queryResUSCounties.data);
-            // console.log(queryResUSCounties)
-
-            const latestNumbers = await axios.get<Covid19LatestNumbers>(Url4LatestNumbers);
-            setCovid19LatestNumbers(latestNumbers.data)
-
-        } catch(err){
-            console.error(err);
-        }
-
-    };
 
     const countyOnSelect = async(countyFeature:IGraphic)=>{
 
@@ -157,14 +137,8 @@ const App = () => {
             };
         }
 
-        // setTooltipData(tooltipData);
-
         dispatch(tooltipDataChanged(tooltipData))
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     useEffect(() => {
         if(covid19CasesByTimeQueryResults){
@@ -283,4 +257,50 @@ const App = () => {
     )
 }
 
-export default App
+const AppContainer = ()=>{
+
+    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
+    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
+    const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
+
+    const fetchData = async()=>{
+
+        try {
+
+            const HostUrl = AppConfig["static-files-host"];
+            const Url4CountiesJSON = HostUrl + AppConfig["covid19-data-us-counties-json"];
+            const Url4StatesJSON = HostUrl + AppConfig["covid19-data-us-states-json"];
+            const Url4LatestNumbers = HostUrl + AppConfig["covid19-latest-numbers-json"];
+
+            const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
+            setCovid19USStatesData(queryResUSStates.data);
+            // console.log(queryResUSStates)
+
+            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
+            setCovid19USCountiesData(queryResUSCounties.data);
+            // console.log(queryResUSCounties)
+
+            const latestNumbers = await axios.get<Covid19LatestNumbers>(Url4LatestNumbers);
+            setCovid19LatestNumbers(latestNumbers.data)
+
+        } catch(err){
+            console.error(err);
+        }
+
+    };
+
+    useEffect(()=>{
+        fetchData()
+    }, []);
+
+    return covid19USCountiesData && covid19USStatesData && covid19LatestNumbers ? (
+        <App
+            covid19USCountiesData={covid19USCountiesData}
+            covid19USStatesData={covid19USStatesData}
+            covid19LatestNumbers={covid19LatestNumbers}
+        />
+    ) : null;
+};
+
+
+export default AppContainer

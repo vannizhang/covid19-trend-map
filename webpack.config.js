@@ -113,8 +113,8 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
-            !devMode ? new CleanWebpackPlugin() : false,
-            !devMode ? new BundleAnalyzerPlugin() : false
+            !devMode ? new CleanWebpackPlugin() : false
+            // !devMode ? new BundleAnalyzerPlugin() : false
         ].filter(Boolean),
         optimization: {
             splitChunks: {
