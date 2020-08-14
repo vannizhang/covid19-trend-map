@@ -54,6 +54,7 @@ declare module 'covid19-trend-map' {
         Deaths: number;
         NewCases: number;
         Population: number;
+        TrendType: COVID19TrendCategoryType;
     };
 
     type Covid19LatestNumbers = {

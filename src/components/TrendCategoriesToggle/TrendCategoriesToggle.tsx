@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeStyle } from '../../AppConfig'
+import { ThemeStyle, TrendColor } from '../../AppConfig'
 
 import {
     useSelector,
@@ -141,7 +141,7 @@ const TrendCategoriesToggle= () => {
                     style={{
                         'display': 'felx',
                         'alignItems': 'center',
-                        'backgroundColor': d.color,
+                        'backgroundColor': TrendColor[d.value].hex,
                         'width': '90px',
                         'color': '#fff',
                         // 'padding': '.3rem .5rem',

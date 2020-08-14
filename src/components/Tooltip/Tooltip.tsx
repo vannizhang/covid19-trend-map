@@ -4,7 +4,7 @@ import React,{
 import {
     useWindowSize,
 } from '@react-hook/window-size';
-import { ThemeStyle } from '../../AppConfig';
+import { ThemeStyle, TrendColor } from '../../AppConfig';
 import { numberFns } from'helper-toolkit-ts'
 
 import {
@@ -15,6 +15,7 @@ import {
     tooltipDataSelector,
     tooltipPositionSelector
 } from '../../store/reducers/Map'
+import { COVID19TrendCategoryType } from 'covid19-trend-map';
 
 export type TooltipPosition = {
     x: number;
@@ -26,6 +27,7 @@ export type TooltipData = {
     confirmed: number;
     deaths: number;
     weeklyNewCases: number;
+    trendCategory?: COVID19TrendCategoryType;
 }
 
 type Props = {
@@ -81,6 +83,23 @@ const Tooltip:React.FC<Props> = ({
         return position.y + PositionOffset;
     };
 
+    const getTrendType = ()=>{
+        if(!data || !data.trendCategory){
+            return null;
+        }
+
+        return (
+            <div className='trailer-quarter'>
+                <span>
+                    <span className='text-theme-color-red avenir-demi font-size--1' style={{
+                        'textTransform': 'uppercase',
+                        'color': TrendColor[data.trendCategory].hex
+                    }}>{ data.trendCategory}</span> trend
+                </span>
+            </div>
+        )
+    }
+
     return data ? (
         <div
             ref={containerRef}
@@ -90,7 +109,7 @@ const Tooltip:React.FC<Props> = ({
                 'left': getXPosition() + 'px',
                 // 'height': TooltipHeight + 'px',
                 // 'width': TooltipWidth + 'px',
-                'padding': '7px 15px',
+                
                 'background': ThemeStyle["theme-color-khaki-bright"],
                 'pointerEvents': 'none',
                 'boxSizing': 'border-box',
@@ -98,11 +117,21 @@ const Tooltip:React.FC<Props> = ({
                 'zIndex': 5
             }}
         >
-            <div>
+            <div
+                style={{
+                    'padding': '5px 15px',
+                    'backgroundColor': '#E8E2D2',
+                    'textTransform': 'uppercase'
+                }}
+            >
                 <span className='text-theme-color-red avenir-demi font-size--1'>{ data.locationName }</span>
             </div>
             
-            <div className='text-theme-color-khaki avenir-demi font-size--2'>
+            <div className='text-theme-color-khaki avenir-demi font-size--2'
+                style={{
+                    'padding': '5px 15px',
+                }}
+            >
                 <span>
                     <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
                 </span>
@@ -117,6 +146,9 @@ const Tooltip:React.FC<Props> = ({
                     <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> deaths
                 </span>
 
+                {
+                    getTrendType()
+                }
             </div>
         </div>
     ) : null;

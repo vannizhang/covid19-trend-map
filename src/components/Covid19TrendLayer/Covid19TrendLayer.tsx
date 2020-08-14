@@ -155,7 +155,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
                 if( showTrendCategories && hasTrendCategoriesAttribute) {
                     color = ( attributes && attributes.trendType ) 
-                        ? TrendColor[attributes.trendType] 
+                        ? TrendColor[attributes.trendType].values
                         : [200,200,200,255];
                 }
 

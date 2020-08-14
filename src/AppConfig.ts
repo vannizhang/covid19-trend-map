@@ -28,11 +28,32 @@ export const ThemeStyle = {
     'theme-color-khaki-dark': '#B2A584'
 };
 
-export const TrendColor: Record<COVID19TrendCategoryType, number[]> = {
-    'Emergent': [212,158,198,255], //'#D49EC6',
-    'Spreading': [165,51,110,255], //'#A5336E',
-    'Epidemic': [128,11,76,255], //'#800B4C',
-    'Controlled': [147,195,195,255], //'#93C3C3',
-    'End Stage': [91,160,168,255], //'#5BA0A8', 
-    'Zero Cases': [100,100,100,255]
+export const TrendColor: Record<COVID19TrendCategoryType, {
+    values: number[],
+    hex: string
+}> = {
+    'Emergent': {
+        values: [212,158,198,255],
+        hex: '#D49EC6'
+    }, //'#D49EC6',
+    'Spreading': { 
+        values: [165,51,110,255], 
+        hex: '#A5336E'
+    }, // [165,51,110,255], //'#A5336E',
+    'Epidemic': { 
+        values: [128,11,76,255], 
+        hex: '#800B4C'
+    }, // [128,11,76,255], //'#800B4C',
+    'Controlled': { 
+        values: [147,195,195,255], 
+        hex: '#93C3C3'
+    }, // [147,195,195,255], //'#93C3C3',
+    'End Stage': { 
+        values: [91,160,168,255],
+        hex: '#5BA0A8'
+    }, // [91,160,168,255], //'#5BA0A8', 
+    'Zero Cases': { 
+        values: [100,100,100,255], 
+        hex: '#c8c8c8'
+    }, // [100,100,100,255]
 };

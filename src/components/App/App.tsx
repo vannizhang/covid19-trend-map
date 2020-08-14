@@ -152,7 +152,8 @@ const App = () => {
                 locationName,
                 confirmed: latestNumbers4SelectedFeature.Confirmed,
                 deaths: latestNumbers4SelectedFeature.Deaths,
-                weeklyNewCases: latestNumbers4SelectedFeature.NewCases
+                weeklyNewCases: latestNumbers4SelectedFeature.NewCases,
+                trendCategory: latestNumbers4SelectedFeature.TrendType
             };
         }
 
