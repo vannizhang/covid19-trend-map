@@ -46,8 +46,8 @@
                 const { newCases } = d;
                 const maxNewCases = newCases.reduce((prev, curr) => Math.max(prev, curr), Number.NEGATIVE_INFINITY);
 
-                const ymax = 200;
-                const xmax = 50;
+                const ymax = 200.00;
+                const xmax = 80.00;
                 const xRatio = xmax / newCases.length;
 
                 const path = newCases.map((val, index)=>{
@@ -76,7 +76,7 @@
                                     enable: true,
                                     scaleSymbolsProportionally: false,
                                     // respectFrame: true,
-                                    size: 100,
+                                    size: 60,
                                     frame: {
                                         xmin: 0,
                                         ymin: 0,
@@ -92,7 +92,7 @@
                                             type: "CIMLineSymbol",
                                             symbolLayers: [{
                                                 type: "CIMSolidStroke",
-                                                width: maxNewCases > 120 ? 2 : 1,
+                                                width: 1, //maxNewCases > 120 ? 2 : 1,
                                                 color: [255,0,0,200]
                                             }]
                                         }
