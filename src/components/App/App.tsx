@@ -79,7 +79,7 @@ const App:React.FC<Props> = ({
 
         setcovid19CasesByTimeQueryLocation({
             graphic: countyFeature,
-            locationName:  `${countyFeature.attributes['NAME']} CO, ${countyFeature.attributes['STATE_NAME']}`
+            locationName:  `${countyFeature.attributes['NAME']}, ${countyFeature.attributes['STATE_NAME']}`
         });
 
         const data = await fetchCovid19Data({

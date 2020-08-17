@@ -42,7 +42,7 @@ const slice = createSlice({
         activeTrend: 'new-cases',
         isAboutModalOpen: false,
         // isLoadingChartData: false,
-        showTrendCategories: false
+        showTrendCategories: true
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action:ActiveTrendUpdatedAction)=>{
