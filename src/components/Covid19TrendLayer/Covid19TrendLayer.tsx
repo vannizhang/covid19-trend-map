@@ -159,7 +159,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                         : [200,200,200,255];
                 }
 
-                const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 2 : 1;
+                const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
 
                 // console.log(color)
 
@@ -174,13 +174,13 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                             symbolLayers: [
                                 {
                                     type: "CIMVectorMarker",
-                                    // anchorPoint: {
-                                    //     x: -.5,
-                                    //     y: -.5
-                                    // },
-                                    // anchorPointUnits: "Relative",
+                                    anchorPoint: {
+                                        x: -.5,
+                                        y: -.5
+                                    },
+                                    anchorPointUnits: "Relative",
                                     enable: true,
-                                    scaleSymbolsProportionally: true,
+                                    scaleSymbolsProportionally: false,
                                     respectFrame: true,
                                     size,
                                     frame,
@@ -193,7 +193,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                                             type: "CIMLineSymbol",
                                             symbolLayers: [{
                                                 type: "CIMSolidStroke",
-                                                width: strokeWidth,
+                                                width: 1,
                                                 color
                                             }]
                                         }

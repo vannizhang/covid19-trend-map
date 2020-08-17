@@ -43,17 +43,21 @@
 
                 const coords = geomLookup[FIPS];
 
-                const { newCases } = d;
-                const maxNewCases = newCases.reduce((prev, curr) => Math.max(prev, curr), Number.NEGATIVE_INFINITY);
+                const { newCases, confirmed, deaths } = d;
+                // const maxNewCases = newCases.reduce((prev, curr) => Math.max(prev, curr), Number.NEGATIVE_INFINITY);
 
-                const ymax = 200.00;
-                const xmax = 80.00;
-                const xRatio = xmax / newCases.length;
+                // YMax for New Cases: 200
+                // YMax for Confirmed: 4000
+                // width/height ratio: .4
 
-                const path = newCases.map((val, index)=>{
+                const ymax = 6043.00;
+                const xmax = ymax * 0.4;
+                const xRatio = xmax / confirmed.length;
+
+                const path = confirmed.map((val, index)=>{
 
                     const x = Math.round(xRatio * index);
-                    const y = val <= 200 ? val : 200;
+                    const y = val <= ymax ? val : ymax;
 
                     return [x, y]
                 });

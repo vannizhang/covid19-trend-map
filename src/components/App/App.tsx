@@ -158,7 +158,7 @@ const App:React.FC<Props> = ({
                 <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
-                    size={20}
+                    size={70}
                     hasTrendCategoriesAttribute={true}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
@@ -166,7 +166,7 @@ const App:React.FC<Props> = ({
                 <Covid19TrendLayer 
                     key='US-States'
                     features={covid19USStatesData}
-                    size={24}
+                    size={70}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     isLayerInVisibleScaleOnChange={(isVisible)=>{
                         // setIsStateLayerVisible(isVisible);
