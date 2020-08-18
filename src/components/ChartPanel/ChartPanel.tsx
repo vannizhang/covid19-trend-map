@@ -52,7 +52,7 @@ const ChartPanel:React.FC<Props> = ({
 
     const activeTrend = useSelector(activeTrendSelector);
 
-    const fieldName = FieldNameByActiveTrend[activeTrend];
+    const fieldNameByActiveTrend = FieldNameByActiveTrend[activeTrend];
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
     const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
@@ -64,7 +64,7 @@ const ChartPanel:React.FC<Props> = ({
         return xDomain
     };
 
-    const getYDomain = ()=>{
+    const getYDomain = (fieldName:string)=>{
         const values = data.map(d=>{
             return showNormalizedValues 
                 ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000 )
@@ -75,31 +75,26 @@ const ChartPanel:React.FC<Props> = ({
         return yDomain;
     }
 
-    const getDataForBars = ():ChartDataItem[] =>{
+    const getChartData = (fieldName:string, showMovingAve?:boolean):ChartDataItem[] =>{
         if(!data || !data.length){
             return [];
         }
 
-        return data.map(d=>{
+        if(!showMovingAve){
+            return data.map(d=>{
 
-            const y = showNormalizedValues
-                ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000)
-                : d.attributes[fieldName] 
-
-            return {
-                x: d.attributes.dt, 
-                y
-            }
-        });
-    };
-
-    const getDataForLine = ():ChartDataItem[] =>{
-        
-        if(!data || !data.length || activeTrend !== 'new-cases'){
-            return [];
+                const y = showNormalizedValues
+                    ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000)
+                    : d.attributes[fieldName] 
+    
+                return {
+                    x: d.attributes.dt, 
+                    y
+                }
+            });
         }
 
-        const values:ChartDataItem[]  = [];
+        let values:ChartDataItem[]  = [];
 
         for(let i = data.length - 1; i > 0; i--){
 
@@ -133,30 +128,85 @@ const ChartPanel:React.FC<Props> = ({
         }
 
         return values;
-    }
+    };
 
-    const getContent = ()=>{
+    // const getDataForLine = (fieldName:string, showMovingAve?:boolean):ChartDataItem[] =>{
+        
+    //     if(!data || !data.length || activeTrend !== 'new-cases'){
+    //         return [];
+    //     }
+
+    //     if(!showMovingAve){
+            
+    //     }
+
+    //     let values:ChartDataItem[]  = [];
+
+    //     for(let i = data.length - 1; i > 0; i--){
+
+    //         const feature = data[i];
+            
+    //         const x = feature.attributes.dt;
+
+    //         let sum = 0;
+    //         const startIndex = i - 6 >= 0 ? i - 6 : 0;
+    //         const endIndex = i + 1;
+
+    //         const featuresInPastWeek = data
+    //             .slice(startIndex, endIndex);
+
+    //         featuresInPastWeek.forEach(d=>sum += d.attributes[fieldName]);
+
+    //         let y = (sum / featuresInPastWeek.length);
+
+    //         if(showNormalizedValues){
+    //             y = ( y / feature.attributes.Population * 100000)
+    //         }
+
+    //         y = Math.round(y);
+
+    //         y = y < 0 ? 0 : y;
+
+    //         values.push({
+    //             x,
+    //             y
+    //         })
+    //     }
+
+    //     return values;
+    // }
+
+    const getContent = (chartType:Covid19TrendName)=>{
 
         if(!data || !data.length){
             return null;
         }
 
+        const fieldName = FieldNameByActiveTrend[chartType];
+
+        const shouldLineShowMovingAve =  chartType === 'new-cases';
+
         return (
             <SvgContainer
+                key={chartType}
                 xDomain={getXDomain()}
-                yDomain={getYDomain()}
+                yDomain={getYDomain(fieldName)}
             >
 
                 <Axis />
 
-                <Bar 
-                    fillColor={ThemeStyle["theme-color-khaki-dark"]}
-                    data={getDataForBars()}
-                />
+                {
+                    chartType === 'new-cases' ? (
+                        <Bar 
+                            fillColor={ThemeStyle["theme-color-khaki-dark"]}
+                            data={getChartData(fieldName)}
+                        />
+                    ) : <></>
+                }
 
                 <Line 
                     strokeColor={ThemeStyle["theme-color-red"]}
-                    data={getDataForLine()}
+                    data={getChartData(fieldName, shouldLineShowMovingAve)}
                 />
 
                 <Tooltip 
@@ -177,11 +227,18 @@ const ChartPanel:React.FC<Props> = ({
             style={{
                 'width': '100%',
                 'height': '170px',
-                'backgroundColor': ThemeStyle["theme-color-khaki-bright"]
+                'backgroundColor': ThemeStyle["theme-color-khaki-bright"],
+                'display': 'flex',
+                'boxSizing': 'border-box',
+                'padding': '0 1rem'
             }}
         >
 
-            { getContent() }
+            { getContent('new-cases') }
+
+            { getContent('confirmed') }
+
+            { getContent('death') }
         </div>
     
     )
