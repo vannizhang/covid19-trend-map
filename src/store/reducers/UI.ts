@@ -6,8 +6,8 @@ import {
 
 import {
     RootState,
-    // StoreDispatch,
-    // StoreGetState
+    StoreDispatch,
+    StoreGetState
 } from '../configureStore';
 import { Covid19TrendName } from 'covid19-trend-map';
 
@@ -16,6 +16,7 @@ import {
 } from 'helper-toolkit-ts';
 
 const isMobile = miscFns.isMobileDevice();
+const NarrowScreenBreakPoint = 1020;
 
 type UIState = {
     isMobile: boolean;
@@ -23,6 +24,7 @@ type UIState = {
     isAboutModalOpen: boolean;
     isLoadingChartData: boolean;
     showTrendCategories: boolean;
+    isNarrowSreen: boolean;
 }
 
 type ActiveTrendUpdatedAction = {
@@ -30,10 +32,10 @@ type ActiveTrendUpdatedAction = {
     payload: Covid19TrendName;
 }
 
-// type BooleanPropToggledAction = {
-//     type: string;
-//     payload: boolean;
-// }
+type BooleanPropChangedAction = {
+    type: string;
+    payload: boolean;
+}
 
 const slice = createSlice({
     name: 'map',
@@ -42,7 +44,8 @@ const slice = createSlice({
         activeTrend: 'new-cases',
         isAboutModalOpen: false,
         // isLoadingChartData: false,
-        showTrendCategories: true
+        showTrendCategories: true,
+        isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action:ActiveTrendUpdatedAction)=>{
@@ -51,12 +54,12 @@ const slice = createSlice({
         isAboutModalOpenToggled: (state)=>{
             state.isAboutModalOpen = !state.isAboutModalOpen;
         }, 
-        // isLoadingChartDataToggled: (state)=>{
-        //     state.isLoadingChartData = !state.isLoadingChartData;
-        // }, 
         showTrendCategoriesToggled: (state)=>{
             state.showTrendCategories = !state.showTrendCategories;
         }, 
+        isNarrowSreenChanged:(state, action:BooleanPropChangedAction)=>{
+            state.isNarrowSreen = action.payload
+        }
     }
 });
 
@@ -67,9 +70,13 @@ const {
 export const {
     activeTrendUpdated,
     isAboutModalOpenToggled,
-    // isLoadingChartDataToggled,
+    isNarrowSreenChanged,
     showTrendCategoriesToggled
 } = slice.actions;
+
+export const updateIsNarrowSreen = (windowOuterWidth:number)=> async(dispatch:StoreDispatch, getState:StoreGetState)=>{
+    dispatch(isNarrowSreenChanged(windowOuterWidth <= NarrowScreenBreakPoint));
+};
 
 // selectors
 export const activeTrendSelector = createSelector(
@@ -95,6 +102,11 @@ export const showTrendCategoriesSelector = createSelector(
 export const isMobileSeletor = createSelector(
     (state:RootState)=>state.UI.isMobile,
     (isMobile)=>isMobile
+);
+
+export const isNarrowSreenSeletor = createSelector(
+    (state:RootState)=>state.UI.isNarrowSreen,
+    (isNarrowSreen)=>isNarrowSreen
 );
 
 export default reducer;

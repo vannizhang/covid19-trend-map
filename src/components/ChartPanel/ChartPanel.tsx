@@ -7,7 +7,9 @@ import {
 } from 'react-redux';
 
 import {
-    activeTrendSelector
+    activeTrendSelector,
+    isMobileSeletor,
+    isNarrowSreenSeletor
 } from '../../store/reducers/UI'
 
 import {
@@ -21,6 +23,7 @@ import Bar from './Bars';
 import Line from './Line';
 import MouseEventsRect from './MouseEventsRect';
 import Tooltip from './Tooltip';
+import Title from './Title';
 
 import {
     max
@@ -45,6 +48,13 @@ export const FieldNameByActiveTrend:{ [ key in Covid19TrendName]: string } = {
     'confirmed': 'Confirmed'
 }
 
+type TooltipData = {
+    data: Covid19CasesByTimeFeature;
+    parentChart: Covid19TrendName;
+};
+
+const NarrowScreenBreakPoint = 1020;
+
 const ChartPanel:React.FC<Props> = ({
     // activeTrend,
     data
@@ -52,12 +62,16 @@ const ChartPanel:React.FC<Props> = ({
 
     const activeTrend = useSelector(activeTrendSelector);
 
-    const fieldNameByActiveTrend = FieldNameByActiveTrend[activeTrend];
+    const isMobile = useSelector(isMobileSeletor);
+
+    const isNarrowScreen = useSelector(isNarrowSreenSeletor);
+
+    // const fieldNameByActiveTrend = FieldNameByActiveTrend[activeTrend];
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
     const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
 
-    const [ itemOnHover, setItemOnHover ] = useState<Covid19CasesByTimeFeature>();
+    const [ itemOnHover, setItemOnHover ] = useState<TooltipData>();
 
     const getXDomain = ()=>{
         const xDomain = data.map(d=>d.attributes.dt);
@@ -130,55 +144,17 @@ const ChartPanel:React.FC<Props> = ({
         return values;
     };
 
-    // const getDataForLine = (fieldName:string, showMovingAve?:boolean):ChartDataItem[] =>{
-        
-    //     if(!data || !data.length || activeTrend !== 'new-cases'){
-    //         return [];
-    //     }
-
-    //     if(!showMovingAve){
-            
-    //     }
-
-    //     let values:ChartDataItem[]  = [];
-
-    //     for(let i = data.length - 1; i > 0; i--){
-
-    //         const feature = data[i];
-            
-    //         const x = feature.attributes.dt;
-
-    //         let sum = 0;
-    //         const startIndex = i - 6 >= 0 ? i - 6 : 0;
-    //         const endIndex = i + 1;
-
-    //         const featuresInPastWeek = data
-    //             .slice(startIndex, endIndex);
-
-    //         featuresInPastWeek.forEach(d=>sum += d.attributes[fieldName]);
-
-    //         let y = (sum / featuresInPastWeek.length);
-
-    //         if(showNormalizedValues){
-    //             y = ( y / feature.attributes.Population * 100000)
-    //         }
-
-    //         y = Math.round(y);
-
-    //         y = y < 0 ? 0 : y;
-
-    //         values.push({
-    //             x,
-    //             y
-    //         })
-    //     }
-
-    //     return values;
-    // }
-
-    const getContent = (chartType:Covid19TrendName)=>{
+    const getChart = (chartType:Covid19TrendName)=>{
 
         if(!data || !data.length){
+            return null;
+        }
+
+        const onlyShowChartForActiveTrend = isMobile || isNarrowScreen;
+
+        const isShowingData4ActiveTrend = chartType === activeTrend;
+
+        if( onlyShowChartForActiveTrend && !isShowingData4ActiveTrend){
             return null;
         }
 
@@ -195,6 +171,10 @@ const ChartPanel:React.FC<Props> = ({
 
                 <Axis />
 
+                <Title 
+                    chartType={chartType}
+                />
+
                 {
                     chartType === 'new-cases' ? (
                         <Bar 
@@ -209,13 +189,26 @@ const ChartPanel:React.FC<Props> = ({
                     data={getChartData(fieldName, shouldLineShowMovingAve)}
                 />
 
-                <Tooltip 
-                    data={itemOnHover}
-                />
+                {
+                    itemOnHover && itemOnHover.parentChart === chartType ? (
+                        <Tooltip 
+                            data={itemOnHover.data}
+                        />
+                    ) : <></>
+                }
 
                 <MouseEventsRect 
                     data={data}
-                    onHover={setItemOnHover}
+                    onHover={(data)=>{
+                        if(!data){
+                            setItemOnHover(undefined)
+                        }
+
+                        setItemOnHover({
+                            data,
+                            parentChart: chartType
+                        })
+                    }}
                 />
 
             </SvgContainer>
@@ -234,11 +227,11 @@ const ChartPanel:React.FC<Props> = ({
             }}
         >
 
-            { getContent('new-cases') }
+            { getChart('new-cases') }
 
-            { getContent('confirmed') }
+            { getChart('confirmed') }
 
-            { getContent('death') }
+            { getChart('death') }
         </div>
     
     )

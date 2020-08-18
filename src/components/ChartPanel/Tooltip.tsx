@@ -52,7 +52,7 @@ const Tooltip:React.FC<Props> = ({
         const tooltipDivWidth = tooltipDiv.offsetWidth;
         const tooltipDivHeight = tooltipDiv.offsetHeight;
 
-        const top = -((tooltipDivHeight / 2 ) - margin.top);
+        const top = -(tooltipDivHeight - margin.top);
         const xPosForItemOnHover = x(data.attributes.dt) + margin.left;
 
         let left = ( xPosForItemOnHover + (tooltipDivWidth / 2) ) >= (width + margin.left) 

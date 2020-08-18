@@ -16,9 +16,7 @@ import {
 } from '../../store/reducers/Map';
 
 import {
-    activeTrendUpdated,
-    isAboutModalOpenToggled,
-    showTrendCategoriesToggled
+    updateIsNarrowSreen
 } from '../../store/reducers/UI';
 
 import About from '../About/About';
@@ -51,6 +49,8 @@ import {
     fetchCovid19Data
 } from '../../utils/queryCovid19Data';
 
+import useWindowSize from '@rehooks/window-size';
+
 type Props = {
     covid19USCountiesData: Covid19TrendData[];
     covid19USStatesData: Covid19TrendData[];
@@ -64,6 +64,7 @@ const App:React.FC<Props> = ({
 }) => {
 
     const dispatch = useDispatch();
+    const windowSize = useWindowSize();
 
     const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
     // user can click map to select US State or County that will be used to query covid19 trend data
@@ -146,6 +147,11 @@ const App:React.FC<Props> = ({
             setIsLoading(false);
         }
     }, [covid19CasesByTimeQueryResults]);
+
+    React.useEffect(()=>{
+    //    console.log(windowSize.outerWidth)
+        dispatch(updateIsNarrowSreen(windowSize.outerWidth) );
+    }, [ windowSize ]);
 
     return (
         <>

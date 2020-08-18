@@ -11,7 +11,7 @@ import {
 
 import useWindowSize from '@rehooks/window-size';
 
-const margin = {
+export const margin = {
     top: 15, 
     right: 10, 
     bottom: 30, 
@@ -171,15 +171,16 @@ const SvgContainer:React.FC<Props> = ({
                     'width': '100%',
                     'height': '100%'
                 }}
-            ></div>
-            {   
-                React.Children.map(children, (child)=>{
-                    return React.cloneElement(child as React.ReactElement<any>, {
-                        svgContainerData,
-                        scales
-                    });
-                })  
-            }
+            >
+                {   
+                    React.Children.map(children, (child)=>{
+                        return React.cloneElement(child as React.ReactElement<any>, {
+                            svgContainerData,
+                            scales
+                        });
+                    })  
+                }
+            </div>
         </>
     );
 }
