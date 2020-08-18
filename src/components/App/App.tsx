@@ -133,6 +133,7 @@ const App:React.FC<Props> = ({
                 confirmed: latestNumbers4SelectedFeature.Confirmed,
                 deaths: latestNumbers4SelectedFeature.Deaths,
                 weeklyNewCases: latestNumbers4SelectedFeature.NewCases,
+                population: latestNumbers4SelectedFeature.Population,
                 trendCategory: latestNumbers4SelectedFeature.TrendType
             };
         }
@@ -158,7 +159,7 @@ const App:React.FC<Props> = ({
                 <Covid19TrendLayer 
                     key='US-Counties'
                     features={covid19USCountiesData}
-                    size={70}
+                    size={60}
                     hasTrendCategoriesAttribute={true}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                 />
@@ -166,7 +167,7 @@ const App:React.FC<Props> = ({
                 <Covid19TrendLayer 
                     key='US-States'
                     features={covid19USStatesData}
-                    size={70}
+                    size={60}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     isLayerInVisibleScaleOnChange={(isVisible)=>{
                         // setIsStateLayerVisible(isVisible);

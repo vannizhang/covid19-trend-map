@@ -175,7 +175,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                                 {
                                     type: "CIMVectorMarker",
                                     anchorPoint: {
-                                        x: -.5,
+                                        x: 0,
                                         y: -.5
                                     },
                                     anchorPointUnits: "Relative",

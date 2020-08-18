@@ -27,6 +27,7 @@ export type TooltipData = {
     confirmed: number;
     deaths: number;
     weeklyNewCases: number;
+    population: number;
     trendCategory?: COVID19TrendCategoryType;
 }
 
@@ -132,6 +133,11 @@ const Tooltip:React.FC<Props> = ({
                     'padding': '5px 15px',
                 }}
             >
+                <span>
+                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.population)}</span> population
+                </span>
+                <br/>
+
                 <span>
                     <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
                 </span>
