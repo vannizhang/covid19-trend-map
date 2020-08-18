@@ -12,7 +12,7 @@ import {
 
 import {
     showTrendCategoriesSelector,
-    showTrendCategoriesToggled,
+    toggleShowTrendCategories,
     isMobileSeletor
 } from '../../store/reducers/UI'
 
@@ -106,7 +106,7 @@ const TrendCategoriesToggle= () => {
                     'cursor': 'pointer'
                 }}
                 onClick={()=>{
-                    dispatch(showTrendCategoriesToggled())
+                    dispatch(toggleShowTrendCategories())
                 }}
             >
                 { checkboxIcon }

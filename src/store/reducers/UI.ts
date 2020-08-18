@@ -12,11 +12,18 @@ import {
 import { Covid19TrendName } from 'covid19-trend-map';
 
 import {
-    miscFns
+    miscFns, urlFns
 } from 'helper-toolkit-ts';
 
-const isMobile = miscFns.isMobileDevice();
 const NarrowScreenBreakPoint = 1020;
+const SearchParamKeyShowTrendCategories = 'trendCategories'
+
+const isMobile = miscFns.isMobileDevice();
+const urlParams = urlFns.parseQuery();
+
+const showTrendCategoriesDefaultVal = urlParams && urlParams[SearchParamKeyShowTrendCategories] 
+    ? urlParams[SearchParamKeyShowTrendCategories] === '1' 
+    : true;
 
 type UIState = {
     isMobile: boolean;
@@ -44,7 +51,7 @@ const slice = createSlice({
         activeTrend: 'new-cases',
         isAboutModalOpen: false,
         // isLoadingChartData: false,
-        showTrendCategories: true,
+        showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint
     } as UIState,
     reducers: {
@@ -76,6 +83,18 @@ export const {
 
 export const updateIsNarrowSreen = (windowOuterWidth:number)=> async(dispatch:StoreDispatch, getState:StoreGetState)=>{
     dispatch(isNarrowSreenChanged(windowOuterWidth <= NarrowScreenBreakPoint));
+};
+
+export const toggleShowTrendCategories = ()=> async(dispatch:StoreDispatch, getState:StoreGetState)=>{
+    const state = getState();
+    const currentVal = state.UI.showTrendCategories;
+    const newVal = !currentVal;
+    dispatch(showTrendCategoriesToggled());
+
+    urlFns.updateQueryParam({
+        key: SearchParamKeyShowTrendCategories,
+        value: newVal ? '1' : '0'
+    })
 };
 
 // selectors
