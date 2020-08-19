@@ -89,14 +89,65 @@ const Tooltip:React.FC<Props> = ({
             return null;
         }
 
+        const trendCategory = data.trendCategory;
+
         return (
             <div className='trailer-quarter'>
                 <span>
-                    <span className='text-theme-color-red avenir-demi font-size--1' style={{
-                        'textTransform': 'uppercase',
-                        'color': TrendColor[data.trendCategory].hex
-                    }}>{ data.trendCategory}</span> trend
+                    <span className='text-theme-color-red avenir-demi font-size--1' 
+                        style={{
+                            'textTransform': 'uppercase',
+                            'color': TrendColor[trendCategory].hex
+                        }}
+                        >{ trendCategory}</span> trend
                 </span>
+            </div>
+        )
+    }
+
+    const getContent = ()=>{
+
+        const content = data.confirmed === 0 && data.trendCategory 
+            ? (
+                <span>
+                    Due to state reporting structures, the Johns Hopkins University data service does not fully reflect cases in this county
+                </span>
+            ) 
+            : (
+                <>
+                    <span>
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.population)}</span> population
+                    </span>
+                    <br/>
+
+                    <span>
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
+                    </span>
+                    <br/>
+
+                    <span>
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.confirmed)}</span> cumulative cases
+                    </span>
+                    <br/>
+
+                    <span>
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> deaths
+                    </span>
+
+                    {
+                        getTrendType()
+                    }
+                </>
+            )
+
+        return (
+            <div className='text-theme-color-khaki avenir-demi font-size--2'
+                style={{
+                    'padding': '5px 15px 7px',
+                    'maxWidth': '200px'
+                }}
+            >
+                { content }
             </div>
         )
     }
@@ -128,34 +179,7 @@ const Tooltip:React.FC<Props> = ({
                 <span className='text-theme-color-red avenir-demi font-size--1'>{ data.locationName }</span>
             </div>
             
-            <div className='text-theme-color-khaki avenir-demi font-size--2'
-                style={{
-                    'padding': '5px 15px',
-                }}
-            >
-                <span>
-                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.population)}</span> population
-                </span>
-                <br/>
-
-                <span>
-                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
-                </span>
-                <br/>
-
-                <span>
-                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.confirmed)}</span> cumulative cases
-                </span>
-                <br/>
-
-                <span>
-                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> deaths
-                </span>
-
-                {
-                    getTrendType()
-                }
-            </div>
+            { getContent() }
         </div>
     ) : null;
 }
