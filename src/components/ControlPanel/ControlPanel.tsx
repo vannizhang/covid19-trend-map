@@ -131,7 +131,7 @@ const ControlPanel = () => {
             >
                 <span className='avenir-bold' style={{
                     'fontSize': '12px'
-                }}>COVID-PULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
+                }}>COVID-PULSE - UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
             </div>
 
             <div
