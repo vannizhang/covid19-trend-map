@@ -47,7 +47,7 @@ const Title:React.FC<Props> = ({
             className={'text-theme-color-red avenir-demi'}
             style={{
                 'position': 'absolute',
-                'top': `10px`,
+                'top': `13px`,
                 'left': `${margin.left + 5}px`,
                 'fontSize': '.8rem'
             }}

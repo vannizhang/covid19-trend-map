@@ -259,7 +259,10 @@ const App:React.FC<Props> = ({
 
             <Tooltip/>
 
-            <About/>
+            <About
+                ymax4confirmed={covid19USStatesData[0].confirmed.frame.ymax}
+                ymax4deaths={covid19USStatesData[0].deaths.frame.ymax}
+            />
         </>
     )
 }

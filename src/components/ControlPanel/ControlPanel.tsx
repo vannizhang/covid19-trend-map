@@ -21,11 +21,11 @@ const SwitchBtnData: {
     value: Covid19TrendName
 }[] = [
     {
-        label: 'WEEKLY CASE RATE',
+        label: 'CASE PER CAPITA',
         value: 'new-cases'
     },
     {
-        label: 'CASES',
+        label: 'CUMULATIVE CASES',
         value: 'confirmed'
     },
     {
@@ -131,7 +131,7 @@ const ControlPanel = () => {
             >
                 <span className='avenir-bold' style={{
                     'fontSize': '12px'
-                }}>NOVEL CORONAVIRUS TRENDS PER 100,000 PEOPLE, SINCE FEBRUARY, UPDATED DAILY</span>
+                }}>COVID-PULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
             </div>
 
             <div
