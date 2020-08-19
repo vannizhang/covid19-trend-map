@@ -12,11 +12,15 @@ import {
 import { Covid19TrendName } from 'covid19-trend-map';
 
 import {
+    URLParamKeys
+} from '../../AppConfig'
+
+import {
     miscFns, urlFns
 } from 'helper-toolkit-ts';
 
 const NarrowScreenBreakPoint = 1020;
-const SearchParamKeyShowTrendCategories = 'trendCategories'
+const SearchParamKeyShowTrendCategories = URLParamKeys["trend-categories"];
 
 const isMobile = miscFns.isMobileDevice();
 const urlParams = urlFns.parseQuery();

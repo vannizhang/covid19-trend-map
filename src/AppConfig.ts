@@ -57,3 +57,8 @@ export const TrendColor: Record<COVID19TrendCategoryType, {
         hex: '#c8c8c8'
     }, // [100,100,100,255]
 };
+
+export const URLParamKeys = {
+    'trend-categories': 'trendCategories',
+    'query-task-feature-fips': 'q'
+}
