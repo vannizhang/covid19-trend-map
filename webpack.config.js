@@ -5,6 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports =  (env, options)=> {
 
@@ -70,6 +71,14 @@ module.exports =  (env, options)=> {
             ]
         },
         plugins: [
+            devMode ? new CopyPlugin({
+                patterns: [
+                    {
+                        from: './src/static',
+                        to: 'media/covidpulse'
+                    }
+                ]
+            }) : false,
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional

@@ -6,7 +6,7 @@ export default {
     'webmap-id':'1bff921ddf7044c3b5ba34e8494a2073',
     'us-states-feature-layer-item-id': '99fd67933e754a1181cc755146be21ca',
     'us-counties-feature-layer-item-id': '7566e0221e5646f99ea249a197116605',
-    'static-files-host': 'https://static.vannizhang.com/covid19/',
+    'static-files-host': '/media/covidpulse/',
     'covid19-data-us-states-json': 'us-states-paths.json',
     'covid19-data-us-counties-json': 'us-counties-paths.json',
     'covid19-latest-numbers-json': 'latest-numbers.json',
