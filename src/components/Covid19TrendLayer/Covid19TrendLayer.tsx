@@ -58,6 +58,13 @@ type Covid19TrendLayerProps = {
     features: Covid19TrendData[]
 } & Props;
 
+
+const sizeByTrendName: { [key in Covid19TrendName]: number } = {
+    'confirmed': 30,
+    'death': 30,
+    'new-cases': 60
+};
+
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     // activeTrend,
     features,
@@ -146,6 +153,8 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
                 const pathData = pathDataByTrendName[activeTrend];
 
+                const size = sizeByTrendName[activeTrend];
+
                 const {
                     frame,
                     path
@@ -159,7 +168,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                         : [200,200,200,255];
                 }
 
-                const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
+                // const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
 
                 // console.log(color)
 
