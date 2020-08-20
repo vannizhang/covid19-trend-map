@@ -78,12 +78,14 @@ const Tooltip:React.FC<Props> = ({
             Confirmed,
             Deaths,
             NewCases,
+            NewDeaths,
             Population
         } = attributes;
 
         const newCases = numberFns.numberWithCommas(NewCases);
         const confirmed = numberFns.numberWithCommas(Confirmed);
         const deaths = numberFns.numberWithCommas(Deaths);
+        const newDeaths =  numberFns.numberWithCommas(NewDeaths); 
 
         return (
             <div
@@ -109,6 +111,10 @@ const Tooltip:React.FC<Props> = ({
 
                     <div>
                         <span className='text-theme-color-khaki'>new cases: <span className='text-theme-color-red'>{newCases}</span></span>
+                    </div>
+
+                    <div>
+                        <span className='text-theme-color-khaki'>new deaths: <span className='text-theme-color-red'>{newDeaths}</span></span>
                     </div>
 
                     <div>
