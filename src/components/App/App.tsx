@@ -51,6 +51,10 @@ import {
 
 import useWindowSize from '@rehooks/window-size';
 
+import {
+    dateFns
+} from 'helper-toolkit-ts';
+
 type Props = {
     covid19USCountiesData: Covid19TrendData[];
     covid19USStatesData: Covid19TrendData[];
@@ -274,6 +278,9 @@ const AppContainer = ()=>{
     const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
 
     const fetchData = async()=>{
+
+        const AppLaunchTime = dateFns.getRoundedDate(60);
+        console.log(AppLaunchTime)
 
         try {
 

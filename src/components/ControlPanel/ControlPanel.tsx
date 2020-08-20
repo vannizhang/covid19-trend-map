@@ -21,16 +21,16 @@ const SwitchBtnData: {
     value: Covid19TrendName
 }[] = [
     {
-        label: 'CASE PER CAPITA',
+        label: 'CASES PER CAPITA',
         value: 'new-cases'
+    },
+    {
+        label: 'DEATHS PER CAPITA',
+        value: 'death'
     },
     {
         label: 'CUMULATIVE CASES',
         value: 'confirmed'
-    },
-    {
-        label: 'DEATHS',
-        value: 'death'
     }
 ];
 
@@ -131,7 +131,7 @@ const ControlPanel = () => {
             >
                 <span className='avenir-bold' style={{
                     'fontSize': '12px'
-                }}>COVID-PULSE - UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
+                }}>COVID PULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
             </div>
 
             <div
