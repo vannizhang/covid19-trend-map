@@ -73,9 +73,26 @@ export const fetchCovid19Data = async({
         if(data && data.features){
             // console.log(data.features)
 
-            cachedQueryResults[key4CachedResults] = data.features;
+            const features:Covid19CasesByTimeFeature[] = data.features.map((feature:Covid19CasesByTimeFeature, index:number)=>{
+        
+                const previousFeature = index > 0 
+                    ? data.features[index - 1] 
+                    : undefined;
+        
+                const newDeaths = previousFeature 
+                    ? feature.attributes.Deaths - previousFeature.attributes.Deaths 
+                    : 0;
+        
+                feature.attributes.NewDeaths = newDeaths;
 
-            return data.features
+                return feature
+            });
+
+            // console.log(features)
+
+            cachedQueryResults[key4CachedResults] = features;
+
+            return features;
         }
 
     } catch(err){

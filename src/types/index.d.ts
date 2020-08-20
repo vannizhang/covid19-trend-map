@@ -13,6 +13,7 @@ declare module 'covid19-trend-map' {
             Deaths: number;
             NewCases: number;
             Population: number;
+            NewDeaths?: number;
         }
     };
 

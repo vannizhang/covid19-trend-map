@@ -14,8 +14,8 @@ type Props = {
 
 const TitleLookup:{ [key in Covid19TrendName] : string} = {
     'confirmed': 'CUMULATIVE CASES',
-    'death': 'CUMULATIVE DEATHS',
-    'new-cases': 'WEEKLY AVERAGE'
+    'death': 'NEW DAILY DEATHS',
+    'new-cases': 'NEW DAILY CASES'
 }
 
 const Title:React.FC<Props> = ({
@@ -23,21 +23,15 @@ const Title:React.FC<Props> = ({
 }) => {
 
     const getTitleContent = ()=>{
-        if(chartType === 'confirmed' || chartType === 'death'){
-            return (
-                <>
-                    <span>{TitleLookup[chartType]}</span>
-                    <br/>
-                    <span></span>
-                </>
-            )
+        if(chartType === 'confirmed'){
+            return ( <span>{TitleLookup[chartType]}</span> )
         }
 
         return (
             <>
-                <span className='text-theme-color-khaki'>NEW DAILY CASES</span>
+                <span className='text-theme-color-khaki'>{TitleLookup[chartType]}</span>
                 <br/>
-                <span>{TitleLookup['new-cases']}</span>
+                <span>WEEKLY AVERAGE</span>
             </>
         )
     }

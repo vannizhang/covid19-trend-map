@@ -44,7 +44,7 @@ export type ChartDataItem = {
 // field names for Covid19CasesByTime Features
 export const FieldNameByActiveTrend:{ [ key in Covid19TrendName]: string } = {
     'new-cases': 'NewCases',
-    'death': 'Deaths',
+    'death': 'NewDeaths',
     'confirmed': 'Confirmed'
 }
 
@@ -97,9 +97,11 @@ const ChartPanel:React.FC<Props> = ({
         if(!showMovingAve){
             return data.map(d=>{
 
-                const y = showNormalizedValues
-                    ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000)
-                    : d.attributes[fieldName] 
+                const y = d.attributes[fieldName];
+
+                // const y = showNormalizedValues
+                //     ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000)
+                //     : d.attributes[fieldName] 
     
                 return {
                     x: d.attributes.dt, 
@@ -127,9 +129,9 @@ const ChartPanel:React.FC<Props> = ({
 
             let y = (sum / featuresInPastWeek.length);
 
-            if(showNormalizedValues){
-                y = ( y / feature.attributes.Population * 100000)
-            }
+            // if(showNormalizedValues){
+            //     y = ( y / feature.attributes.Population * 100000)
+            // }
 
             y = Math.round(y);
 
@@ -160,7 +162,7 @@ const ChartPanel:React.FC<Props> = ({
 
         const fieldName = FieldNameByActiveTrend[chartType];
 
-        const shouldLineShowMovingAve =  chartType === 'new-cases';
+        const shouldLineShowMovingAve =  chartType === 'new-cases' || chartType === 'death';
 
         return (
             <SvgContainer
@@ -176,7 +178,7 @@ const ChartPanel:React.FC<Props> = ({
                 />
 
                 {
-                    chartType === 'new-cases' ? (
+                    shouldLineShowMovingAve ? (
                         <Bar 
                             fillColor={ThemeStyle["theme-color-khaki-dark"]}
                             data={getChartData(fieldName)}
@@ -229,9 +231,10 @@ const ChartPanel:React.FC<Props> = ({
 
             { getChart('new-cases') }
 
+            { getChart('death') }
+
             { getChart('confirmed') }
 
-            { getChart('death') }
         </div>
     
     )
