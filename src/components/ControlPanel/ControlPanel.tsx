@@ -14,7 +14,11 @@ import {
     activeTrendSelector,
     activeTrendUpdated,
     isAboutModalOpenToggled
-} from '../../store/reducers/UI'
+} from '../../store/reducers/UI';
+
+import {
+    updateTrendTypeInURLSearchParams
+} from '../../utils/UrlSearchParams';
 
 const SwitchBtnData: {
     label: string;
@@ -66,6 +70,7 @@ const ControlPanel = () => {
                     }}
                     onClick={()=>{
                         dispatch(activeTrendUpdated(value));
+                        updateTrendTypeInURLSearchParams(value);
                     }}
                 >
                     <span 

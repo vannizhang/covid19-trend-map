@@ -12,22 +12,22 @@ import {
 import { Covid19TrendName } from 'covid19-trend-map';
 
 import {
-    URLParamKeys
-} from '../../AppConfig'
-
-import {
-    miscFns, urlFns
+    miscFns
 } from 'helper-toolkit-ts';
 
+import {
+    getDefaultValueFromSearchParams,
+    updateTrendCategoriesInURLSearchParams
+} from '../../utils/UrlSearchParams';
+
 const NarrowScreenBreakPoint = 1020;
-const SearchParamKeyShowTrendCategories = URLParamKeys["trend-categories"];
-
 const isMobile = miscFns.isMobileDevice();
-const urlParams = urlFns.parseQuery();
 
-const showTrendCategoriesDefaultVal = urlParams && urlParams[SearchParamKeyShowTrendCategories] 
-    ? urlParams[SearchParamKeyShowTrendCategories] === '1' 
+const showTrendCategoriesDefaultVal = getDefaultValueFromSearchParams('trendCategories')
+    ? getDefaultValueFromSearchParams('trendCategories') === '1' 
     : true;
+
+const activeTrendDefaultVal = getDefaultValueFromSearchParams('trendType') as Covid19TrendName;
 
 type UIState = {
     isMobile: boolean;
@@ -52,7 +52,7 @@ const slice = createSlice({
     name: 'map',
     initialState: {
         isMobile,
-        activeTrend: 'new-cases',
+        activeTrend: activeTrendDefaultVal,
         isAboutModalOpen: false,
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
@@ -95,10 +95,7 @@ export const toggleShowTrendCategories = ()=> async(dispatch:StoreDispatch, getS
     const newVal = !currentVal;
     dispatch(showTrendCategoriesToggled());
 
-    urlFns.updateQueryParam({
-        key: SearchParamKeyShowTrendCategories,
-        value: newVal ? '1' : '0'
-    })
+    updateTrendCategoriesInURLSearchParams(newVal);
 };
 
 // selectors
