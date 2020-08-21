@@ -70,16 +70,17 @@ const About:React.FC<Props> = ({
                 <div className='block-group block-group-3-up tablet-block-group-1-up phone-block-group-1-up'>
                     <div className='block'>
                         <h4 className='header-red avenir-bold'>CASES PER CAPITA</h4>
-                        <p>These trend lines mark the proportion of new cases, per 100,000 population, per week—useful for showing the local fluctuations of case rates throughout the outbreak. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge.</p>
+                        <p>These trend lines mark the proportion of new cases, normalized by population—useful for showing the local fluctuations of case rates throughout the outbreak. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge.</p>
+                    </div>
+                    <div className='block'>
+                        <h4 className='header-red avenir-bold'>DEATHS PER CAPITA</h4>
+                        <p>These trend lines mark the proportion of new covid-19 related deaths, normalized by population. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge. Given the incubation and illness period of the virus, these lines may show a similar pattern to CASES PER CAPITA, though with a time lag.</p>
                     </div>
                     <div className='block'>
                         <h4 className='header-red avenir-bold'>CUMULATIVE CASES</h4>
-                        <p>These trend lines track the ongoing cumulative number of cases, per 100,000 population, per week. Because it is a cumulative count, the lines will never trend downward, though their rate of increase over time can provide an impression of the local history of the outbreak. An upward-bending line indicates a slow start and rapidly rising outbreak. A generally diagonal line indicates a consistent rate of transmission. An s-shaped line indicates a local “flattening of the curve” associated with a decrease in local cases.</p>
+                        <p>These trend lines track the ongoing cumulative number of cases, normalized by population. Because it is a cumulative count, the lines will never trend downward, except in the event of data-corrective measures (see SOURCES, below).</p>
                     </div>
-                    <div className='block'>
-                        <h4 className='header-red avenir-bold'>DEATHS</h4>
-                        <p>These trend lines track the ongoing cumulative number of deaths, per 100,000 population. Interpretations of these lines is consistent with the description of cases. Given the incubation and illness period of the virus, these lines will show a similar pattern to CASES, though with a time lag.</p>
-                    </div>
+
                 </div>
 
                 <div>
@@ -89,7 +90,7 @@ const About:React.FC<Props> = ({
 
                 <div>
                     <h4 className='header-khaki avenir-bold'>ABOUT THE Y-AXIS</h4>
-                    <p>The y-axis of chart lines are consistent so place-to-place comparisons can be visualized, except for outlier counties; Outlier counties are given a scaled y-axis. Specifically, outliers are defined for CASES PER CAPITA as counties with greater than 200 cases per 100,000 population (Trousdale, TN, for <a href="https://en.wikipedia.org/wiki/Trousdale_Turner_Correctional_Center" target="_blank">instance</a>); CUMULATIVE CASES and DEATHS outliers are defined as counties with numbers over two standard deviations from the national mean, which is currently {numberFns.numberWithCommas(ymax4confirmed)} and {ymax4deaths}, respectively. These outlier county chart lines are given a fixed maximum height of 200 pixels.</p>
+                    <p>The y-axis of chart lines are consistent within each of the categories so place-to-place comparisons can be visualized—except for rare outlier counties. Outlier counties are constrained by a scaled y-axis. Specifically, outliers are defined for CASES PER CAPITA as counties with greater than 200 cases per 100,000 population; DEATHS PER CAPITA outliers are defined as counties with numbers of weekly deaths that are two standard deviations (currently a rate of {ymax4deaths} per 10 million population) higher than the national average; CUMULATIVE CASES outliers are defined as counties with counts that are two standard deviations above (currently {ymax4confirmed}) the national mean.</p>
                 </div>
 
                 <div>
