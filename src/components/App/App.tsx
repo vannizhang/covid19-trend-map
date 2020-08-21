@@ -284,9 +284,9 @@ const AppContainer = ()=>{
         try {
 
             const HostUrl = AppConfig["static-files-host"];
-            const Url4CountiesJSON = `${HostUrl}${AppConfig["covid19-data-us-counties-json"]}`;
-            const Url4StatesJSON =`${HostUrl}${AppConfig["covid19-data-us-states-json"]}`;
-            const Url4LatestNumbers =`${HostUrl}${AppConfig["covid19-latest-numbers-json"]}`;
+            const Url4CountiesJSON = `${HostUrl}${AppConfig["covid19-data-us-counties-json"]}?t=${queryTime}`;
+            const Url4StatesJSON =`${HostUrl}${AppConfig["covid19-data-us-states-json"]}?t=${queryTime}`;
+            const Url4LatestNumbers =`${HostUrl}${AppConfig["covid19-latest-numbers-json"]}?t=${queryTime}`;
 
             const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);
