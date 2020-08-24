@@ -46,7 +46,9 @@ import IGraphic from 'esri/Graphic';
 import AppConfig from '../../AppConfig';
 
 import {
-    fetchCovid19Data
+    fetchCovid19Data,
+    fetchCovid19DataForNYCCounties,
+    FIPSCodes4NYCCounties
 } from '../../utils/queryCovid19Data';
 
 import useWindowSize from '@rehooks/window-size';
@@ -87,9 +89,14 @@ const App:React.FC<Props> = ({
             locationName:  `${countyFeature.attributes['NAME']}, ${countyFeature.attributes['STATE_NAME']}`
         });
 
-        const data = await fetchCovid19Data({
-            countyFIPS: countyFeature.attributes['FIPS']
-        });
+        const countyFIPS = countyFeature.attributes['FIPS']
+
+        const data = FIPSCodes4NYCCounties.indexOf(countyFIPS) === -1 
+            ? await fetchCovid19Data({
+                countyFIPS
+            })
+            : await fetchCovid19DataForNYCCounties()
+
         setCovid19CasesByTimeQueryResults(data);
     };
 
@@ -129,7 +136,7 @@ const App:React.FC<Props> = ({
 
         let tooltipData:TooltipData;
 
-        if(locationName && FIPS){
+        if(locationName && FIPS && covid19LatestNumbers[FIPS]){
 
             const latestNumbers4SelectedFeature = covid19LatestNumbers[FIPS];
 

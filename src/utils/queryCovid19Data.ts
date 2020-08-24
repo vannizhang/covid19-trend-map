@@ -15,6 +15,55 @@ const cachedQueryResults: {
     [key:string]: Covid19CasesByTimeFeature[]
 } = {};
 
+export const FIPSCodes4NYCCounties = [ '36085', '36047', '36081', '36005', '36061' ];
+const FIPSCode4NYCounty = '36061';
+const FIPSCodes4OtherNYCCounties = FIPSCodes4NYCCounties.filter(FIPS=> FIPS !== FIPSCode4NYCounty);
+
+export const fetchCovid19DataForNYCCounties = async():Promise<Covid19CasesByTimeFeature[]>=>{
+
+    if(cachedQueryResults[FIPSCode4NYCounty]){
+        return cachedQueryResults[FIPSCode4NYCounty];
+    }
+
+    const features4NYCCounties:{
+        [key:string]: Covid19CasesByTimeFeature[]
+    } = {};
+
+    for(let i = 0, len = FIPSCodes4NYCCounties.length; i < len; i++){
+        const countyFIPS = FIPSCodes4NYCCounties[i];
+        features4NYCCounties[countyFIPS] = await fetchCovid19Data({ countyFIPS });
+    }
+
+    const NYCountyFeatures = features4NYCCounties[FIPSCode4NYCounty];
+
+    // add numbers from all NYC Counties into NY County
+    const features = NYCountyFeatures.map((feature, index)=>{
+
+        FIPSCodes4OtherNYCCounties.forEach(FIPS=>{
+
+            // get items for each NYC County ast specific date
+            const results = features4NYCCounties[FIPS];
+
+            if(results && results[index]){
+                const item = results[index];
+                feature.attributes.Confirmed += item.attributes.Confirmed;
+                feature.attributes.NewCases += item.attributes.NewCases;
+                feature.attributes.Deaths += item.attributes.Deaths;
+                feature.attributes.Population += item.attributes.Population;
+                feature.attributes.NewDeaths += item.attributes.NewDeaths;
+            }
+        })
+
+        return feature;
+    });
+
+    cachedQueryResults[FIPSCode4NYCounty] = features;
+
+    console.log(features);
+
+    return features;
+}
+
 export const fetchCovid19Data = async({
     countyFIPS,
     stateName
