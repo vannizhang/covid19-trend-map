@@ -30,8 +30,10 @@ import IwatchUtils from 'esri/core/watchUtils';
 
 import {
     PathData,
+    PathFrame,
     Covid19TrendName,
-    Covid19TrendData
+    Covid19TrendData,
+    Covid19TrendDataQueryResponse
 } from 'covid19-trend-map';
 
 import {
@@ -55,7 +57,8 @@ type Props = {
 }
 
 type Covid19TrendLayerProps = {
-    features: Covid19TrendData[]
+    // features: Covid19TrendData[]
+    data: Covid19TrendDataQueryResponse
 } & Props;
 
 
@@ -67,7 +70,7 @@ const sizeByTrendName: { [key in Covid19TrendName]: number } = {
 
 const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     // activeTrend,
-    features,
+    data,
     visibleScale,
     size = 20,
     hasTrendCategoriesAttribute = false,
@@ -117,7 +120,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
         }
     };
 
-    const draw = async(features:Covid19TrendData[])=>{
+    const draw = async()=>{
 
         type Modules = [
             typeof ICIMSymbol,
@@ -135,6 +138,16 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                 'esri/Graphic',
                 'esri/geometry/Point'
             ]) as Promise<Modules>);
+
+            const { features, frames } = data;
+
+            const pathFrameByTrendName: { [key in Covid19TrendName]: PathFrame } = {
+                'confirmed': frames.confirmed,
+                'death': frames.deaths,
+                'new-cases': frames.newCases
+            };
+    
+            const frame = pathFrameByTrendName[activeTrend];
 
             const graphics = features.map(feature=>{
                 const {
@@ -155,10 +168,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
                 const size = sizeByTrendName[activeTrend];
 
-                const {
-                    frame,
-                    path
-                } = pathData;
+                const { path } = pathData;
 
                 let color = [161, 13, 34, 255];
 
@@ -238,25 +248,26 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     }, [mapView]);
 
     useEffect(()=>{
-        if(trendLayer && features){
+
+        if(trendLayer && data){
 
             trendLayer.removeAll();
-            draw(features);
+            // draw(features);
 
-            // if(isLayerInVisibleScale){
-            //     draw(features);
-            // }
+            if(isLayerInVisibleScale){
+                draw();
+            }
         }
-    }, [ trendLayer, features, activeTrend, showTrendCategories ]);
+    }, [ trendLayer, data, activeTrend, showTrendCategories ]);
 
     
     useEffect(()=>{
         if( 
-            features &&
+            data &&
             isLayerInVisibleScale && 
             !trendLayer.graphics.length
         ){
-            draw(features);
+            draw();
         }
 
         if(isLayerInVisibleScaleOnChange){

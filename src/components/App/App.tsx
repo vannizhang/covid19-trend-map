@@ -36,9 +36,10 @@ import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggl
 import {
     // Covid19TrendName,
     Covid19TrendData,
+    Covid19TrendDataQueryResponse,
     Covid19LatestNumbers,
     Covid19CasesByTimeFeature,
-    QueryLocation4Covid19TrendData
+    QueryLocation4Covid19TrendData,
 } from 'covid19-trend-map';
 
 import IGraphic from 'esri/Graphic';
@@ -58,8 +59,8 @@ import {
 } from 'helper-toolkit-ts';
 
 type Props = {
-    covid19USCountiesData: Covid19TrendData[];
-    covid19USStatesData: Covid19TrendData[];
+    covid19USCountiesData: Covid19TrendDataQueryResponse;
+    covid19USStatesData: Covid19TrendDataQueryResponse;
     covid19LatestNumbers: Covid19LatestNumbers
 }
 
@@ -175,7 +176,7 @@ const App:React.FC<Props> = ({
 
                 <Covid19TrendLayer 
                     key='US-Counties'
-                    features={covid19USCountiesData}
+                    data={covid19USCountiesData}
                     // size={30}
                     hasTrendCategoriesAttribute={true}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
@@ -183,7 +184,7 @@ const App:React.FC<Props> = ({
 
                 <Covid19TrendLayer 
                     key='US-States'
-                    features={covid19USStatesData}
+                    data={covid19USStatesData}
                     // size={30}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     isLayerInVisibleScaleOnChange={(isVisible)=>{
@@ -271,8 +272,8 @@ const App:React.FC<Props> = ({
             <Tooltip/>
 
             <About
-                ymax4confirmed={covid19USStatesData[0].confirmed.frame.ymax}
-                ymax4deaths={covid19USStatesData[0].deaths.frame.ymax}
+                ymax4confirmed={covid19USStatesData.frames.confirmed.ymax}
+                ymax4deaths={covid19USStatesData.frames.deaths.ymax}
             />
         </>
     )
@@ -280,8 +281,8 @@ const App:React.FC<Props> = ({
 
 const AppContainer = ()=>{
 
-    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendData[]>();
-    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendData[]>();
+    const [ covid19USCountiesData, setCovid19USCountiesData ] = useState<Covid19TrendDataQueryResponse>();
+    const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendDataQueryResponse>();
     const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
 
     const fetchData = async()=>{
@@ -295,11 +296,11 @@ const AppContainer = ()=>{
             const Url4StatesJSON =`${HostUrl}${AppConfig["covid19-data-us-states-json"]}?t=${queryTime}`;
             const Url4LatestNumbers =`${HostUrl}${AppConfig["covid19-latest-numbers-json"]}?t=${queryTime}`;
 
-            const queryResUSStates = await axios.get<Covid19TrendData[]>(Url4StatesJSON);
+            const queryResUSStates = await axios.get<Covid19TrendDataQueryResponse>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);
             // console.log(queryResUSStates)
 
-            const queryResUSCounties = await axios.get<Covid19TrendData[]>(Url4CountiesJSON);
+            const queryResUSCounties = await axios.get<Covid19TrendDataQueryResponse>(Url4CountiesJSON);
             setCovid19USCountiesData(queryResUSCounties.data);
             // console.log(queryResUSCounties)
 

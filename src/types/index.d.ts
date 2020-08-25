@@ -21,14 +21,16 @@ declare module 'covid19-trend-map' {
 
     type COVID19TrendCategoryType = 'Emergent' | 'Spreading' | 'Epidemic' | 'Controlled' | 'End Stage' | 'Zero Cases';
 
+    type PathFrame = {
+        xmin: number;
+        ymin: number;
+        xmax: number;
+        ymax: number;
+    }
+
     type PathData = {
         path: number[][];
-        frame: {
-            xmin: number;
-            ymin: number;
-            xmax: number;
-            ymax: number;
-        };
+        frame?: PathFrame;
     }
 
     type Covid19TrendPaths = {
@@ -44,6 +46,15 @@ declare module 'covid19-trend-map' {
             y: number;
         };
     } & Covid19TrendPaths;
+
+    type Covid19TrendDataQueryResponse = {
+        features: Covid19TrendData[];
+        frames:{
+            confirmed: PathFrame;
+            deaths: PathFrame;
+            newCases: PathFrame;
+        }
+    }
 
     type QueryLocation4Covid19TrendData = {
         graphic: IGraphic;
@@ -64,10 +75,12 @@ declare module 'covid19-trend-map' {
 
     export {
         PathData,
+        PathFrame,
         Covid19TrendName,
         COVID19TrendCategoryType,
         Covid19TrendPaths,
         Covid19TrendData,
+        Covid19TrendDataQueryResponse,
         Covid19CasesByTimeFeature,
         QueryLocation4Covid19TrendData,
         Covid19LatestNumbersFeature,
