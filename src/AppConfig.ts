@@ -11,12 +11,12 @@ export default {
     'covid19-data-us-counties-json': 'us-counties-paths.json',
     'covid19-latest-numbers-json': 'latest-numbers.json',
     'us-counties-layer-visible-scale': {
-        'min': 9500000,
+        'min': 7500000,
         'max': 0
     },
     'us-states-layer-visible-scale': {
-        'min': 73957190,
-        'max': 9500001
+        'min': 99999999,
+        'max': 7500001
     }
 };
 

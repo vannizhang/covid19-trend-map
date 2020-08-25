@@ -241,11 +241,11 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
         if(trendLayer && features){
 
             trendLayer.removeAll();
-            // draw(features);
+            draw(features);
 
-            if(isLayerInVisibleScale){
-                draw(features);
-            }
+            // if(isLayerInVisibleScale){
+            //     draw(features);
+            // }
         }
     }, [ trendLayer, features, activeTrend, showTrendCategories ]);
 

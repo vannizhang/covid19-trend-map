@@ -66,7 +66,8 @@ const ControlPanel = () => {
                         'boxSizing':'border-box',
                         'borderBottom': `solid 4px ${ activeTrend === value ? ThemeStyle["theme-color-red"] : 'transparent' }`,
                         'borderRight': `solid 1px #E0D8C1`,
-                        'cursor': 'pointer'
+                        'cursor': 'pointer',
+                        'textAlign': 'center'
                     }}
                     onClick={()=>{
                         dispatch(activeTrendUpdated(value));

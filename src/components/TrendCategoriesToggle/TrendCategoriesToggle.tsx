@@ -142,7 +142,7 @@ const TrendCategoriesToggle= () => {
                         'display': 'felx',
                         'alignItems': 'center',
                         'backgroundColor': TrendColor[d.value].hex,
-                        'width': '90px',
+                        'width': isMobile ? '33%' : '90px',
                         'color': '#fff',
                         // 'padding': '.3rem .5rem',
                         'textAlign': 'center',
