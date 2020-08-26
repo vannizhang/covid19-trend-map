@@ -1,6 +1,7 @@
 import React, {
     useEffect,
-    useState
+    useState,
+    useRef
 } from 'react';
 
 import {
@@ -79,6 +80,7 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
     isLayerInVisibleScaleOnChange
 }) => {
 
+    const renderDealy = useRef<number>();
     const activeTrend = useSelector(activeTrendSelector);
     const showTrendCategories = useSelector(showTrendCategoriesSelector);
     
@@ -236,6 +238,109 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
 
             trendLayer.addMany(graphics);
 
+            // const doChunk = (startIndex=0)=>{
+            //     // console.log('doChunk', startIndex)
+            //     const chunckNum = 600;
+            //     const endIndex = startIndex + chunckNum < features.length? startIndex + chunckNum : features.length;
+            //     const data:Covid19TrendData[] = features.slice(startIndex, endIndex);
+
+            //     const graphics = data.map(feature=>{
+
+            //         const {
+            //             attributes,
+            //             geometry,
+            //             confirmed,
+            //             deaths,
+            //             newCases
+            //         } = feature;
+    
+            //         const pathDataByTrendName: { [key in Covid19TrendName]: PathData } = {
+            //             'confirmed': confirmed,
+            //             'death': deaths,
+            //             'new-cases': newCases
+            //         };
+    
+            //         const pathData = pathDataByTrendName[activeTrend];
+    
+            //         const size = sizeByTrendName[activeTrend];
+    
+            //         const { path } = pathData;
+    
+            //         let color = [161, 13, 34, 255];
+    
+            //         if( showTrendCategories && hasTrendCategoriesAttribute) {
+            //             color = ( attributes && attributes.trendType ) 
+            //                 ? TrendColor[attributes.trendType].values
+            //                 : [200,200,200,255];
+            //         }
+    
+            //         // const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
+    
+            //         // console.log(color)
+    
+            //         // Create the CIM symbol:
+            //         //  - set the size value
+            //         //  - assign the generated path to the marker's geometry
+            //         const symbol = new CIMSymbol({
+            //             data: {
+            //                 type: 'CIMSymbolReference',
+            //                 symbol: {
+            //                     type: "CIMPointSymbol",
+            //                     symbolLayers: [
+            //                         {
+            //                             type: "CIMVectorMarker",
+            //                             anchorPoint: {
+            //                                 x: 0,
+            //                                 y: -.5
+            //                             },
+            //                             anchorPointUnits: "Relative",
+            //                             enable: true,
+            //                             scaleSymbolsProportionally: false,
+            //                             respectFrame: true,
+            //                             size,
+            //                             frame,
+            //                             markerGraphics: [{
+            //                                 type: "CIMMarkerGraphic",
+            //                                 geometry: {
+            //                                     paths: [path]
+            //                                 },
+            //                                 symbol: {
+            //                                     type: "CIMLineSymbol",
+            //                                     symbolLayers: [{
+            //                                         type: "CIMSolidStroke",
+            //                                         width: 1,
+            //                                         color
+            //                                     }]
+            //                                 }
+            //                             }]
+            //                         }
+            //                     ]
+            //                 }
+            //             }
+            //         });
+    
+            //         const graphic = new Graphic({
+            //             geometry: new Point({
+            //                 latitude: geometry.y,
+            //                 longitude: geometry.x
+            //             }),
+            //             symbol
+            //         })
+    
+            //         return graphic;
+            //     });
+    
+            //     trendLayer.addMany(graphics);
+
+            //     if(startIndex + chunckNum < features.length){
+            //         renderDealy.current = setTimeout(()=>{
+            //             doChunk(startIndex + chunckNum)
+            //         }, 1);
+            //     }
+            // }
+
+            // doChunk(0);
+
         } catch(err){   
             console.error(err);
         }
@@ -252,7 +357,8 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
         if(trendLayer && data){
 
             trendLayer.removeAll();
-            // draw(features);
+            // clearTimeout(renderDealy.current);
+            // draw();
 
             if(isLayerInVisibleScale){
                 draw();
