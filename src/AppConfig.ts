@@ -4,8 +4,10 @@ import {
 
 export default {
     'webmap-id':'1bff921ddf7044c3b5ba34e8494a2073',
-    'us-states-feature-layer-item-id': '99fd67933e754a1181cc755146be21ca',
-    'us-counties-feature-layer-item-id': '7566e0221e5646f99ea249a197116605',
+    // 'us-states-feature-layer-item-id': '99fd67933e754a1181cc755146be21ca',
+    'us-states-feature-layer-item-url': 'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_States_Generalized/FeatureServer/0',
+    // 'us-counties-feature-layer-item-id': '7566e0221e5646f99ea249a197116605',
+    'us-counties-feature-layer-item-url': 'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Counties_Generalized/FeatureServer/0',
     'static-files-host': '/media/covidpulse/',
     'covid19-data-us-states-json': 'us-states-paths.json',
     'covid19-data-us-counties-json': 'us-counties-paths.json',

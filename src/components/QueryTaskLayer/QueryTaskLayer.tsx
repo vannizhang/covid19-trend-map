@@ -14,7 +14,8 @@ import IFeatureLayerView from 'esri/views/layers/FeatureLayerView';
 import { TooltipPosition } from '../Tooltip/Tooltip';
 
 type Props = {
-    itemId: string;
+    url: string;
+    // itemId: string;
     outFields?: string[];
     mapView?:IMapView;
     visibleScale?: {
@@ -29,7 +30,8 @@ type Props = {
 }
 
 const QueryTaskLayer:React.FC<Props> = ({
-    itemId,
+    url,
+    // itemId,
     outFields,
     mapView,
     visibleScale,
@@ -64,9 +66,10 @@ const QueryTaskLayer:React.FC<Props> = ({
             ]) as Promise<Modules>);
 
             const layer = new FeatureLayer({
-                portalItem: {
-                    id: itemId
-                },
+                url,
+                // portalItem: {
+                //     id: itemId
+                // },
                 minScale: visibleScale && visibleScale.min,
                 maxScale: visibleScale && visibleScale.max,
                 visible: true,

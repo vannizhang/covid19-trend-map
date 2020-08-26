@@ -193,7 +193,8 @@ const App:React.FC<Props> = ({
 
                 <QueryTaskLayer 
                     key='query-4-US-Counties'
-                    itemId={AppConfig["us-counties-feature-layer-item-id"]}
+                    url={AppConfig["us-counties-feature-layer-item-url"]}
+                    // itemId={AppConfig["us-counties-feature-layer-item-id"]}
                     outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
@@ -217,7 +218,8 @@ const App:React.FC<Props> = ({
 
                 <QueryTaskLayer 
                     key='query-4-US-States'
-                    itemId={AppConfig["us-states-feature-layer-item-id"]}
+                    url={AppConfig["us-states-feature-layer-item-url"]}
+                    // itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME', 'STATE_FIPS']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
                     onStart={queryOnStartHandler}
