@@ -132,12 +132,14 @@ const ControlPanel = () => {
                     // 'height': isMobile ? 'auto' : '20px',
                     'lineHeight': '20px',
                     'width': '100%',
-                    'textAlign': 'center'
+                    'textAlign': 'right',
+                    'maxWidth': '525px',
+                    'padding': '0 .5rem'
                 }}
             >
                 <span className='avenir-bold' style={{
                     'fontSize': '12px'
-                }}>COVID PULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY</span>
+                }}>COVID PULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY (Source: Johns Hopkins University, ESRI)</span>
             </div>
 
             <div
