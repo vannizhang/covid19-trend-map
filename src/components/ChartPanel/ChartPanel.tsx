@@ -220,20 +220,37 @@ const ChartPanel:React.FC<Props> = ({
     return (
         <div
             style={{
+                'position': 'relative',
                 'width': '100%',
                 'height': '170px',
                 'backgroundColor': ThemeStyle["theme-color-khaki-bright"],
-                'display': 'flex',
+                'padding': '0 1rem 1rem',
                 'boxSizing': 'border-box',
-                'padding': '0 1rem'
             }}
         >
+            <div
+                style={{
+                    'display': 'flex',
+                    'width': '100%',
+                    'height': '100%',
+                }}
+            >
+                { getChart('new-cases') }
 
-            { getChart('new-cases') }
+                { getChart('death') }
 
-            { getChart('death') }
+                { getChart('confirmed') }
+            </div>
 
-            { getChart('confirmed') }
+            <div className='text-right' 
+                style={{
+                    'position': 'absolute',
+                    'bottom': '.25rem',
+                    'right': '1rem'
+                }}
+            >
+                <span className='font-size--3 text-theme-color-khaki'>source: Johns Hopkins University CSSE <a className='text-theme-color-khaki avenir-demi' href='https://www.arcgis.com/home/item.html?id=4cb598ae041348fb92270f102a6783cb' target='blank'>US County Cases</a></span>
+            </div>
 
         </div>
     

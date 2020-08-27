@@ -25,7 +25,7 @@ const SwitchBtnData: {
     value: Covid19TrendName
 }[] = [
     {
-        label: 'CASES PER CAPITA',
+        label: 'NEW CASES PER CAPITA',
         value: 'new-cases'
     },
     {

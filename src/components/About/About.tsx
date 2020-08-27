@@ -69,12 +69,12 @@ const About:React.FC<Props> = ({
 
                 <div className='block-group block-group-3-up tablet-block-group-1-up phone-block-group-1-up'>
                     <div className='block'>
-                        <h4 className='header-red avenir-bold'>CASES PER CAPITA</h4>
+                        <h4 className='header-red avenir-bold'>NEW CASES PER CAPITA</h4>
                         <p>These trend lines mark the proportion of new cases, normalized by population—useful for showing the local fluctuations of case rates throughout the outbreak. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge.</p>
                     </div>
                     <div className='block'>
                         <h4 className='header-red avenir-bold'>DEATHS PER CAPITA</h4>
-                        <p>These trend lines mark the proportion of new covid-19 related deaths, normalized by population. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge. Given the incubation and illness period of the virus, these lines may show a similar pattern to CASES PER CAPITA, though with a time lag.</p>
+                        <p>These trend lines mark the proportion of new covid-19 related deaths, normalized by population. When viewing these local rates across the map, comparative national and regional patterns of transmission emerge. Given the incubation and illness period of the virus, these lines may show a similar pattern to NEW CASES PER CAPITA, though with a time lag.</p>
                     </div>
                     <div className='block'>
                         <h4 className='header-red avenir-bold'>CUMULATIVE CASES</h4>
@@ -90,7 +90,7 @@ const About:React.FC<Props> = ({
 
                 <div>
                     <h4 className='header-khaki avenir-bold'>ABOUT THE Y-AXIS</h4>
-                    <p>The y-axis of chart lines are consistent within each of the categories so place-to-place comparisons can be visualized—except for rare outlier counties. Outlier counties are constrained by a scaled y-axis. Specifically, outliers are defined for CASES PER CAPITA as counties with greater than 200 cases per 100,000 population; DEATHS PER CAPITA outliers are defined as counties with numbers of weekly deaths that are two standard deviations (currently a rate of {ymax4deaths} per 10 million population) higher than the national average; CUMULATIVE CASES outliers are defined as counties with counts that are two standard deviations above (currently {ymax4confirmed}) the national mean.</p>
+                    <p>The y-axis of chart lines are consistent within each of the categories so place-to-place comparisons can be visualized—except for rare outlier counties. Outlier counties are constrained by a scaled y-axis. Specifically, outliers are defined for NEW CASES PER CAPITA as counties with greater than 200 cases per 100,000 population; DEATHS PER CAPITA outliers are defined as counties with numbers of weekly deaths that are two standard deviations (currently a rate of {ymax4deaths} per 10 million population) higher than the national average; CUMULATIVE CASES outliers are defined as counties with counts that are two standard deviations above (currently {ymax4confirmed}) the national mean.</p>
                 </div>
 
                 <div>
