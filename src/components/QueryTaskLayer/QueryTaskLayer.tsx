@@ -4,6 +4,14 @@ import React, {
     useRef
 } from 'react'
 
+import {
+    useSelector
+} from 'react-redux';
+
+import {
+    isMobileSeletor
+} from '../../store/reducers/UI'
+
 import { loadModules } from 'esri-loader';
 
 import IMapView from 'esri/views/MapView';
@@ -40,6 +48,8 @@ const QueryTaskLayer:React.FC<Props> = ({
     pointerOnMove,
     featureOnHover
 }) => {
+
+    const isMobile = useSelector(isMobileSeletor);
 
     const layerRef = useRef<IFeatureLayer>();
     const layerViewRef = useRef<IFeatureLayerView>();
@@ -131,7 +141,7 @@ const QueryTaskLayer:React.FC<Props> = ({
             // mapView.toScreen(event.)
             // console.log(event.x, event.y)
 
-            if(isLayerInVisibleRange()){
+            if(isLayerInVisibleRange() && !isMobile){
 
                 const { x, y } = event;
 
