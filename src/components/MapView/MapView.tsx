@@ -7,8 +7,6 @@ import IMapView from 'esri/views/MapView';
 import IWebMap from "esri/WebMap";
 import IwatchUtils from 'esri/core/watchUtils';
 
-// import useMapCenterLocationFromUrl from '../../hooks/useMapLocationFromUrl';
-
 import {
     getDefaultValueFromSearchParams,
     updateMapLocation

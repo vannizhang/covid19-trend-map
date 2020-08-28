@@ -103,25 +103,6 @@ module.exports =  (env, options)=> {
                     useShortDoctype                : true
                 }
             }),
-             new HtmlWebpackPlugin({
-                template: './src/debug-fixed-ymax.html',
-                filename: 'newcases-fixed-ymax.html',
-                chunks: [],
-                minify: {
-                    html5                          : true,
-                    collapseWhitespace             : true,
-                    minifyCSS                      : true,
-                    minifyJS                       : true,
-                    minifyURLs                     : false,
-                    removeComments                 : true,
-                    removeEmptyAttributes          : true,
-                    removeOptionalTags             : true,
-                    removeRedundantAttributes      : true,
-                    removeScriptTypeAttributes     : true,
-                    removeStyleLinkTypeAttributese : true,
-                    useShortDoctype                : true
-                }
-            }),
             !devMode ? new CleanWebpackPlugin() : false
             // !devMode ? new BundleAnalyzerPlugin() : false
         ].filter(Boolean),
