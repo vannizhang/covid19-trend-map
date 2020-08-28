@@ -56,6 +56,8 @@ import {
     dateFns	
 } from 'helper-toolkit-ts';
 
+import { getModifiedTime } from '../../utils/getModifiedDate';
+
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
@@ -287,14 +289,13 @@ const AppContainer = ()=>{
 
     const fetchData = async()=>{
 
-        const queryTime = dateFns.getRoundedDate(60);
+        const modified = getModifiedTime();
 
         try {
-
             const HostUrl = AppConfig["static-files-host"];
-            const Url4CountiesJSON = `${HostUrl}${AppConfig["covid19-data-us-counties-json"]}?t=${queryTime}`;
-            const Url4StatesJSON =`${HostUrl}${AppConfig["covid19-data-us-states-json"]}?t=${queryTime}`;
-            const Url4LatestNumbers =`${HostUrl}${AppConfig["covid19-latest-numbers-json"]}?t=${queryTime}`;
+            const Url4CountiesJSON = `${HostUrl}${AppConfig["covid19-data-us-counties-json"]}?modified=${modified}`;
+            const Url4StatesJSON =`${HostUrl}${AppConfig["covid19-data-us-states-json"]}?modified=${modified}`;
+            const Url4LatestNumbers =`${HostUrl}${AppConfig["covid19-latest-numbers-json"]}?modified=${modified}`;
 
             const queryResUSStates = await axios.get<Covid19TrendDataQueryResponse>(Url4StatesJSON);
             setCovid19USStatesData(queryResUSStates.data);

@@ -190,7 +190,7 @@ const TrendCategoriesToggle= () => {
         <div
             style={{
                 'position': 'absolute',
-                'top': isMobile ? '140px' : '120px',
+                'top': isMobile ? '130px' : '125px',
                 'right': '10px',
                 'height': Height,
                 'display': 'flex',

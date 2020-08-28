@@ -44,6 +44,59 @@ const ControlPanel = () => {
     const activeTrend = useSelector(activeTrendSelector);
     const isMobile = useSelector(isMobileSeletor);
     
+    const getTitleText = ()=>{
+
+        const content = !isMobile 
+            ? (
+                <div>
+                    <div>
+                        <span className='avenir-bold' style={{
+                            'fontSize': '14.5px',
+                        }}>Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus trend lines, since February</span>
+                    </div>
+
+                    <div className='text-right'>
+                        <span className='avenir-light' style={{
+                            'fontSize': '12px',
+                            // 'marginRight': '12px',
+                        }}>source: Johns Hopkins University, Esri</span>
+                    </div>
+                </div>
+            ) 
+            : (
+                <div>
+                    <span className='avenir-bold' style={{
+                        'fontSize': '14.5px',
+                    }}>Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus trend lines, since February</span>
+                    &nbsp;&nbsp;
+                    <span className='avenir-light' style={{
+                        'fontSize': '12px',
+                        // 'marginRight': '12px',
+                    }}>source: Johns Hopkins University, Esri</span>
+                </div>
+            )
+
+        return (
+            <div
+                style={{
+                    'backgroundColor': ThemeStyle["theme-color-red"],
+                    'color': ThemeStyle["theme-color-khaki-bright"],
+                    // 'height': isMobile ? 'auto' : '20px',
+                    'lineHeight': '16px',
+                    'width': '100%',
+                    // 'textAlign': 'center',
+                    // 'maxWidth': isMobile ? 'auto': '540px',
+                    'padding': '.5rem',
+                    'boxSizing': 'border-box',
+                    'display': 'flex',
+                    'justifyContent': 'center'
+                }}
+            >
+                { content }
+            </div>
+        );
+    }
+
     const getSwitchBtns = ()=>{
         return SwitchBtnData.map(d=>{
 
@@ -125,24 +178,8 @@ const ControlPanel = () => {
                 'boxShadow': `0 0 10px 2px #B1A483`,
             }}
         >
-            <div
-                style={{
-                    'backgroundColor': ThemeStyle["theme-color-red"],
-                    'color': ThemeStyle["theme-color-khaki-bright"],
-                    // 'height': isMobile ? 'auto' : '20px',
-                    'lineHeight': '20px',
-                    'width': '100%',
-                    'textAlign': 'right',
-                    'maxWidth': isMobile ? 'auto': '540px',
-                    'padding': '0 .25rem',
-                    'boxSizing': 'border-box'
-                }}
-            >
-                <span className='avenir-bold' style={{
-                    'fontSize': '12px'
-                }}>ESRI COVIDPULSE -- UNITED STATES NOVEL CORONAVIRUS TREND LINES, SINCE FEBRUARY (Source: Johns Hopkins University, ESRI)</span>
-            </div>
-
+            { getTitleText() }
+            
             <div
                 style={{
                     'display': 'flex',
