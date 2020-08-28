@@ -66,8 +66,6 @@ const ChartPanel:React.FC<Props> = ({
 
     const isNarrowScreen = useSelector(isNarrowSreenSeletor);
 
-    // const fieldNameByActiveTrend = FieldNameByActiveTrend[activeTrend];
-
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
     const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
 
@@ -98,10 +96,6 @@ const ChartPanel:React.FC<Props> = ({
             return data.map(d=>{
 
                 const y = d.attributes[fieldName];
-
-                // const y = showNormalizedValues
-                //     ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000)
-                //     : d.attributes[fieldName] 
     
                 return {
                     x: d.attributes.dt, 
@@ -128,10 +122,6 @@ const ChartPanel:React.FC<Props> = ({
             featuresInPastWeek.forEach(d=>sum += d.attributes[fieldName]);
 
             let y = (sum / featuresInPastWeek.length);
-
-            // if(showNormalizedValues){
-            //     y = ( y / feature.attributes.Population * 100000)
-            // }
 
             y = Math.round(y);
 

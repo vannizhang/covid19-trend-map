@@ -131,10 +131,6 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
             typeof IPoint
         ];
 
-        trendLayer.graphics.on('after-added', (evt)=>{
-            console.log(evt)
-        })
-
         try {
             const [ 
                 CIMSymbol,
@@ -155,93 +151,6 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
             };
     
             const frame = pathFrameByTrendName[activeTrend];
-
-            // const graphics = features.map(feature=>{
-            //     const {
-            //         attributes,
-            //         geometry,
-            //         confirmed,
-            //         deaths,
-            //         newCases
-            //     } = feature;
-
-            //     const pathDataByTrendName: { [key in Covid19TrendName]: PathData } = {
-            //         'confirmed': confirmed,
-            //         'death': deaths,
-            //         'new-cases': newCases
-            //     };
-
-            //     const pathData = pathDataByTrendName[activeTrend];
-
-            //     const size = sizeByTrendName[activeTrend];
-
-            //     const { path } = pathData;
-
-            //     let color = [161, 13, 34, 255];
-
-            //     if( showTrendCategories && hasTrendCategoriesAttribute) {
-            //         color = ( attributes && attributes.trendType ) 
-            //             ? TrendColor[attributes.trendType].values
-            //             : [200,200,200,255];
-            //     }
-
-            //     // const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
-
-            //     // console.log(color)
-
-            //     // Create the CIM symbol:
-            //     //  - set the size value
-            //     //  - assign the generated path to the marker's geometry
-            //     const symbol = new CIMSymbol({
-            //         data: {
-            //             type: 'CIMSymbolReference',
-            //             symbol: {
-            //                 type: "CIMPointSymbol",
-            //                 symbolLayers: [
-            //                     {
-            //                         type: "CIMVectorMarker",
-            //                         anchorPoint: {
-            //                             x: 0,
-            //                             y: -.5
-            //                         },
-            //                         anchorPointUnits: "Relative",
-            //                         enable: true,
-            //                         scaleSymbolsProportionally: false,
-            //                         respectFrame: true,
-            //                         size,
-            //                         frame,
-            //                         markerGraphics: [{
-            //                             type: "CIMMarkerGraphic",
-            //                             geometry: {
-            //                                 paths: [path]
-            //                             },
-            //                             symbol: {
-            //                                 type: "CIMLineSymbol",
-            //                                 symbolLayers: [{
-            //                                     type: "CIMSolidStroke",
-            //                                     width: 1,
-            //                                     color
-            //                                 }]
-            //                             }
-            //                         }]
-            //                     }
-            //                 ]
-            //             }
-            //         }
-            //     });
-
-            //     const graphic = new Graphic({
-            //         geometry: new Point({
-            //             latitude: geometry.y,
-            //             longitude: geometry.x
-            //         }),
-            //         symbol
-            //     })
-
-            //     return graphic;
-            // });
-
-            // trendLayer.addMany(graphics);
 
             const addGraphicsByChunk = (startIndex=0)=>{
                 // console.log('doChunk', startIndex)
@@ -278,10 +187,6 @@ const Covid19TrendLayer:React.FC<Covid19TrendLayerProps> = ({
                             ? TrendColor[attributes.trendType].values
                             : [200,200,200,255];
                     }
-    
-                    // const strokeWidth = ( showTrendCategories && hasTrendCategoriesAttribute) ? 1 : 1;
-    
-                    // console.log(color)
     
                     // Create the CIM symbol:
                     //  - set the size value
