@@ -113,7 +113,7 @@ const SummaryInfoPanel:React.FC<Props> = ({
                     'display': 'block'
                 }}>
                     <span>
-                        <span className='text-theme-color-red'>Biggest Weekly Jump</span> { isMobile ? null : <br/>} { getBiggestWeeklyIncrease() }
+                        <span className='text-theme-color-red'>Biggest Weekly New Cases Jump</span> { isMobile ? null : <br/>} { getBiggestWeeklyIncrease() }
                     </span>
                 </div>
 
