@@ -44,7 +44,7 @@ export const updateMapLocation = (mapCenterLocation:MapCenterLocation)=>{
 
     const { lon, lat, zoom } = mapCenterLocation;
 
-    updateHashParam({
+    urlFns.updateHashParam({
         key,
         value: `${lon},${lat},${zoom}`
     });
@@ -53,7 +53,7 @@ export const updateMapLocation = (mapCenterLocation:MapCenterLocation)=>{
 export const updateTrendCategoriesInURLHashParams = (value:boolean)=>{
     const key:UrlHashParamKey = 'trendCategories';
 
-    updateHashParam({
+    urlFns.updateHashParam({
         key,
         value: value ? '1' : '0'
     });
@@ -64,7 +64,7 @@ export const updateTrendTypeInURLHashParams = (value:Covid19TrendName)=>{
 
     const index = TrendTypesValuesInOrder.indexOf(value);
 
-    updateHashParam({
+    urlFns.updateHashParam({
         key,
         value: index && index > -1 ? index.toString() : '0'
     });
@@ -104,22 +104,4 @@ const getTrendTypeFromUrlSearchParams = (hashParams?:HashParams)=>{
         : 0 ;
 
     return TrendTypesValuesInOrder[index];
-}
-
-// update a hash param by providing key and value
-const updateHashParam = ({ key = '', value = '' } = {}) => {
-    if (key) {
-        const hashParams = urlFns.parseHash();
-
-        hashParams[key] = value;
-
-        const queryParamsStr = Object.keys(hashParams)
-        .map(paramKey => {
-            const val = hashParams[paramKey];
-            return `${paramKey}=${val}`;
-        })
-        .join('&');
-
-        window.location.hash = queryParamsStr;
-    }
 };
