@@ -10,33 +10,33 @@ import {
     Covid19TrendName
 } from 'covid19-trend-map'
 
-type SearchParams = {
+type HashParams = {
     [key:string]: string
 }
 
-type UrlSearchParamKey = '@' | 'trendCategories' | 'trendType';
+type UrlHashParamKey = '@' | 'trendCategories' | 'trendType';
 
-const DefaultSearchParams:SearchParams = urlFns.parseQuery();
+const DefaultHashParams:HashParams = urlFns.parseHash();
 
 const TrendTypesValuesInOrder:Covid19TrendName[] = ['new-cases', 'death', 'confirmed']
 
-export const getDefaultValueFromSearchParams= (key:UrlSearchParamKey)=>{
+export const getDefaultValueFromHashParams= (key:UrlHashParamKey)=>{
 
     if(key === '@'){
-        return getMapLocationFromUrlSearchParams(DefaultSearchParams);
+        return getMapLocationFromUrlSearchParams(DefaultHashParams);
     }
 
     if(key === 'trendType'){
-        return getTrendTypeFromUrlSearchParams(DefaultSearchParams);
+        return getTrendTypeFromUrlSearchParams(DefaultHashParams);
     }
     
-    return DefaultSearchParams[key] || null;
+    return DefaultHashParams[key] || null;
 
 }
 
 export const updateMapLocation = (mapCenterLocation:MapCenterLocation)=>{
 
-    const key:UrlSearchParamKey = '@';
+    const key:UrlHashParamKey = '@';
 
     if(!mapCenterLocation){
         return;
@@ -44,43 +44,43 @@ export const updateMapLocation = (mapCenterLocation:MapCenterLocation)=>{
 
     const { lon, lat, zoom } = mapCenterLocation;
 
-    urlFns.updateQueryParam({
+    updateHashParam({
         key,
         value: `${lon},${lat},${zoom}`
     });
 };
 
-export const updateTrendCategoriesInURLSearchParams = (value:boolean)=>{
-    const key:UrlSearchParamKey = 'trendCategories';
+export const updateTrendCategoriesInURLHashParams = (value:boolean)=>{
+    const key:UrlHashParamKey = 'trendCategories';
 
-    urlFns.updateQueryParam({
+    updateHashParam({
         key,
         value: value ? '1' : '0'
     });
 };
 
-export const updateTrendTypeInURLSearchParams = (value:Covid19TrendName)=>{
-    const key:UrlSearchParamKey = 'trendType';
+export const updateTrendTypeInURLHashParams = (value:Covid19TrendName)=>{
+    const key:UrlHashParamKey = 'trendType';
 
     const index = TrendTypesValuesInOrder.indexOf(value);
 
-    urlFns.updateQueryParam({
+    updateHashParam({
         key,
         value: index && index > -1 ? index.toString() : '0'
     });
 }
 
-const getMapLocationFromUrlSearchParams = (searchParams?:SearchParams)=>{
+const getMapLocationFromUrlSearchParams = (hashParams?:HashParams)=>{
 
-    searchParams = searchParams || urlFns.parseQuery();
+    hashParams = hashParams || urlFns.parseQuery();
 
-    const key:UrlSearchParamKey = '@';
+    const key:UrlHashParamKey = '@';
     
-    if(!searchParams[key]){
+    if(!hashParams[key]){
         return null;
     }
 
-    const values: number[] = searchParams[key]
+    const values: number[] = hashParams[key]
         .split(',')
         .map((d:string)=>+d)
 
@@ -89,19 +89,37 @@ const getMapLocationFromUrlSearchParams = (searchParams?:SearchParams)=>{
     return { lon, lat, zoom };
 }
 
-const getTrendTypeFromUrlSearchParams = (searchParams?:SearchParams)=>{
+const getTrendTypeFromUrlSearchParams = (hashParams?:HashParams)=>{
 
-    searchParams = searchParams || urlFns.parseQuery();
+    hashParams = hashParams || urlFns.parseQuery();
 
-    const key:UrlSearchParamKey = 'trendType';
+    const key:UrlHashParamKey = 'trendType';
 
-    if(!searchParams[key]){
+    if(!hashParams[key]){
         return 'new-cases';
     }
     
-    const index = searchParams[key] && +searchParams[key] >= 0 && +searchParams[key] <= 3 
-        ? +searchParams[key] 
+    const index = hashParams[key] && +hashParams[key] >= 0 && +hashParams[key] <= 3 
+        ? +hashParams[key] 
         : 0 ;
 
     return TrendTypesValuesInOrder[index];
 }
+
+// update a hash param by providing key and value
+const updateHashParam = ({ key = '', value = '' } = {}) => {
+    if (key) {
+        const hashParams = urlFns.parseHash();
+
+        hashParams[key] = value;
+
+        const queryParamsStr = Object.keys(hashParams)
+        .map(paramKey => {
+            const val = hashParams[paramKey];
+            return `${paramKey}=${val}`;
+        })
+        .join('&');
+
+        window.location.hash = queryParamsStr;
+    }
+};

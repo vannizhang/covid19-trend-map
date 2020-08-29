@@ -8,7 +8,7 @@ import IWebMap from "esri/WebMap";
 import IwatchUtils from 'esri/core/watchUtils';
 
 import {
-    getDefaultValueFromSearchParams,
+    getDefaultValueFromHashParams,
     updateMapLocation
 } from '../../utils/UrlSearchParams';
 
@@ -22,7 +22,7 @@ interface Props {
     webmapId: string;
 };
 
-const locationFromURL = getDefaultValueFromSearchParams('@') as MapCenterLocation;
+const locationFromURL = getDefaultValueFromHashParams('@') as MapCenterLocation;
 
 const MapView:React.FC<Props> = ({
     webmapId,

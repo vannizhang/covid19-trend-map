@@ -16,18 +16,18 @@ import {
 } from 'helper-toolkit-ts';
 
 import {
-    getDefaultValueFromSearchParams,
-    updateTrendCategoriesInURLSearchParams
+    getDefaultValueFromHashParams,
+    updateTrendCategoriesInURLHashParams
 } from '../../utils/UrlSearchParams';
 
 const NarrowScreenBreakPoint = 1020;
 const isMobile = miscFns.isMobileDevice();
 
-const showTrendCategoriesDefaultVal = getDefaultValueFromSearchParams('trendCategories')
-    ? getDefaultValueFromSearchParams('trendCategories') === '1' 
+const showTrendCategoriesDefaultVal = getDefaultValueFromHashParams('trendCategories')
+    ? getDefaultValueFromHashParams('trendCategories') === '1' 
     : true;
 
-const activeTrendDefaultVal = getDefaultValueFromSearchParams('trendType') as Covid19TrendName;
+const activeTrendDefaultVal = getDefaultValueFromHashParams('trendType') as Covid19TrendName;
 
 type UIState = {
     isMobile: boolean;
@@ -95,7 +95,7 @@ export const toggleShowTrendCategories = ()=> async(dispatch:StoreDispatch, getS
     const newVal = !currentVal;
     dispatch(showTrendCategoriesToggled());
 
-    updateTrendCategoriesInURLSearchParams(newVal);
+    updateTrendCategoriesInURLHashParams(newVal);
 };
 
 // selectors

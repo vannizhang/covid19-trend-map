@@ -17,7 +17,7 @@ import {
 } from '../../store/reducers/UI';
 
 import {
-    updateTrendTypeInURLSearchParams
+    updateTrendTypeInURLHashParams
 } from '../../utils/UrlSearchParams';
 
 const SwitchBtnData: {
@@ -124,7 +124,7 @@ const ControlPanel = () => {
                     }}
                     onClick={()=>{
                         dispatch(activeTrendUpdated(value));
-                        updateTrendTypeInURLSearchParams(value);
+                        updateTrendTypeInURLHashParams(value);
                     }}
                 >
                     <span 
