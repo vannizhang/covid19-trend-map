@@ -122,7 +122,7 @@ const TrendCategoriesToggle= () => {
                     style={{
                         'backgroundColor': ThemeStyle["theme-color-khaki-bright"],
                         'color': ThemeStyle["theme-color-khaki-dark"],
-                        'width': isMobile ? 'auto' : '540px',
+                        'width': isMobile ? 'auto' : '100%',
                         'boxSizing': 'border-box',
                         'border': `1px solid ${ThemeStyle["theme-color-khaki"]}`,
                         'padding': '0 .25rem'
@@ -189,13 +189,15 @@ const TrendCategoriesToggle= () => {
     return (
         <div
             style={{
-                'position': 'absolute',
-                'top': isMobile ? '130px' : '125px',
-                'right': '10px',
+                // 'width': '100%',
+                'marginTop': '6px',
+                'maxWidth': '540px',
+                'boxSizing': 'border-box',
                 'height': Height,
                 'display': 'flex',
                 'fontSize': '12px',
-                'lineHeight': Height
+                'lineHeight': Height,
+                'justifyContent': 'flex-end'
             }}
         >
             {

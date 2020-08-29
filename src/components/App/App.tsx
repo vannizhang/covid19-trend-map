@@ -31,7 +31,7 @@ import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer'; 
-import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
+// import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
 
 import {
     Covid19TrendDataQueryResponse,
@@ -51,10 +51,6 @@ import {
 } from '../../utils/queryCovid19Data';
 
 import useWindowSize from '@rehooks/window-size';
-
-import {	
-    dateFns	
-} from 'helper-toolkit-ts';
 
 import { getModifiedTime } from '../../utils/getModifiedDate';
 
@@ -249,8 +245,6 @@ const App:React.FC<Props> = ({
             </MapView>
 
             <ControlPanel />
-
-            <TrendCategoriesToggle/>
 
             {
                 covid19CasesByTimeQueryResults || isLoading ? (

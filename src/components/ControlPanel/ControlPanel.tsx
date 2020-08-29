@@ -20,6 +20,8 @@ import {
     updateTrendTypeInURLHashParams
 } from '../../utils/UrlSearchParams';
 
+import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
+
 const SwitchBtnData: {
     label: string;
     value: Covid19TrendName
@@ -174,26 +176,33 @@ const ControlPanel = () => {
                 'top': '10px',
                 'right': '10px',
                 'left': isMobile ? '10px' : 'unset',
-                // 'maxWidth': '420px',
-                'boxShadow': `0 0 10px 2px #B1A483`,
             }}
         >
-            { getTitleText() }
-            
             <div
                 style={{
-                    'display': 'flex',
-                    'height': '60px',
-                    'width': '100%',
-                    'boxSizing':'border-box',
-                    
-                    'backgroundColor': ThemeStyle["theme-color-khaki"]
+                    'boxShadow': `0 0 10px 2px #B1A483`,
                 }}
             >
-                { getSwitchBtns() }
-                { getInfoBtn() }
+                { getTitleText() }
+                
+                <div
+                    style={{
+                        'display': 'flex',
+                        'height': '60px',
+                        'width': '100%',
+                        'boxSizing':'border-box',
+                        
+                        'backgroundColor': ThemeStyle["theme-color-khaki"]
+                    }}
+                >
+                    { getSwitchBtns() }
+                    { getInfoBtn() }
+                </div>
             </div>
+
+            <TrendCategoriesToggle/>
         </div>
+
 
     )
 }
