@@ -4,22 +4,42 @@ import {
     Covid19CasesByTimeFeature
 } from 'covid19-trend-map';
 
+import { 
+    parse, 
+    getISODay
+} from 'date-fns';
+
 type FetchCovid19DataOptions = {
     countyFIPS?: string;
     stateName?: string;
+    skipSummaryInfo?: boolean;
 }
+
+export type SummaryInfo = {
+    cumulativeCases: number;
+    cumulativeDeaths: number;
+    newCasesThisWeek: number;
+    deathsThisWeek: number;
+    population: number;
+    dateWithBiggestWeeklyIncrease: Date
+};
+
+export type FetchCovid19DataResponse = {
+    features: Covid19CasesByTimeFeature[];
+    summaryInfo?: SummaryInfo
+};
 
 const USCountiesCovid19CasesByTimeFeatureServiceURL = 'https://services9.arcgis.com/6Hv9AANartyT7fJW/ArcGIS/rest/services/USCounties_cases_V1/FeatureServer/1';
 
 const cachedQueryResults: {
-    [key:string]: Covid19CasesByTimeFeature[]
+    [key:string]: FetchCovid19DataResponse
 } = {};
 
 export const FIPSCodes4NYCCounties = [ '36085', '36047', '36081', '36005', '36061' ];
 const FIPSCode4NYCounty = '36061';
 const FIPSCodes4OtherNYCCounties = FIPSCodes4NYCCounties.filter(FIPS=> FIPS !== FIPSCode4NYCounty);
 
-export const fetchCovid19DataForNYCCounties = async():Promise<Covid19CasesByTimeFeature[]>=>{
+export const fetchCovid19DataForNYCCounties = async():Promise<FetchCovid19DataResponse>=>{
 
     if(cachedQueryResults[FIPSCode4NYCounty]){
         return cachedQueryResults[FIPSCode4NYCounty];
@@ -31,7 +51,8 @@ export const fetchCovid19DataForNYCCounties = async():Promise<Covid19CasesByTime
 
     for(let i = 0, len = FIPSCodes4NYCCounties.length; i < len; i++){
         const countyFIPS = FIPSCodes4NYCCounties[i];
-        features4NYCCounties[countyFIPS] = await fetchCovid19Data({ countyFIPS });
+        const { features } = await fetchCovid19Data({ countyFIPS });
+        features4NYCCounties[countyFIPS] = features;
     }
 
     const NYCountyFeatures = features4NYCCounties[FIPSCode4NYCounty];
@@ -57,17 +78,23 @@ export const fetchCovid19DataForNYCCounties = async():Promise<Covid19CasesByTime
         return feature;
     });
 
-    cachedQueryResults[FIPSCode4NYCounty] = features;
+    const summaryInfo = getSummaryInfo(features);
 
-    console.log(features);
+    const queryResults = {
+        features,
+        summaryInfo
+    };
 
-    return features;
+    cachedQueryResults[FIPSCode4NYCounty] = queryResults;
+
+    return queryResults;
 }
 
 export const fetchCovid19Data = async({
     countyFIPS,
-    stateName
-}:FetchCovid19DataOptions):Promise<Covid19CasesByTimeFeature[]>=>{
+    stateName,
+    skipSummaryInfo
+}:FetchCovid19DataOptions):Promise<FetchCovid19DataResponse>=>{
 
     const key4CachedResults = countyFIPS || stateName;
 
@@ -139,9 +166,16 @@ export const fetchCovid19Data = async({
 
             // console.log(features)
 
-            cachedQueryResults[key4CachedResults] = features;
+            const summaryInfo = !skipSummaryInfo ? getSummaryInfo(features) : undefined;
 
-            return features;
+            const queryResults = {
+                features,
+                summaryInfo
+            };
+
+            cachedQueryResults[key4CachedResults] = queryResults;
+
+            return queryResults;
         }
 
     } catch(err){
@@ -149,4 +183,69 @@ export const fetchCovid19Data = async({
     }
 
     return null;
+};
+
+const getSummaryInfo = (data:Covid19CasesByTimeFeature[])=>{
+
+        // const feature7DaysAgo = data[data.length - 7]
+        const indexOfLatestFeature = data.length - 1;
+        const latestFeature = data[indexOfLatestFeature];
+
+        const { dt, Confirmed, Deaths, Population } = latestFeature.attributes;
+
+        const [ year, month, day ] = dt.split('-');
+        const date = new Date(+year, +month - 1, +day);
+    
+        const dayOfWeek = date.getDay();
+    
+        const featureOfLastSunday = dayOfWeek === 0 
+            ? data[ indexOfLatestFeature - 6 ]
+            : data[ indexOfLatestFeature - dayOfWeek ];
+
+        const dateWithBiggestWeeklyIncrease = getBiggestWeeklyIncrease(data);
+
+        return {
+            cumulativeCases: Confirmed,
+            cumulativeDeaths: Deaths,
+            newCasesThisWeek: Confirmed - featureOfLastSunday.attributes.Confirmed,
+            deathsThisWeek: Deaths - featureOfLastSunday.attributes.Deaths,
+            population: Population,
+            dateWithBiggestWeeklyIncrease
+        }
+}
+
+const getBiggestWeeklyIncrease = (data:Covid19CasesByTimeFeature[])=>{
+
+    let featureWithBiggestWeeklyIncrease = data[0];
+    let biggestWeeklyIncrease = Number.NEGATIVE_INFINITY;
+
+    const dateForFirstFeature = parse(data[0].attributes.dt, 'yyyy-MM-dd', new Date())
+
+    let dayForFirstFeature = getISODay(dateForFirstFeature);
+
+    for( let i = 0, len= data.length; i < len; i++){
+
+        let dayOfWeek = ( i % 7 ) + dayForFirstFeature;
+
+        dayOfWeek = dayOfWeek > 7 ? dayOfWeek - 7 : dayOfWeek;
+
+        if(dayOfWeek === 1){
+            const { Confirmed } = data[i].attributes;
+
+            const feature7DaysAgo = i - 6 >= 0 
+                ? data[i-6] 
+                : data[0];
+            
+            const weeklyIncrease = Confirmed - feature7DaysAgo.attributes.Confirmed;
+
+            if(weeklyIncrease > biggestWeeklyIncrease){
+                biggestWeeklyIncrease = weeklyIncrease;
+                featureWithBiggestWeeklyIncrease = data[i];
+            }
+        }
+    }
+
+    const dateWithBiggestWeeklyIncrease = parse(featureWithBiggestWeeklyIncrease.attributes.dt, 'yyyy-MM-dd', new Date())
+
+    return dateWithBiggestWeeklyIncrease;//format(dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy');
 };

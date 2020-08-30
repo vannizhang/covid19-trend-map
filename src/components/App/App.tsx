@@ -31,12 +31,11 @@ import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer'; 
-// import TrendCategoriesToggle from '../TrendCategoriesToggle/TrendCategoriesToggle';
 
 import {
     Covid19TrendDataQueryResponse,
     Covid19LatestNumbers,
-    Covid19CasesByTimeFeature,
+    // Covid19CasesByTimeFeature,
     QueryLocation4Covid19TrendData,
 } from 'covid19-trend-map';
 
@@ -47,7 +46,8 @@ import AppConfig from '../../AppConfig';
 import {
     fetchCovid19Data,
     fetchCovid19DataForNYCCounties,
-    FIPSCodes4NYCCounties
+    FIPSCodes4NYCCounties,
+    FetchCovid19DataResponse
 } from '../../utils/queryCovid19Data';
 
 import useWindowSize from '@rehooks/window-size';
@@ -69,7 +69,7 @@ const App:React.FC<Props> = ({
     const dispatch = useDispatch();
     const windowSize = useWindowSize();
 
-    const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<Covid19CasesByTimeFeature[]>();
+    const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<FetchCovid19DataResponse>();
     // user can click map to select US State or County that will be used to query covid19 trend data
     const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -81,18 +81,22 @@ const App:React.FC<Props> = ({
             return false;
         }
 
-        setcovid19CasesByTimeQueryLocation({
-            graphic: countyFeature,
-            locationName:  `${countyFeature.attributes['NAME']}, ${countyFeature.attributes['STATE_NAME']}`
-        });
+        const countyFIPS = countyFeature.attributes['FIPS'];
 
-        const countyFIPS = countyFeature.attributes['FIPS']
+        const isNYCCounties = FIPSCodes4NYCCounties.indexOf(countyFIPS) > -1;
 
-        const data = FIPSCodes4NYCCounties.indexOf(countyFIPS) === -1 
+        const locationName = isNYCCounties ? 'NEW YORK, NEW YORK' : `${countyFeature.attributes['NAME']}, ${countyFeature.attributes['STATE_NAME']}`;
+
+        const data = !isNYCCounties
             ? await fetchCovid19Data({
                 countyFIPS
             })
             : await fetchCovid19DataForNYCCounties()
+        
+        setcovid19CasesByTimeQueryLocation({
+            graphic: countyFeature,
+            locationName
+        });
 
         setCovid19CasesByTimeQueryResults(data);
     };
@@ -106,14 +110,15 @@ const App:React.FC<Props> = ({
 
         const stateName = stateFeature.attributes['STATE_NAME'];
 
+        const data = await fetchCovid19Data({
+            stateName
+        });
+
         setcovid19CasesByTimeQueryLocation({
             graphic: stateFeature,
             locationName: stateFeature.attributes['STATE_NAME']
         });
 
-        const data = await fetchCovid19Data({
-            stateName
-        });
         setCovid19CasesByTimeQueryResults(data);
     };
 
@@ -254,12 +259,12 @@ const App:React.FC<Props> = ({
 
                         <SummaryInfoPanel 
                             locationName={covid19CasesByTimeQueryLocation ? covid19CasesByTimeQueryLocation.locationName : undefined }
-                            data={covid19CasesByTimeQueryResults}
+                            data={covid19CasesByTimeQueryResults ? covid19CasesByTimeQueryResults.summaryInfo : undefined}
                             closeBtnOnClick={resetQueryResults}
                         />
 
                         <ChartPanel 
-                            data={covid19CasesByTimeQueryResults}
+                            data={covid19CasesByTimeQueryResults ? covid19CasesByTimeQueryResults.features : undefined}
                         />
                     </BottomPanel>
                 ) : null

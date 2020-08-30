@@ -9,13 +9,16 @@ import {
 } from '../../store/reducers/UI'
 
 import { ThemeStyle } from '../../AppConfig'
-import { Covid19CasesByTimeFeature } from 'covid19-trend-map';
 import { numberFns } from 'helper-toolkit-ts';
-import { parse, getISODay, format } from 'date-fns';
+import { format } from 'date-fns';
+
+import {
+    SummaryInfo
+} from '../../utils/queryCovid19Data';
 
 type Props = {
     locationName?: string;
-    data: Covid19CasesByTimeFeature[];
+    data: SummaryInfo;
     closeBtnOnClick: ()=>void;
 };
 
@@ -27,70 +30,21 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
     const isMobile = useSelector(isMobileSeletor);
 
-    const getBiggestWeeklyIncrease = ()=>{
-
-        let featureWithBiggestWeeklyIncrease = data[0];
-        let biggestWeeklyIncrease = Number.NEGATIVE_INFINITY;
-
-        const dateForFirstFeature = parse(data[0].attributes.dt, 'yyyy-MM-dd', new Date())
-
-        let dayForFirstFeature = getISODay(dateForFirstFeature);
-
-        for( let i = 0, len= data.length; i < len; i++){
-
-            let dayOfWeek = ( i % 7 ) + dayForFirstFeature;
-
-            dayOfWeek = dayOfWeek > 7 ? dayOfWeek - 7 : dayOfWeek;
-
-            if(dayOfWeek === 1){
-                const { Confirmed } = data[i].attributes;
-
-                const feature7DaysAgo = i - 6 >= 0 
-                    ? data[i-6] 
-                    : data[0];
-                
-                const weeklyIncrease = Confirmed - feature7DaysAgo.attributes.Confirmed;
-
-                if(weeklyIncrease > biggestWeeklyIncrease){
-                    biggestWeeklyIncrease = weeklyIncrease;
-                    featureWithBiggestWeeklyIncrease = data[i];
-                }
-            }
-        }
-
-        const dateWithBiggestWeeklyIncrease = parse(featureWithBiggestWeeklyIncrease.attributes.dt, 'yyyy-MM-dd', new Date())
-
-        return format(dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy');
-    };
-
     const getSummaryInfo = ()=>{
 
-        if(!data || !data.length){
+        if(!data){
             return null
         }
 
-        // const feature7DaysAgo = data[data.length - 7]
-        const indexOfLatestFeature = data.length - 1;
-        const latestFeature = data[indexOfLatestFeature];
+        const cumulativeCases = numberFns.numberWithCommas(data.cumulativeCases);
+        const cumulativeDeaths = numberFns.numberWithCommas(data.cumulativeDeaths);
 
-        const { dt, Confirmed, Deaths, Population } = latestFeature.attributes;
+        const newCasesThisWeek = numberFns.numberWithCommas(data.newCasesThisWeek);
+        const deathsThisWeek = numberFns.numberWithCommas(data.deathsThisWeek);
 
-        const [ year, month, day ] = dt.split('-');
-        const date = new Date(+year, +month - 1, +day);
-    
-        const dayOfWeek = date.getDay();
-    
-        const featureOfLastSunday = dayOfWeek === 0 
-            ? data[ indexOfLatestFeature - 6 ]
-            : data[ indexOfLatestFeature - dayOfWeek ];
+        const population = numberFns.numberWithCommas(data.population);
 
-        const cumulativeCases = numberFns.numberWithCommas(Confirmed);
-        const cumulativeDeaths = numberFns.numberWithCommas(Deaths);
-
-        const newCasesThisWeek = numberFns.numberWithCommas(Confirmed - featureOfLastSunday.attributes.Confirmed);
-        const deathsThisWeek = numberFns.numberWithCommas(Deaths - featureOfLastSunday.attributes.Deaths);
-
-        const population = numberFns.numberWithCommas(Population);
+        const dateWithBiggestWeeklyIncrease = format(data.dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy')
 
         const blockStyle:React.CSSProperties ={
             'padding': isMobile ? '0' : '0 .65rem',
@@ -113,7 +67,7 @@ const SummaryInfoPanel:React.FC<Props> = ({
                     'display': 'block'
                 }}>
                     <span>
-                        <span className='text-theme-color-red'>Biggest Weekly New Cases Jump</span> { isMobile ? null : <br/>} { getBiggestWeeklyIncrease() }
+                        <span className='text-theme-color-red'>Biggest Weekly New Cases Jump</span> { isMobile ? null : <br/>} { dateWithBiggestWeeklyIncrease }
                     </span>
                 </div>
 
