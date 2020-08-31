@@ -26,7 +26,8 @@ export type TooltipData = {
     locationName: string;
     confirmed: number;
     deaths: number;
-    weeklyNewCases: number;
+    newCasesPast7Days: number;
+    newDeathsPast7Days: number;
     population: number;
     trendCategory?: COVID19TrendCategoryType;
 }
@@ -121,9 +122,14 @@ const Tooltip:React.FC<Props> = ({
                     <br/>
 
                     <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.weeklyNewCases)}</span> new cases this week
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.newCasesPast7Days)}</span> new cases in past 7 days
                     </span>
                     <br/>
+
+                    {/* <span>
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.newDeathsPast7Days)}</span> new deaths in past 7 days
+                    </span>
+                    <br/> */}
 
                     <span>
                         <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.confirmed)}</span> cumulative cases
@@ -131,7 +137,7 @@ const Tooltip:React.FC<Props> = ({
                     <br/>
 
                     <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> deaths
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> total deaths
                     </span>
 
                     {
@@ -144,7 +150,7 @@ const Tooltip:React.FC<Props> = ({
             <div className='text-theme-color-khaki avenir-demi font-size--2'
                 style={{
                     'padding': '5px 15px 7px',
-                    'maxWidth': '200px'
+                    // 'maxWidth': '250px'
                 }}
             >
                 { content }

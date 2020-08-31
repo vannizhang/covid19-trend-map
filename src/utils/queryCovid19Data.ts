@@ -18,8 +18,8 @@ type FetchCovid19DataOptions = {
 export type SummaryInfo = {
     cumulativeCases: number;
     cumulativeDeaths: number;
-    newCasesThisWeek: number;
-    deathsThisWeek: number;
+    newCasesPast7Days: number;
+    deathsPast7Days: number;
     population: number;
     dateWithBiggestWeeklyIncrease: Date
 };
@@ -187,29 +187,24 @@ export const fetchCovid19Data = async({
 
 const getSummaryInfo = (data:Covid19CasesByTimeFeature[])=>{
 
-        // const feature7DaysAgo = data[data.length - 7]
-        const indexOfLatestFeature = data.length - 1;
-        const latestFeature = data[indexOfLatestFeature];
+        const feature7DaysAgo = data[data.length - 8]
+        // const indexOfLatestFeature = data.length - 1;
+        const latestFeature = data[data.length - 1];
 
         const { dt, Confirmed, Deaths, Population } = latestFeature.attributes;
 
-        const [ year, month, day ] = dt.split('-');
-        const date = new Date(+year, +month - 1, +day);
-    
-        const dayOfWeek = date.getDay();
-
-        // JHU updates their serive a day after the reporting day so user sees Sunday's data on Monday,
-        // therefore we should use last feature as featureOfLastSunday if dayOfWeek is 0,
-        // which would make cumulativeCases, cumulativeDeaths, newCasesThisWeek to 0, to not
-        const featureOfLastSunday = data[ indexOfLatestFeature - dayOfWeek ];
+        // const [ year, month, day ] = dt.split('-');
+        // const date = new Date(+year, +month - 1, +day);
+        // const dayOfWeek = date.getDay();
+        // const featureOfLastSunday = data[ indexOfLatestFeature - dayOfWeek ];
 
         const dateWithBiggestWeeklyIncrease = getBiggestWeeklyIncrease(data);
 
         return {
             cumulativeCases: Confirmed,
             cumulativeDeaths: Deaths,
-            newCasesThisWeek: Confirmed - featureOfLastSunday.attributes.Confirmed,
-            deathsThisWeek: Deaths - featureOfLastSunday.attributes.Deaths,
+            newCasesPast7Days: Confirmed - feature7DaysAgo.attributes.Confirmed,
+            deathsPast7Days: Deaths - feature7DaysAgo.attributes.Deaths,
             population: Population,
             dateWithBiggestWeeklyIncrease
         }

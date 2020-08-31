@@ -146,7 +146,8 @@ const App:React.FC<Props> = ({
                 locationName,
                 confirmed: latestNumbers4SelectedFeature.Confirmed,
                 deaths: latestNumbers4SelectedFeature.Deaths,
-                weeklyNewCases: latestNumbers4SelectedFeature.NewCases,
+                newCasesPast7Days: latestNumbers4SelectedFeature.NewCases,
+                newDeathsPast7Days: latestNumbers4SelectedFeature.NewDeaths,
                 population: latestNumbers4SelectedFeature.Population,
                 trendCategory: latestNumbers4SelectedFeature.TrendType
             };

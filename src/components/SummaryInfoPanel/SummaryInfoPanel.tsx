@@ -39,8 +39,8 @@ const SummaryInfoPanel:React.FC<Props> = ({
         const cumulativeCases = numberFns.numberWithCommas(data.cumulativeCases);
         const cumulativeDeaths = numberFns.numberWithCommas(data.cumulativeDeaths);
 
-        const newCasesThisWeek = numberFns.numberWithCommas(data.newCasesThisWeek);
-        const deathsThisWeek = numberFns.numberWithCommas(data.deathsThisWeek);
+        const newCasesThisWeek = numberFns.numberWithCommas(data.newCasesPast7Days);
+        const deathsThisWeek = numberFns.numberWithCommas(data.deathsPast7Days);
 
         const population = numberFns.numberWithCommas(data.population);
 
@@ -77,7 +77,7 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
                 <div style={blockStyle}>
                     <span>
-                        <span className='text-theme-color-red'>{newCasesThisWeek}</span> new cases and <span className='text-theme-color-red'>{deathsThisWeek}</span> deaths this week
+                        <span className='text-theme-color-red'>{newCasesThisWeek}</span> new cases and <span className='text-theme-color-red'>{deathsThisWeek}</span> deaths in past 7 days
                     </span>
                 </div>
 

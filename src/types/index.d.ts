@@ -65,6 +65,7 @@ declare module 'covid19-trend-map' {
         Confirmed: number;
         Deaths: number;
         NewCases: number;
+        NewDeaths: number;
         Population: number;
         TrendType: COVID19TrendCategoryType;
     };
