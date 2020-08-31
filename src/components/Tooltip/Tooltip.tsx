@@ -150,7 +150,7 @@ const Tooltip:React.FC<Props> = ({
             <div className='text-theme-color-khaki avenir-demi font-size--2'
                 style={{
                     'padding': '5px 15px 7px',
-                    // 'maxWidth': '250px'
+                    'maxWidth': '250px'
                 }}
             >
                 { content }
