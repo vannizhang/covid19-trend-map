@@ -48,33 +48,31 @@ const ControlPanel = () => {
     
     const getTitleText = ()=>{
 
+        const title = (
+            <span className='avenir-bold' style={{
+                'fontSize': '14.5px',
+            }}>Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus trend lines, since February</span>
+        );
+
+        const dataSource = (
+            <span className='avenir-light' style={{
+                'fontSize': '12px',
+                // 'marginRight': '12px',
+            }}>data: Johns Hopkins University, Esri</span>
+        )
+
         const content = !isMobile 
             ? (
                 <div>
-                    <div>
-                        <span className='avenir-bold' style={{
-                            'fontSize': '14.5px',
-                        }}>Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus trend lines, since February</span>
-                    </div>
-
-                    <div className='text-right'>
-                        <span className='avenir-light' style={{
-                            'fontSize': '12px',
-                            // 'marginRight': '12px',
-                        }}>source: Johns Hopkins University, Esri</span>
-                    </div>
+                    <div> { title } </div>
+                    <div className='text-right'> { dataSource } </div>
                 </div>
             ) 
             : (
                 <div>
-                    <span className='avenir-bold' style={{
-                        'fontSize': '14.5px',
-                    }}>Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus trend lines, since February</span>
+                    { title }
                     &nbsp;&nbsp;
-                    <span className='avenir-light' style={{
-                        'fontSize': '12px',
-                        // 'marginRight': '12px',
-                    }}>source: Johns Hopkins University, Esri</span>
+                    { dataSource }
                 </div>
             )
 
