@@ -197,10 +197,11 @@ const getSummaryInfo = (data:Covid19CasesByTimeFeature[])=>{
         const date = new Date(+year, +month - 1, +day);
     
         const dayOfWeek = date.getDay();
-    
-        const featureOfLastSunday = dayOfWeek === 0 
-            ? data[ indexOfLatestFeature - 6 ]
-            : data[ indexOfLatestFeature - dayOfWeek ];
+
+        // JHU updates their serive a day after the reporting day so user sees Sunday's data on Monday,
+        // therefore we should use last feature as featureOfLastSunday if dayOfWeek is 0,
+        // which would make cumulativeCases, cumulativeDeaths, newCasesThisWeek to 0, to not
+        const featureOfLastSunday = data[ indexOfLatestFeature - dayOfWeek ];
 
         const dateWithBiggestWeeklyIncrease = getBiggestWeeklyIncrease(data);
 
