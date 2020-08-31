@@ -147,7 +147,7 @@ const App:React.FC<Props> = ({
                 confirmed: latestNumbers4SelectedFeature.Confirmed,
                 deaths: latestNumbers4SelectedFeature.Deaths,
                 newCasesPast7Days: latestNumbers4SelectedFeature.NewCases,
-                newDeathsPast7Days: latestNumbers4SelectedFeature.NewDeaths,
+                newDeathsPast7Days: latestNumbers4SelectedFeature.NewDeaths || 0,
                 population: latestNumbers4SelectedFeature.Population,
                 trendCategory: latestNumbers4SelectedFeature.TrendType
             };

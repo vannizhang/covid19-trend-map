@@ -108,21 +108,35 @@ const Tooltip:React.FC<Props> = ({
 
     const getContent = ()=>{
 
+        const {
+            population,
+            newCasesPast7Days,
+            newDeathsPast7Days,
+            confirmed,
+            deaths
+        } = data;
+
         const content = data.confirmed === 0 && data.trendCategory 
             ? (
-                <span>
-                    Due to state reporting structures, the Johns Hopkins University data service does not fully reflect cases in this county
-                </span>
+                <div
+                    style={{
+                        'maxWidth': '220px'
+                    }}
+                >
+                    <span>
+                        Due to state reporting structures, the Johns Hopkins University data service does not fully reflect cases in this county
+                    </span>
+                </div>
             ) 
             : (
                 <>
                     <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.population)}</span> population
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(population)}</span> population
                     </span>
                     <br/>
 
                     <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.newCasesPast7Days)}</span> new cases in past 7 days
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(newCasesPast7Days)}</span> new cases and <span className='text-theme-color-red'>{numberFns.numberWithCommas(newDeathsPast7Days)}</span> deaths in past 7 days
                     </span>
                     <br/>
 
@@ -132,13 +146,13 @@ const Tooltip:React.FC<Props> = ({
                     <br/> */}
 
                     <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.confirmed)}</span> cumulative cases
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(confirmed)}</span> cumulative cases and <span className='text-theme-color-red'>{numberFns.numberWithCommas(deaths)}</span> deaths
                     </span>
                     <br/>
 
-                    <span>
+                    {/* <span>
                         <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> total deaths
-                    </span>
+                    </span> */}
 
                     {
                         getTrendType()
@@ -150,7 +164,7 @@ const Tooltip:React.FC<Props> = ({
             <div className='text-theme-color-khaki avenir-demi font-size--2'
                 style={{
                     'padding': '5px 15px 7px',
-                    'maxWidth': '250px'
+                    // 'maxWidth': '250px'
                 }}
             >
                 { content }
