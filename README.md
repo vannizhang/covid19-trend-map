@@ -1,4 +1,4 @@
-# COVID-19 Trends Map
+# CovidPulse App
 [view it live](https://livingatlas.arcgis.com/covidpulse/)
 ![screenshot](./screenshot.png)
 
