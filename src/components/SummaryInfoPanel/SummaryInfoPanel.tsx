@@ -10,7 +10,7 @@ import {
 
 import { ThemeStyle } from '../../AppConfig'
 import { numberFns } from 'helper-toolkit-ts';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 import {
     SummaryInfo
@@ -44,7 +44,8 @@ const SummaryInfoPanel:React.FC<Props> = ({
 
         const population = numberFns.numberWithCommas(data.population);
 
-        const dateWithBiggestWeeklyIncrease = format(data.dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy')
+        const dateWithBiggestWeeklyIncrease = parse(data.dateWithBiggestWeeklyIncrease, 'yyyy-MM-dd', new Date())
+        const dateWithBiggestWeeklyIncreaseFormatted = format(dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy')
 
         const blockStyle:React.CSSProperties ={
             'padding': isMobile ? '0' : '0 .65rem',
@@ -67,7 +68,7 @@ const SummaryInfoPanel:React.FC<Props> = ({
                     'display': 'block'
                 }}>
                     <span>
-                        <span className='text-theme-color-red'>Biggest Weekly New Cases Jump</span> { isMobile ? null : <br/>} { dateWithBiggestWeeklyIncrease }
+                        <span className='text-theme-color-red'>Biggest Weekly New Cases Jump</span> { isMobile ? null : <br/>} { dateWithBiggestWeeklyIncreaseFormatted }
                     </span>
                 </div>
 

@@ -30,7 +30,7 @@ type Props = {
         min: number;
         max: number;
     }
-    onStart: ()=>void;
+    // onStart?: ()=>void;
     onSelect: (feature:IGraphic)=>void;
 
     pointerOnMove: (position: TooltipPosition)=>void;
@@ -43,7 +43,7 @@ const QueryTaskLayer:React.FC<Props> = ({
     outFields,
     mapView,
     visibleScale,
-    onStart,
+    // onStart,
     onSelect,
     pointerOnMove,
     featureOnHover
@@ -111,7 +111,7 @@ const QueryTaskLayer:React.FC<Props> = ({
 
         if(isVisible){
 
-            onStart();
+            // onStart();
 
             const results = await layerViewRef.current.queryFeatures({
                 where: '1=1',

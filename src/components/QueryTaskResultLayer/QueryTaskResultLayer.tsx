@@ -6,15 +6,15 @@ import React, {
 import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
 import IGraphic from 'esri/Graphic';
+import IPolygon from 'esri/geometry/Polygon';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import ISimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import { ThemeStyle } from '../../AppConfig';
+import { QueryLocationFeature } from 'covid19-trend-map';
 
 type Props = {
-    queryResult: IGraphic
+    queryResult: QueryLocationFeature
     mapView?:IMapView;
 }
-
 
 const QueryTaskResultLayer:React.FC<Props> = ({
     queryResult,
@@ -49,16 +49,26 @@ const QueryTaskResultLayer:React.FC<Props> = ({
     const showQueryResult = async()=>{
 
         type Modules = [
-            typeof ISimpleFillSymbol,
+            typeof IGraphic,
+            typeof IPolygon,
+            typeof ISimpleFillSymbol
         ];
 
         const [ 
+            Graphic,
+            Polygon,
             SimpleFillSymbol
         ] = await (loadModules([
+            'esri/Graphic',
+            'esri/geometry/Polygon',
             'esri/symbols/SimpleFillSymbol'
         ]) as Promise<Modules>);
 
-        queryResult.symbol = new SimpleFillSymbol({
+        const graphic = new Graphic({
+            geometry: new Polygon(queryResult.geometry)
+        });
+
+        graphic.symbol = new SimpleFillSymbol({
             color: [0,0,0,0],
             outline: {  // autocasts as new SimpleLineSymbol()
                 color: 'rgba(178,165,132,.7)',
@@ -66,7 +76,7 @@ const QueryTaskResultLayer:React.FC<Props> = ({
             } 
         });
 
-        graphicLayer.add(queryResult)
+        graphicLayer.add(graphic)
     }
 
     useEffect(()=>{

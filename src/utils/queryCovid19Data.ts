@@ -21,7 +21,7 @@ export type SummaryInfo = {
     newCasesPast7Days: number;
     deathsPast7Days: number;
     population: number;
-    dateWithBiggestWeeklyIncrease: Date
+    dateWithBiggestWeeklyIncrease: string
 };
 
 export type FetchCovid19DataResponse = {
@@ -241,7 +241,7 @@ const getBiggestWeeklyIncrease = (data:Covid19CasesByTimeFeature[])=>{
         }
     }
 
-    const dateWithBiggestWeeklyIncrease = parse(featureWithBiggestWeeklyIncrease.attributes.dt, 'yyyy-MM-dd', new Date())
+    const dateWithBiggestWeeklyIncrease = featureWithBiggestWeeklyIncrease.attributes.dt //parse(featureWithBiggestWeeklyIncrease.attributes.dt, 'yyyy-MM-dd', new Date())
 
     return dateWithBiggestWeeklyIncrease;//format(dateWithBiggestWeeklyIncrease, 'MMMM dd, yyyy');
 };

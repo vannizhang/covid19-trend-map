@@ -56,8 +56,19 @@ declare module 'covid19-trend-map' {
         }
     }
 
+    type QueryLocationFeature = {
+        attributes: any;
+        geometry: {
+            rings: number[][][],
+            spatialReference: {
+                latestWkid: number;
+                wkid: number;
+            }
+        }
+    }
+
     type QueryLocation4Covid19TrendData = {
-        graphic: IGraphic;
+        graphic: QueryLocationFeature;
         locationName: string;
     }
 
@@ -85,6 +96,7 @@ declare module 'covid19-trend-map' {
         Covid19CasesByTimeFeature,
         QueryLocation4Covid19TrendData,
         Covid19LatestNumbersFeature,
-        Covid19LatestNumbers
+        Covid19LatestNumbers,
+        QueryLocationFeature
     }
 }
