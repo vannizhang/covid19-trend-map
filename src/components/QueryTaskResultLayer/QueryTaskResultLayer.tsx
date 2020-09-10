@@ -1,7 +1,4 @@
-import React, {
-    useState,
-    useEffect
-} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
@@ -12,27 +9,19 @@ import ISimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
 import { QueryLocationFeature } from 'covid19-trend-map';
 
 type Props = {
-    queryResult: QueryLocationFeature
-    mapView?:IMapView;
-}
+    queryResult: QueryLocationFeature;
+    mapView?: IMapView;
+};
 
-const QueryTaskResultLayer:React.FC<Props> = ({
-    queryResult,
-    mapView
-}) => {
+const QueryTaskResultLayer: React.FC<Props> = ({ queryResult, mapView }) => {
+    const [graphicLayer, setGraphicLayer] = useState<IGraphicsLayer>();
 
-    const [ graphicLayer, setGraphicLayer ] = useState<IGraphicsLayer>();
-
-    const init = async()=>{
-        type Modules = [
-            typeof IGraphicsLayer,
-        ];
+    const init = async () => {
+        type Modules = [typeof IGraphicsLayer];
 
         try {
-            const [ 
-                GraphicsLayer
-            ] = await (loadModules([
-                'esri/layers/GraphicsLayer'
+            const [GraphicsLayer] = await (loadModules([
+                'esri/layers/GraphicsLayer',
             ]) as Promise<Modules>);
 
             const layer = new GraphicsLayer();
@@ -40,64 +29,57 @@ const QueryTaskResultLayer:React.FC<Props> = ({
             mapView.map.add(layer);
 
             setGraphicLayer(layer);
-
-        } catch(err){
+        } catch (err) {
             console.error(err);
         }
     };
 
-    const showQueryResult = async()=>{
-
+    const showQueryResult = async () => {
         type Modules = [
             typeof IGraphic,
             typeof IPolygon,
             typeof ISimpleFillSymbol
         ];
 
-        const [ 
-            Graphic,
-            Polygon,
-            SimpleFillSymbol
-        ] = await (loadModules([
+        const [Graphic, Polygon, SimpleFillSymbol] = await (loadModules([
             'esri/Graphic',
             'esri/geometry/Polygon',
-            'esri/symbols/SimpleFillSymbol'
+            'esri/symbols/SimpleFillSymbol',
         ]) as Promise<Modules>);
 
         const graphic = new Graphic({
-            geometry: new Polygon(queryResult.geometry)
+            geometry: new Polygon(queryResult.geometry),
         });
 
         graphic.symbol = new SimpleFillSymbol({
-            color: [0,0,0,0],
-            outline: {  // autocasts as new SimpleLineSymbol()
+            color: [0, 0, 0, 0],
+            outline: {
+                // autocasts as new SimpleLineSymbol()
                 color: 'rgba(178,165,132,.7)',
-                width: 1
-            } 
+                width: 1,
+            },
         });
 
-        graphicLayer.add(graphic)
-    }
+        graphicLayer.add(graphic);
+    };
 
-    useEffect(()=>{
-        if(mapView){
+    useEffect(() => {
+        if (mapView) {
             init();
         }
     }, [mapView]);
 
-    useEffect(()=>{
-        if(graphicLayer){
-
+    useEffect(() => {
+        if (graphicLayer) {
             graphicLayer.removeAll();
 
-            if(queryResult){
+            if (queryResult) {
                 showQueryResult();
             }
-            
         }
     }, [queryResult]);
 
     return null;
-}
+};
 
-export default QueryTaskResultLayer
+export default QueryTaskResultLayer;

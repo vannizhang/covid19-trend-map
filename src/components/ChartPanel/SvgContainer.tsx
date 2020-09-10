@@ -1,21 +1,14 @@
-import React, {
-    useRef,
-    useEffect
-} from 'react';
+import React, { useRef, useEffect } from 'react';
 
-import { 
-    select,
-    scaleBand,
-    scaleLinear
-} from 'd3';
+import { select, scaleBand, scaleLinear } from 'd3';
 
 import useWindowSize from '@rehooks/window-size';
 
 export const margin = {
-    top: 15, 
-    right: 10, 
-    bottom: 30, 
-    left: 30
+    top: 15,
+    right: 10,
+    bottom: 30,
+    left: 30,
 };
 
 type Dimension = {
@@ -36,99 +29,89 @@ export type SvgContainerData = {
     svg: SVGElement;
     g: SVGGElement;
     margin: typeof margin;
-    dimension?: Dimension
-}
+    dimension?: Dimension;
+};
 
 type Props = {
     // data: Covid19CasesByTimeFeature[];
     xDomain: string[];
-    yDomain: number[]
-}
+    yDomain: number[];
+};
 
-const SvgContainer:React.FC<Props> = ({
+const SvgContainer: React.FC<Props> = ({
     // data,
     xDomain,
     yDomain,
-    children
+    children,
 }) => {
-
     const windowSize = useWindowSize();
 
     const containerRef = useRef<HTMLDivElement>();
     const dimensionRef = useRef<Dimension>();
 
-    const [ svgContainerData, setSvgContainerData ] = React.useState<SvgContainerData>();
+    const [svgContainerData, setSvgContainerData] = React.useState<
+        SvgContainerData
+    >();
 
-    const [ scales, setScales ] =  React.useState<Scales>();
+    const [scales, setScales] = React.useState<Scales>();
 
-    const init = ()=>{
-
+    const init = () => {
         const container = containerRef.current;
         const width = container.offsetWidth - margin.left - margin.right;
         const height = container.offsetHeight - margin.top - margin.bottom;
 
         dimensionRef.current = {
             height,
-            width
+            width,
         };
 
         select(container)
-            .append("svg")
-                .attr("width", '100%')
-                .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-                .attr(
-                    "transform", 
-                    `translate(${margin.left}, ${margin.top})`
-                );
-        
-        const svgSelector = select(container)
-            .select<SVGElement>('svg');
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+        const svgSelector = select(container).select<SVGElement>('svg');
 
         const svg = svgSelector.node();
 
-        const g = svgSelector
-            .select<SVGGElement>('g')
-            .node();
+        const g = svgSelector.select<SVGGElement>('g').node();
 
         const xScale = scaleBand<string>()
             .paddingInner(0.2)
             .range([0, width])
-            .domain(xDomain)
+            .domain(xDomain);
 
-        const yScale = scaleLinear()
-            .range([height, 0])
-            .domain(yDomain).nice();
+        const yScale = scaleLinear().range([height, 0]).domain(yDomain).nice();
 
         setSvgContainerData({
             svg,
             g,
             margin,
-            dimension: dimensionRef.current
+            dimension: dimensionRef.current,
         });
 
         setScales({
             x: xScale,
-            y: yScale
+            y: yScale,
         });
-        
     };
 
-    const scalesOnUpdateEndHandler = ()=>{
-        setScales(scales=>{
+    const scalesOnUpdateEndHandler = () => {
+        setScales((scales) => {
             return {
                 ...scales,
                 // change last update time so the children components know scales have changed
-                lastUpdateTime: new Date()
-            }
+                lastUpdateTime: new Date(),
+            };
         });
     };
 
-    const resizeHandler = ()=>{
-
+    const resizeHandler = () => {
         const container = containerRef.current;
 
-        if(!container || !svgContainerData || !scales){
+        if (!container || !svgContainerData || !scales) {
             return;
         }
 
@@ -140,49 +123,48 @@ const SvgContainer:React.FC<Props> = ({
 
         dimensionRef.current.width = newWidth;
 
-        x.range([0, newWidth ]);
+        x.range([0, newWidth]);
 
         scalesOnUpdateEndHandler();
-    }
+    };
 
-    useEffect(()=>{
+    useEffect(() => {
         init();
     }, []);
 
-    useEffect(()=>{
-
-        if( scales && yDomain ){
+    useEffect(() => {
+        if (scales && yDomain) {
             scales.y.domain(yDomain).nice();
             scalesOnUpdateEndHandler();
         }
+    }, [yDomain]);
 
-    }, [ yDomain ]);
-
-    React.useEffect(()=>{
+    React.useEffect(() => {
         resizeHandler();
-    }, [ windowSize ]);
+    }, [windowSize]);
 
     return (
         <>
-            <div 
+            <div
                 ref={containerRef}
                 style={{
-                    'position': 'relative',
-                    'width': '100%',
-                    'height': '100%'
+                    position: 'relative',
+                    width: '100%',
+                    height: '100%',
                 }}
             >
-                {   
-                    React.Children.map(children, (child)=>{
-                        return React.cloneElement(child as React.ReactElement<any>, {
+                {React.Children.map(children, (child) => {
+                    return React.cloneElement(
+                        child as React.ReactElement<any>,
+                        {
                             svgContainerData,
-                            scales
-                        });
-                    })  
-                }
+                            scales,
+                        }
+                    );
+                })}
             </div>
         </>
     );
-}
+};
 
-export default SvgContainer
+export default SvgContainer;

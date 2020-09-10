@@ -6,5 +6,5 @@ import covid19DataReducer from './Covid19Data';
 export default combineReducers({
     map: mapReducer,
     UI: UIReducer,
-    covid19Data: covid19DataReducer
+    covid19Data: covid19DataReducer,
 });

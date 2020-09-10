@@ -1,16 +1,8 @@
-import React, {
-    useEffect,
-    useState,
-    useRef
-} from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 
-import {
-    useSelector
-} from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import {
-    isMobileSeletor
-} from '../../store/reducers/UI'
+import { isMobileSeletor } from '../../store/reducers/UI';
 
 import { loadModules } from 'esri-loader';
 
@@ -25,19 +17,19 @@ type Props = {
     url: string;
     // itemId: string;
     outFields?: string[];
-    mapView?:IMapView;
+    mapView?: IMapView;
     visibleScale?: {
         min: number;
         max: number;
-    }
+    };
     // onStart?: ()=>void;
-    onSelect: (feature:IGraphic)=>void;
+    onSelect: (feature: IGraphic) => void;
 
-    pointerOnMove: (position: TooltipPosition)=>void;
-    featureOnHover: (feature: IGraphic)=>void;
-}
+    pointerOnMove: (position: TooltipPosition) => void;
+    featureOnHover: (feature: IGraphic) => void;
+};
 
-const QueryTaskLayer:React.FC<Props> = ({
+const QueryTaskLayer: React.FC<Props> = ({
     url,
     // itemId,
     outFields,
@@ -46,32 +38,26 @@ const QueryTaskLayer:React.FC<Props> = ({
     // onStart,
     onSelect,
     pointerOnMove,
-    featureOnHover
+    featureOnHover,
 }) => {
-
     const isMobile = useSelector(isMobileSeletor);
 
     const layerRef = useRef<IFeatureLayer>();
     const layerViewRef = useRef<IFeatureLayerView>();
     const mouseMoveDelay = useRef<number>();
 
-    const isLayerInVisibleRange = ()=>{
-        return ( 
-            mapView.scale < layerRef.current.minScale && 
+    const isLayerInVisibleRange = () => {
+        return (
+            mapView.scale < layerRef.current.minScale &&
             mapView.scale > layerRef.current.maxScale
         );
-    }
+    };
 
-    const init = async()=>{
-
-        type Modules = [
-            typeof IFeatureLayer
-        ];
+    const init = async () => {
+        type Modules = [typeof IFeatureLayer];
 
         try {
-            const [ 
-                FeatureLayer,
-            ] = await (loadModules([
+            const [FeatureLayer] = await (loadModules([
                 'esri/layers/FeatureLayer',
             ]) as Promise<Modules>);
 
@@ -85,92 +71,89 @@ const QueryTaskLayer:React.FC<Props> = ({
                 visible: true,
                 popupEnabled: false,
                 outFields,
-                opacity: 0
+                opacity: 0,
             });
 
             mapView.map.add(layer);
 
-            mapView.whenLayerView(layer).then(layerView=>{
+            mapView.whenLayerView(layer).then((layerView) => {
                 // console.log(layerView)
 
                 layerRef.current = layer;
                 layerViewRef.current = layerView;
 
                 initEventListeners();
-            })
-
-        } catch(err){
+            });
+        } catch (err) {
             console.error(err);
         }
     };
 
-    const queryFeatures = async(event:__esri.MapViewClickEvent)=>{
+    const queryFeatures = async (event: __esri.MapViewClickEvent) => {
         // console.log(mapView.scale)
 
         const isVisible = isLayerInVisibleRange();
 
-        if(isVisible){
-
+        if (isVisible) {
             // onStart();
 
             const results = await layerViewRef.current.queryFeatures({
                 where: '1=1',
                 geometry: mapView.toMap(event),
                 returnGeometry: true,
-                outFields: outFields || ['*']
+                outFields: outFields || ['*'],
             });
 
-            onSelect(results.features && results.features.length ? results.features[0] : undefined);
+            onSelect(
+                results.features && results.features.length
+                    ? results.features[0]
+                    : undefined
+            );
         }
-    }
+    };
 
-    const initEventListeners = ()=>{
-
-        mapView.on("click", (event)=>{
+    const initEventListeners = () => {
+        mapView.on('click', (event) => {
             queryFeatures(event);
         });
 
-        mapView.on("pointer-leave", ()=>{
+        mapView.on('pointer-leave', () => {
             pointerOnMove(undefined);
-        })
+        });
 
-        mapView.on("pointer-move", (event)=>{
-
+        mapView.on('pointer-move', (event) => {
             clearTimeout(mouseMoveDelay.current);
 
             // mapView.toScreen(event.)
             // console.log(event.x, event.y)
 
-            if(isLayerInVisibleRange() && !isMobile){
-
+            if (isLayerInVisibleRange() && !isMobile) {
                 const { x, y } = event;
 
                 pointerOnMove({ x, y });
 
-                mouseMoveDelay.current = window.setTimeout(async()=>{
-
+                mouseMoveDelay.current = window.setTimeout(async () => {
                     const results = await layerViewRef.current.queryFeatures({
                         where: '1=1',
                         geometry: mapView.toMap(event),
                         returnGeometry: false,
-                        outFields: outFields || ['*']
+                        outFields: outFields || ['*'],
                     });
                     // console.log(results)
 
                     featureOnHover(results.features[0]);
-
                 }, 50);
             }
         });
-    }
+    };
 
     useEffect(() => {
-        if(mapView){
+        if (mapView) {
             init();
         }
     }, [mapView]);
 
     return null;
-}
+};
 
-export default QueryTaskLayer
+export default QueryTaskLayer;

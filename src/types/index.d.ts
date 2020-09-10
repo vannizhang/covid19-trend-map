@@ -3,7 +3,6 @@ declare module '*.png';
 declare module '*.svg';
 
 declare module 'covid19-trend-map' {
-
     import IGraphic from 'esri/Graphic';
 
     type Covid19CasesByTimeFeature = {
@@ -14,33 +13,39 @@ declare module 'covid19-trend-map' {
             NewCases: number;
             Population: number;
             NewDeaths?: number;
-        }
+        };
     };
 
     type Covid19TrendName = 'confirmed' | 'death' | 'new-cases';
 
-    type COVID19TrendCategoryType = 'Emergent' | 'Spreading' | 'Epidemic' | 'Controlled' | 'End Stage' | 'Zero Cases';
+    type COVID19TrendCategoryType =
+        | 'Emergent'
+        | 'Spreading'
+        | 'Epidemic'
+        | 'Controlled'
+        | 'End Stage'
+        | 'Zero Cases';
 
     type PathFrame = {
         xmin: number;
         ymin: number;
         xmax: number;
         ymax: number;
-    }
+    };
 
     type PathData = {
         path: number[][];
         frame?: PathFrame;
-    }
+    };
 
     type Covid19TrendPaths = {
         confirmed: PathData;
         deaths: PathData;
         newCases: PathData;
-    }
+    };
 
     type Covid19TrendData = {
-        attributes: any
+        attributes: any;
         geometry: {
             x: number;
             y: number;
@@ -49,28 +54,28 @@ declare module 'covid19-trend-map' {
 
     type Covid19TrendDataQueryResponse = {
         features: Covid19TrendData[];
-        frames:{
+        frames: {
             confirmed: PathFrame;
             deaths: PathFrame;
             newCases: PathFrame;
-        }
-    }
+        };
+    };
 
     type QueryLocationFeature = {
         attributes: any;
         geometry: {
-            rings: number[][][],
+            rings: number[][][];
             spatialReference: {
                 latestWkid: number;
                 wkid: number;
-            }
-        }
-    }
+            };
+        };
+    };
 
     type QueryLocation4Covid19TrendData = {
         graphic: QueryLocationFeature;
         locationName: string;
-    }
+    };
 
     type Covid19LatestNumbersFeature = {
         Confirmed: number;
@@ -82,8 +87,8 @@ declare module 'covid19-trend-map' {
     };
 
     type Covid19LatestNumbers = {
-        [key: string]: Covid19LatestNumbersFeature
-    }
+        [key: string]: Covid19LatestNumbersFeature;
+    };
 
     export {
         PathData,
@@ -97,6 +102,6 @@ declare module 'covid19-trend-map' {
         QueryLocation4Covid19TrendData,
         Covid19LatestNumbersFeature,
         Covid19LatestNumbers,
-        QueryLocationFeature
-    }
+        QueryLocationFeature,
+    };
 }
