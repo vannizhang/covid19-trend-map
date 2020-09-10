@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 
 import {
+    updateTooltipData,
     tooltipDataChanged,
     tooltipPositionChanged,
     isStateLayerVisilbeToggled
@@ -25,15 +26,9 @@ import {
     queryLocationSelector,
 } from '../../store/reducers/Covid19Data';
 
-import {
-    updateIsNarrowSreen
-} from '../../store/reducers/UI';
-
 import About from '../About/About';
 import MapView from '../MapView/MapView';
-import Tooltip, {
-    TooltipData
-} from '../Tooltip/Tooltip';
+import Tooltip from '../Tooltip/Tooltip';
 import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
@@ -45,141 +40,34 @@ import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer';
 import {
     Covid19TrendDataQueryResponse,
     Covid19LatestNumbers,
+    QueryLocation4Covid19TrendData,
     // Covid19CasesByTimeFeature,
-    // QueryLocation4Covid19TrendData,
 } from 'covid19-trend-map';
-
-// import IGraphic from 'esri/Graphic';
 
 import AppConfig from '../../AppConfig';
 
-// import {
-//     fetchCovid19Data,
-//     fetchCovid19DataForNYCCounties,
-//     FIPSCodes4NYCCounties,
-//     FetchCovid19DataResponse
-// } from '../../utils/queryCovid19Data';
-
-import useWindowSize from '@rehooks/window-size';
-
 import { getModifiedTime } from '../../utils/getModifiedDate';
+import { FetchCovid19DataResponse } from '../../utils/queryCovid19Data';
 
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
-    covid19LatestNumbers: Covid19LatestNumbers
+    covid19LatestNumbers: Covid19LatestNumbers;
+    covid19CasesByTimeQueryResults: FetchCovid19DataResponse;
+    covid19CasesByTimeQueryLocation: QueryLocation4Covid19TrendData;
+    isLoadingQueryResults: boolean;
 }
 
 const App:React.FC<Props> = ({
     covid19USCountiesData,
     covid19USStatesData,
-    covid19LatestNumbers
+    covid19LatestNumbers,
+    covid19CasesByTimeQueryResults,
+    covid19CasesByTimeQueryLocation,
+    isLoadingQueryResults
 }) => {
 
     const dispatch = useDispatch();
-    const windowSize = useWindowSize();
-
-    const covid19CasesByTimeQueryResults = useSelector(covid19DataByLocationSelector);
-    const covid19CasesByTimeQueryLocation = useSelector(queryLocationSelector);
-    const isLoading = useSelector(covid19DataOnLoadingSelector);
-
-    // const [ covid19CasesByTimeQueryResults, setCovid19CasesByTimeQueryResults ] = useState<FetchCovid19DataResponse>();
-    // // user can click map to select US State or County that will be used to query covid19 trend data
-    // const [ covid19CasesByTimeQueryLocation, setcovid19CasesByTimeQueryLocation ] = useState<QueryLocation4Covid19TrendData>();
-    // const [ isLoading, setIsLoading ] = useState<boolean>(false);
-
-    // const countyOnSelect = async(countyFeature:IGraphic)=>{
-
-    //     if(!countyFeature){
-    //         resetQueryResults();
-    //         return false;
-    //     }
-
-    //     const countyFIPS = countyFeature.attributes['FIPS'];
-
-    //     const isNYCCounties = FIPSCodes4NYCCounties.indexOf(countyFIPS) > -1;
-
-    //     const locationName = isNYCCounties ? 'NEW YORK, NEW YORK' : `${countyFeature.attributes['NAME']}, ${countyFeature.attributes['STATE_NAME']}`;
-
-    //     const data = !isNYCCounties
-    //         ? await fetchCovid19Data({
-    //             countyFIPS
-    //         })
-    //         : await fetchCovid19DataForNYCCounties()
-        
-    //     setcovid19CasesByTimeQueryLocation({
-    //         graphic: countyFeature,
-    //         locationName
-    //     });
-
-    //     setCovid19CasesByTimeQueryResults(data);
-    // };
-
-    // const stateOnSelect = async(stateFeature:IGraphic)=>{
-
-    //     if(!stateFeature){
-    //         resetQueryResults();
-    //         return false;
-    //     }
-
-    //     const stateName = stateFeature.attributes['STATE_NAME'];
-
-    //     const data = await fetchCovid19Data({
-    //         stateName
-    //     });
-
-    //     setcovid19CasesByTimeQueryLocation({
-    //         graphic: stateFeature,
-    //         locationName: stateFeature.attributes['STATE_NAME']
-    //     });
-
-    //     setCovid19CasesByTimeQueryResults(data);
-    // };
-
-    // const queryOnStartHandler = ()=>{
-    //     setCovid19CasesByTimeQueryResults(undefined);
-    //     setIsLoading(true);
-    // }
-
-    // const resetQueryResults = ()=>{
-    //     setIsLoading(false);
-    //     setCovid19CasesByTimeQueryResults(undefined);
-    //     setcovid19CasesByTimeQueryLocation(undefined);
-    // };
-
-    // when pointer hove US Counties or State Polygons
-    const featureOnHoverHandler = (locationName:string, FIPS:string)=>{
-
-        let tooltipData:TooltipData;
-
-        if(locationName && FIPS && covid19LatestNumbers[FIPS]){
-
-            const latestNumbers4SelectedFeature = covid19LatestNumbers[FIPS];
-
-            tooltipData = {
-                locationName,
-                confirmed: latestNumbers4SelectedFeature.Confirmed,
-                deaths: latestNumbers4SelectedFeature.Deaths,
-                newCasesPast7Days: latestNumbers4SelectedFeature.NewCases,
-                newDeathsPast7Days: latestNumbers4SelectedFeature.NewDeaths || 0,
-                population: latestNumbers4SelectedFeature.Population,
-                trendCategory: latestNumbers4SelectedFeature.TrendType
-            };
-        }
-
-        dispatch(tooltipDataChanged(tooltipData))
-    };
-
-    // useEffect(() => {
-    //     if(covid19CasesByTimeQueryResults){
-    //         setIsLoading(false);
-    //     }
-    // }, [covid19CasesByTimeQueryResults]);
-
-    React.useEffect(()=>{
-    //    console.log(windowSize.outerWidth)
-        dispatch(updateIsNarrowSreen(windowSize.outerWidth) );
-    }, [ windowSize ]);
 
     return (
         <>
@@ -216,10 +104,8 @@ const App:React.FC<Props> = ({
                 <QueryTaskLayer 
                     key='query-4-US-Counties'
                     url={AppConfig["us-counties-feature-layer-item-url"]}
-                    // itemId={AppConfig["us-counties-feature-layer-item-id"]}
                     outFields={['FIPS', 'NAME', 'STATE_NAME']}
                     visibleScale={AppConfig["us-counties-layer-visible-scale"]}
-                    // onStart={queryOnStartHandler}
                     onSelect={(feature)=>{
                         const featureJSON = feature ? feature.toJSON() : undefined;
                         dispatch(queryCountyData(featureJSON))
@@ -236,18 +122,18 @@ const App:React.FC<Props> = ({
                         const FIPS = feature 
                             ? feature.attributes['FIPS'] 
                             : undefined;
+                        
+                        const tooltipData = covid19LatestNumbers[FIPS];
 
-                        featureOnHoverHandler(locationName, FIPS);
+                        dispatch(updateTooltipData(locationName, tooltipData));
                     }}
                 />
 
                 <QueryTaskLayer 
                     key='query-4-US-States'
                     url={AppConfig["us-states-feature-layer-item-url"]}
-                    // itemId={AppConfig["us-states-feature-layer-item-id"]}
                     outFields={['STATE_NAME', 'STATE_FIPS']}
                     visibleScale={AppConfig["us-states-layer-visible-scale"]}
-                    // onStart={queryOnStartHandler}
                     onSelect={(feature)=>{
                         const featureJSON = feature ? feature.toJSON() : undefined;
                         dispatch(queryStateData(featureJSON))
@@ -265,7 +151,9 @@ const App:React.FC<Props> = ({
                             ? feature.attributes['STATE_FIPS'] 
                             : undefined;
 
-                        featureOnHoverHandler(locationName, FIPS);
+                        const tooltipData = covid19LatestNumbers[FIPS];
+
+                        dispatch(updateTooltipData(locationName, tooltipData));
                     }}
                 />
             </MapView>
@@ -273,9 +161,9 @@ const App:React.FC<Props> = ({
             <ControlPanel />
 
             {
-                covid19CasesByTimeQueryResults || isLoading ? (
+                covid19CasesByTimeQueryResults || isLoadingQueryResults ? (
                     <BottomPanel
-                        showLoadingIndicator={isLoading}
+                        showLoadingIndicator={isLoadingQueryResults}
                     >
 
                         <SummaryInfoPanel 
@@ -309,6 +197,10 @@ const AppContainer = ()=>{
     const [ covid19USStatesData, setCovid19USStatesData ] = useState<Covid19TrendDataQueryResponse>();
     const [ covid19LatestNumbers, setCovid19LatestNumbers ] = useState<Covid19LatestNumbers>();
 
+    const covid19CasesByTimeQueryResults = useSelector(covid19DataByLocationSelector);
+    const covid19CasesByTimeQueryLocation = useSelector(queryLocationSelector);
+    const isLoading = useSelector(covid19DataOnLoadingSelector);
+
     const fetchData = async()=>{
 
         const modified = getModifiedTime();
@@ -327,13 +219,13 @@ const AppContainer = ()=>{
             setCovid19USCountiesData(queryResUSCounties.data);
             // console.log(queryResUSCounties)
 
-            const latestNumbers = await axios.get<Covid19LatestNumbers>(Url4LatestNumbers);
-            setCovid19LatestNumbers(latestNumbers.data)
+            const queryResLatestNumbers = await axios.get<Covid19LatestNumbers>(Url4LatestNumbers);
+            setCovid19LatestNumbers(queryResLatestNumbers.data)
+            // dispatch(latestNumbersLoaded(queryResLatestNumbers.data));
 
         } catch(err){
             console.error(err);
         }
-
     };
 
     useEffect(()=>{
@@ -345,6 +237,9 @@ const AppContainer = ()=>{
             covid19USCountiesData={covid19USCountiesData}
             covid19USStatesData={covid19USStatesData}
             covid19LatestNumbers={covid19LatestNumbers}
+            covid19CasesByTimeQueryResults={covid19CasesByTimeQueryResults}
+            covid19CasesByTimeQueryLocation={covid19CasesByTimeQueryLocation}
+            isLoadingQueryResults={isLoading}
         />
     ) : null;
 };

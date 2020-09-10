@@ -6,19 +6,21 @@ import {
 
 import {
     RootState,
-    // StoreDispatch,
-    // StoreGetState
+    StoreDispatch,
+    StoreGetState
 } from '../configureStore';
 
 import {
     TooltipPosition,
     TooltipData
 } from '../../components/Tooltip/Tooltip'
+import { Covid19LatestNumbers, Covid19LatestNumbersFeature } from 'covid19-trend-map';
 
 type MapState = {
     tooltipPosition: TooltipPosition;
     tooltipData: TooltipData;
     isStateLayerVisilbe: boolean;
+    latestNumbers: Covid19LatestNumbers
 }
 
 type TooltipPositionChangedAction = {
@@ -41,7 +43,7 @@ const slice = createSlice({
     initialState: {
         tooltipPosition: null,
         tooltipData: null,
-        isStateLayerVisilbe: true
+        isStateLayerVisilbe: true,
     } as MapState,
     reducers: {
         tooltipPositionChanged: (state, action:TooltipPositionChangedAction)=>{
@@ -61,10 +63,39 @@ const {
 } = slice;
 
 export const {
-    tooltipPositionChanged,
     tooltipDataChanged,
+    tooltipPositionChanged,
     isStateLayerVisilbeToggled
 } = slice.actions;
+
+export const updateTooltipData = (locationName:string, data:Covid19LatestNumbersFeature)=>(dispatch:StoreDispatch, getState:StoreGetState)=>{
+
+    let tooltipData:TooltipData;
+
+    if(locationName && data){
+
+        const {
+            Confirmed,
+            Deaths,
+            NewCases,
+            NewDeaths,
+            Population,
+            TrendType
+        } = data;
+
+        tooltipData = {
+            locationName,
+            confirmed: Confirmed,
+            deaths: Deaths,
+            newCasesPast7Days: NewCases,
+            newDeathsPast7Days: NewDeaths || 0,
+            population: Population,
+            trendCategory: TrendType
+        };
+    }
+
+    dispatch(tooltipDataChanged(tooltipData))
+}
 
 // selectors
 export const tooltipPositionSelector = createSelector(

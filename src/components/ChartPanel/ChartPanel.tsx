@@ -3,12 +3,16 @@ import React, {
 } from 'react';
 
 import {
+    useDispatch,
     useSelector
 } from 'react-redux';
 
+import useWindowSize from '@rehooks/window-size';
+
 import {
-    activeTrendSelector,
     isMobileSeletor,
+    updateIsNarrowSreen,
+    activeTrendSelector,
     isNarrowSreenSeletor
 } from '../../store/reducers/UI'
 
@@ -53,12 +57,14 @@ type TooltipData = {
     parentChart: Covid19TrendName;
 };
 
-const NarrowScreenBreakPoint = 1020;
-
 const ChartPanel:React.FC<Props> = ({
     // activeTrend,
     data
 }) => {
+
+    const dispatch = useDispatch();
+
+    const windowSize = useWindowSize();
 
     const activeTrend = useSelector(activeTrendSelector);
 
@@ -67,7 +73,7 @@ const ChartPanel:React.FC<Props> = ({
     const isNarrowScreen = useSelector(isNarrowSreenSeletor);
 
     // if true, convert numbers from Covid19CasesByTimeFeature into number per 100K people
-    const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
+    // const [ showNormalizedValues, setShowNormalizedValues ] = useState<boolean>(false);
 
     const [ itemOnHover, setItemOnHover ] = useState<TooltipData>();
 
@@ -78,9 +84,7 @@ const ChartPanel:React.FC<Props> = ({
 
     const getYDomain = (fieldName:string)=>{
         const values = data.map(d=>{
-            return showNormalizedValues 
-                ? Math.round(d.attributes[fieldName] / d.attributes.Population * 100000 )
-                : d.attributes[fieldName] 
+            return d.attributes[fieldName];
         });
         const yMax = max(values) || 1;
         const yDomain = [ 0, yMax ];
@@ -206,6 +210,11 @@ const ChartPanel:React.FC<Props> = ({
             </SvgContainer>
         );
     }
+
+    React.useEffect(()=>{
+        // console.log(windowSize.outerWidth)
+        dispatch(updateIsNarrowSreen(windowSize.outerWidth) );
+    }, [ windowSize ]);
 
     return (
         <div
