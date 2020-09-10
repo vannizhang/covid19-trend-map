@@ -33,7 +33,7 @@ const SwitchBtnData: {
     },
 ];
 
-const ControlPanel = () => {
+const ControlPanel: React.FC = () => {
     const dispatch = useDispatch();
     const activeTrend = useSelector(activeTrendSelector);
     const isMobile = useSelector(isMobileSeletor);

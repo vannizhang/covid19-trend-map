@@ -14,7 +14,7 @@ const TitleLookup: { [key in Covid19TrendName]: string } = {
     'new-cases': 'NEW DAILY CASES',
 };
 
-const Title: React.FC<Props> = ({ chartType }) => {
+const Title: React.FC<Props> = ({ chartType }: Props) => {
     const getTitleContent = () => {
         if (chartType === 'confirmed') {
             return <span>{TitleLookup[chartType]}</span>;

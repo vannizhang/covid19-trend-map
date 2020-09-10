@@ -37,7 +37,7 @@ const Tooltip: React.FC<Props> = ({ svgContainerData, scales, data }) => {
 
         const { width } = dimension;
 
-        const { x, y } = scales;
+        const { x } = scales;
 
         const tooltipDivWidth = tooltipDiv.offsetWidth;
         const tooltipDivHeight = tooltipDiv.offsetHeight;
@@ -69,7 +69,7 @@ const Tooltip: React.FC<Props> = ({ svgContainerData, scales, data }) => {
             Deaths,
             NewCases,
             NewDeaths,
-            Population,
+            // Population,
         } = attributes;
 
         const newCases = numberFns.numberWithCommas(NewCases);

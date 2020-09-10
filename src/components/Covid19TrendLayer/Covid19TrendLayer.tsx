@@ -33,23 +33,18 @@ import {
 import { TrendColor } from '../../AppConfig';
 
 type Props = {
-    // activeTrend: Covid19TrendName;
-    size?: number;
     visibleScale?: {
         min: number;
         max: number;
     };
     // indicate if attributes contains 'trend category type' value from https://www.arcgis.com/home/item.html?id=49c25e0ce50340e08fcfe51fe6f26d1e#overview
     hasTrendCategoriesAttribute?: boolean;
-    // itemId?: string;
-    // field?: string;
     mapView?: IMapView;
 
     isLayerInVisibleScaleOnChange?: (visible: boolean) => void;
 };
 
 type Covid19TrendLayerProps = {
-    // features: Covid19TrendData[]
     data: Covid19TrendDataQueryResponse;
 } & Props;
 
@@ -60,13 +55,10 @@ const sizeByTrendName: { [key in Covid19TrendName]: number } = {
 };
 
 const Covid19TrendLayer: React.FC<Covid19TrendLayerProps> = ({
-    // activeTrend,
     data,
-    visibleScale,
-    size = 20,
-    hasTrendCategoriesAttribute = false,
     mapView,
-
+    visibleScale,
+    hasTrendCategoriesAttribute = false,
     isLayerInVisibleScaleOnChange,
 }) => {
     const renderDealy = useRef<number>();

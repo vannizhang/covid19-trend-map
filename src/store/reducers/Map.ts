@@ -4,7 +4,11 @@ import {
     // createAsyncThunk
 } from '@reduxjs/toolkit';
 
-import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+import {
+    RootState,
+    StoreDispatch,
+    // StoreGetState
+} from '../configureStore';
 
 import { TooltipPosition, TooltipData } from '../../components/Tooltip/Tooltip';
 import {
@@ -71,7 +75,10 @@ export const {
 export const updateTooltipData = (
     locationName: string,
     data: Covid19LatestNumbersFeature
-) => (dispatch: StoreDispatch, getState: StoreGetState) => {
+) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void => {
     let tooltipData: TooltipData;
 
     if (locationName && data) {

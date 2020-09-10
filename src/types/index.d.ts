@@ -3,7 +3,7 @@ declare module '*.png';
 declare module '*.svg';
 
 declare module 'covid19-trend-map' {
-    import IGraphic from 'esri/Graphic';
+    // import IGraphic from 'esri/Graphic';
 
     type Covid19CasesByTimeFeature = {
         attributes: {

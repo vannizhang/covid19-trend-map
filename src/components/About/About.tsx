@@ -9,8 +9,6 @@ import {
     isAboutModalOpenToggled,
 } from '../../store/reducers/UI';
 
-import { numberFns } from 'helper-toolkit-ts';
-
 type Props = {
     ymax4confirmed: number;
     ymax4deaths: number;
@@ -18,7 +16,7 @@ type Props = {
 
 const ModalID = 'about';
 
-const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
+const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
     const dispatch = useDispatch();
 
     const isOpen = useSelector(isAboutModalOpenSelector);
@@ -115,6 +113,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         <a
                             href="https://urbanobservatory.maps.arcgis.com/apps/MapSeries/index.html?appid=ad46e587a9134fcdb43ff54c16f8c39b"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             trend summary
                         </a>
@@ -122,6 +121,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         <a
                             href="https://www.arcgis.com/home/item.html?id=a16bb8b137ba4d8bbe645301b80e5740"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             here
                         </a>
@@ -157,6 +157,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         University CSSE feature service of daily{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://www.arcgis.com/home/item.html?id=4cb598ae041348fb92270f102a6783cb"
                         >
                             US County Cases
@@ -170,6 +171,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         fashion. Please refer to their{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://coronavirus.jhu.edu/us-map-faq"
                         >
                             frequently asked questions
@@ -177,6 +179,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         for more context around this data. The Khaki basemap is{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://livingatlas.arcgis.com/en/browse/#d=2&amp;q=khaki"
                         >
                             available via Living Atlas
@@ -185,6 +188,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         tool{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=000AIr"
                         >
                             here
@@ -199,6 +203,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         This application was created by{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://github.com/vannizhang/"
                         >
                             Jinnan Zhang
@@ -206,17 +211,23 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         and{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://adventuresinmapping.com/"
                         >
                             John Nelson
                         </a>
                         , of Esri, with help from{' '}
-                        <a target="_blank" href="https://github.com/ycabon">
+                        <a
+                            target="_blank"
+                            rel="noreferrer"
+                            href="https://github.com/ycabon"
+                        >
                             Yann Cabon
                         </a>{' '}
                         and Fang Li, inspired by the{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://datagistips.hypotheses.org/488"
                         >
                             trend line maps of Mathieu Rajerison
@@ -224,6 +235,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         and the{' '}
                         <a
                             target="_blank"
+                            rel="noreferrer"
                             href="https://twitter.com/rileydchampine/status/1243552850728411143"
                         >
                             local 1918 flu charts of Riley D. Champine
@@ -238,6 +250,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }) => {
                         <a
                             href="https://www.esri.com/en-us/covid-19/overview"
                             target="_blank"
+                            rel="noreferrer"
                         >
                             Esri COVID-19 hub.
                         </a>

@@ -18,11 +18,12 @@ export type MapCenterLocation = {
 
 interface Props {
     webmapId: string;
+    children: React.ReactNode;
 }
 
 const locationFromURL = getDefaultValueFromHashParams('@') as MapCenterLocation;
 
-const MapView: React.FC<Props> = ({ webmapId, children }) => {
+const MapView: React.FC<Props> = ({ webmapId, children }: Props) => {
     const mapDivRef = React.useRef<HTMLDivElement>();
 
     const [mapView, setMapView] = React.useState<IMapView>(null);

@@ -1,6 +1,6 @@
 import { subHours } from 'date-fns';
 
-export const getModifiedTime = () => {
+export const getModifiedTime = (): number => {
     const now = new Date();
     // const syncHourInUTC = 13
     const utcYear = now.getUTCFullYear();
@@ -9,7 +9,7 @@ export const getModifiedTime = () => {
     const utcHour = now.getUTCHours();
 
     // the file can be modified at 13PM or 14PM UTC
-    let syncHourInUTC = utcHour === 13 ? utcHour : 14;
+    const syncHourInUTC = utcHour === 13 ? utcHour : 14;
 
     let modifiedTime = new Date(
         Date.UTC(utcYear, utcMonth, utcDate, syncHourInUTC)

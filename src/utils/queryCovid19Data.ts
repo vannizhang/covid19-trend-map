@@ -194,7 +194,7 @@ const getSummaryInfo = (data: Covid19CasesByTimeFeature[]) => {
     // const indexOfLatestFeature = data.length - 1;
     const latestFeature = data[data.length - 1];
 
-    const { dt, Confirmed, Deaths, Population } = latestFeature.attributes;
+    const { Confirmed, Deaths, Population } = latestFeature.attributes;
 
     // const [ year, month, day ] = dt.split('-');
     // const date = new Date(+year, +month - 1, +day);
@@ -223,7 +223,7 @@ const getBiggestWeeklyIncrease = (data: Covid19CasesByTimeFeature[]) => {
         new Date()
     );
 
-    let dayForFirstFeature = getISODay(dateForFirstFeature);
+    const dayForFirstFeature = getISODay(dateForFirstFeature);
 
     for (let i = 0, len = data.length; i < len; i++) {
         let dayOfWeek = (i % 7) + dayForFirstFeature;

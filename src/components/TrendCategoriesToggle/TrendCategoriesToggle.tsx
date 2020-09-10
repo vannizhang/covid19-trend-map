@@ -53,7 +53,7 @@ const LegendData: {
 
 const Height = '22px';
 
-const TrendCategoriesToggle = () => {
+const TrendCategoriesToggle = (): JSX.Element => {
     const dispatch = useDispatch();
     const isStateLayerVisilbe = useSelector(isStateLayerVisilbeSelector);
     const showTrendCategories = useSelector(showTrendCategoriesSelector);

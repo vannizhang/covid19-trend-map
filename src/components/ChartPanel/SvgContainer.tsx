@@ -36,6 +36,7 @@ type Props = {
     // data: Covid19CasesByTimeFeature[];
     xDomain: string[];
     yDomain: number[];
+    children: React.ReactNode;
 };
 
 const SvgContainer: React.FC<Props> = ({
@@ -43,7 +44,7 @@ const SvgContainer: React.FC<Props> = ({
     xDomain,
     yDomain,
     children,
-}) => {
+}: Props) => {
     const windowSize = useWindowSize();
 
     const containerRef = useRef<HTMLDivElement>();

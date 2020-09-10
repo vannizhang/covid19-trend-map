@@ -26,7 +26,6 @@ import { max } from 'd3';
 import { ThemeStyle } from '../../AppConfig';
 
 type Props = {
-    // activeTrend: Covid19TrendName;
     data: Covid19CasesByTimeFeature[];
 };
 
@@ -47,10 +46,7 @@ type TooltipData = {
     parentChart: Covid19TrendName;
 };
 
-const ChartPanel: React.FC<Props> = ({
-    // activeTrend,
-    data,
-}) => {
+const ChartPanel: React.FC<Props> = ({ data }: Props) => {
     const dispatch = useDispatch();
 
     const windowSize = useWindowSize();
@@ -99,7 +95,7 @@ const ChartPanel: React.FC<Props> = ({
             });
         }
 
-        let values: ChartDataItem[] = [];
+        const values: ChartDataItem[] = [];
 
         for (let i = data.length - 1; i > 0; i--) {
             const feature = data[i];

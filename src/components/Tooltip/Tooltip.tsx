@@ -35,7 +35,7 @@ type Props = {
 // const TooltipHeight = 150;
 const PositionOffset = 10;
 
-const Tooltip: React.FC<Props> = ({ position, data }) => {
+const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
     const containerRef = useRef<HTMLDivElement>();
 
     const [width, height] = useWindowSize();

@@ -3,9 +3,13 @@ import { ThemeStyle } from '../../AppConfig';
 
 type Props = {
     showLoadingIndicator: boolean;
+    children: React.ReactNode;
 };
 
-const BottomPanel: React.FC<Props> = ({ showLoadingIndicator, children }) => {
+const BottomPanel: React.FC<Props> = ({
+    showLoadingIndicator,
+    children,
+}: Props) => {
     const getLoadingIndicator = () => {
         return (
             <div

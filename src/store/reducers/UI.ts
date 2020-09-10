@@ -81,17 +81,17 @@ export const {
     showTrendCategoriesToggled,
 } = slice.actions;
 
-export const updateIsNarrowSreen = (windowOuterWidth: number) => async (
-    dispatch: StoreDispatch,
-    getState: StoreGetState
-) => {
+export const updateIsNarrowSreen = (windowOuterWidth: number) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void => {
     dispatch(isNarrowSreenChanged(windowOuterWidth <= NarrowScreenBreakPoint));
 };
 
-export const toggleShowTrendCategories = () => async (
+export const toggleShowTrendCategories = () => (
     dispatch: StoreDispatch,
     getState: StoreGetState
-) => {
+): void => {
     const state = getState();
     const currentVal = state.UI.showTrendCategories;
     const newVal = !currentVal;

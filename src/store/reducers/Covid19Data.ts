@@ -4,10 +4,13 @@ import {
     createAsyncThunk,
 } from '@reduxjs/toolkit';
 
-import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
+import {
+    RootState,
+    StoreDispatch,
+    // StoreGetState
+} from '../configureStore';
 
 import {
-    Covid19TrendDataQueryResponse,
     QueryLocation4Covid19TrendData,
     QueryLocationFeature,
 } from 'covid19-trend-map';
@@ -19,18 +22,11 @@ import {
     FetchCovid19DataResponse,
 } from '../../utils/queryCovid19Data';
 
-import IGraphic from 'esri/Graphic';
-
 type State = {
     loading: boolean;
     data: FetchCovid19DataResponse;
     queryLocation: QueryLocation4Covid19TrendData;
 };
-
-// type QueryResultsUpdatedAction = {
-//     type: string;
-//     payload: FetchCovid19DataResponse;
-// }
 
 type QueryLocationUpdatedAction = {
     type: string;
@@ -110,10 +106,10 @@ const { reducer } = slice;
 
 const { queryResultsReset, queryLocationUpdated } = slice.actions;
 
-export const queryCountyData = (feature: QueryLocationFeature) => async (
-    dispatch: StoreDispatch,
-    getState: StoreGetState
-) => {
+export const queryCountyData = (feature: QueryLocationFeature) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void => {
     if (feature) {
         const countyFIPS = feature.attributes['FIPS'];
 
@@ -141,10 +137,10 @@ export const queryCountyData = (feature: QueryLocationFeature) => async (
     }
 };
 
-export const queryStateData = (feature: QueryLocationFeature) => async (
-    dispatch: StoreDispatch,
-    getState: StoreGetState
-) => {
+export const queryStateData = (feature: QueryLocationFeature) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void => {
     if (feature) {
         const stateName = feature.attributes['STATE_NAME'];
 
@@ -165,10 +161,10 @@ export const queryStateData = (feature: QueryLocationFeature) => async (
     }
 };
 
-export const resetQueryData = () => async (
-    dispatch: StoreDispatch,
-    getState: StoreGetState
-) => {
+export const resetQueryData = () => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void => {
     dispatch(queryResultsReset());
 };
 

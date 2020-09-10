@@ -59,7 +59,7 @@ const App: React.FC<Props> = ({
     covid19CasesByTimeQueryResults,
     covid19CasesByTimeQueryLocation,
     isLoadingQueryResults,
-}) => {
+}: Props) => {
     const dispatch = useDispatch();
 
     return (
@@ -76,7 +76,6 @@ const App: React.FC<Props> = ({
                 <Covid19TrendLayer
                     key="US-Counties"
                     data={covid19USCountiesData}
-                    // size={30}
                     hasTrendCategoriesAttribute={true}
                     visibleScale={AppConfig['us-counties-layer-visible-scale']}
                 />
@@ -84,7 +83,6 @@ const App: React.FC<Props> = ({
                 <Covid19TrendLayer
                     key="US-States"
                     data={covid19USStatesData}
-                    // size={30}
                     visibleScale={AppConfig['us-states-layer-visible-scale']}
                     isLayerInVisibleScaleOnChange={(isVisible) => {
                         // setIsStateLayerVisible(isVisible);
@@ -195,7 +193,7 @@ const App: React.FC<Props> = ({
     );
 };
 
-const AppContainer = () => {
+const AppContainer = (): JSX.Element => {
     const [covid19USCountiesData, setCovid19USCountiesData] = useState<
         Covid19TrendDataQueryResponse
     >();

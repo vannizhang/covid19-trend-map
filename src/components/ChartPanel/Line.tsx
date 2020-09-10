@@ -1,6 +1,6 @@
 import React from 'react';
 import { generate } from 'shortid';
-import { select, line, curveMonotoneX } from 'd3';
+import { select, line } from 'd3';
 
 import { Scales, SvgContainerData } from './SvgContainer';
 

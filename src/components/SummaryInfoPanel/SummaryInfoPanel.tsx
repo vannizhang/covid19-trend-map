@@ -20,7 +20,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
     locationName,
     data,
     closeBtnOnClick,
-}) => {
+}: Props) => {
     const isMobile = useSelector(isMobileSeletor);
 
     const getSummaryInfo = () => {
