@@ -1,5 +1,16 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ThemeStyle } from '../../AppConfig';
+
+import {
+    resetQueryData,
+    covid19DataByLocationSelector,
+    covid19DataOnLoadingSelector,
+    queryLocationSelector,
+} from '../../store/reducers/Covid19Data';
+
+import ChartPanel from '../ChartPanel/ChartPanel';
+import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 
 type Props = {
     showLoadingIndicator: boolean;
@@ -47,4 +58,44 @@ const BottomPanel: React.FC<Props> = ({
     );
 };
 
-export default BottomPanel;
+const BottomPanelContainer: React.FC = () => {
+    const dispatch = useDispatch();
+
+    const covid19CasesByTimeQueryResults = useSelector(
+        covid19DataByLocationSelector
+    );
+
+    const covid19CasesByTimeQueryLocation = useSelector(queryLocationSelector);
+
+    const isLoading = useSelector(covid19DataOnLoadingSelector);
+
+    return covid19CasesByTimeQueryResults || isLoading ? (
+        <BottomPanel showLoadingIndicator={isLoading}>
+            <SummaryInfoPanel
+                locationName={
+                    covid19CasesByTimeQueryLocation
+                        ? covid19CasesByTimeQueryLocation.locationName
+                        : undefined
+                }
+                data={
+                    covid19CasesByTimeQueryResults
+                        ? covid19CasesByTimeQueryResults.summaryInfo
+                        : undefined
+                }
+                closeBtnOnClick={() => {
+                    dispatch(resetQueryData());
+                }}
+            />
+
+            <ChartPanel
+                data={
+                    covid19CasesByTimeQueryResults
+                        ? covid19CasesByTimeQueryResults.features
+                        : undefined
+                }
+            />
+        </BottomPanel>
+    ) : null;
+};
+
+export default BottomPanelContainer;

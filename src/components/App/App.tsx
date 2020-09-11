@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import axios from 'axios';
 
@@ -14,64 +14,43 @@ import {
 import {
     queryCountyData,
     queryStateData,
-    resetQueryData,
-    covid19DataByLocationSelector,
-    covid19DataOnLoadingSelector,
-    queryLocationSelector,
 } from '../../store/reducers/Covid19Data';
 
 import About from '../About/About';
 import MapView from '../MapView/MapView';
 import Tooltip from '../Tooltip/Tooltip';
-import ChartPanel from '../ChartPanel/ChartPanel';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
 import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
-import SummaryInfoPanel from '../SummaryInfoPanel/SummaryInfoPanel';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer';
 
 import {
     Covid19TrendDataQueryResponse,
     Covid19LatestNumbers,
-    QueryLocation4Covid19TrendData,
-    // Covid19CasesByTimeFeature,
 } from 'covid19-trend-map';
 
 import AppConfig from '../../AppConfig';
 
 import { getModifiedTime } from '../../utils/getModifiedDate';
-import { FetchCovid19DataResponse } from '../../utils/queryCovid19Data';
 
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
     covid19LatestNumbers: Covid19LatestNumbers;
-    covid19CasesByTimeQueryResults: FetchCovid19DataResponse;
-    covid19CasesByTimeQueryLocation: QueryLocation4Covid19TrendData;
-    isLoadingQueryResults: boolean;
 };
 
 const App: React.FC<Props> = ({
     covid19USCountiesData,
     covid19USStatesData,
     covid19LatestNumbers,
-    covid19CasesByTimeQueryResults,
-    covid19CasesByTimeQueryLocation,
-    isLoadingQueryResults,
 }: Props) => {
     const dispatch = useDispatch();
 
     return (
         <>
             <MapView webmapId={AppConfig['webmap-id']}>
-                <QueryTaskResultLayer
-                    queryResult={
-                        covid19CasesByTimeQueryLocation
-                            ? covid19CasesByTimeQueryLocation.graphic
-                            : undefined
-                    }
-                />
+                <QueryTaskResultLayer />
 
                 <Covid19TrendLayer
                     key="US-Counties"
@@ -155,33 +134,7 @@ const App: React.FC<Props> = ({
 
             <ControlPanel />
 
-            {covid19CasesByTimeQueryResults || isLoadingQueryResults ? (
-                <BottomPanel showLoadingIndicator={isLoadingQueryResults}>
-                    <SummaryInfoPanel
-                        locationName={
-                            covid19CasesByTimeQueryLocation
-                                ? covid19CasesByTimeQueryLocation.locationName
-                                : undefined
-                        }
-                        data={
-                            covid19CasesByTimeQueryResults
-                                ? covid19CasesByTimeQueryResults.summaryInfo
-                                : undefined
-                        }
-                        closeBtnOnClick={() => {
-                            dispatch(resetQueryData());
-                        }}
-                    />
-
-                    <ChartPanel
-                        data={
-                            covid19CasesByTimeQueryResults
-                                ? covid19CasesByTimeQueryResults.features
-                                : undefined
-                        }
-                    />
-                </BottomPanel>
-            ) : null}
+            <BottomPanel />
 
             <Tooltip />
 
@@ -203,12 +156,6 @@ const AppContainer = (): JSX.Element => {
     const [covid19LatestNumbers, setCovid19LatestNumbers] = useState<
         Covid19LatestNumbers
     >();
-
-    const covid19CasesByTimeQueryResults = useSelector(
-        covid19DataByLocationSelector
-    );
-    const covid19CasesByTimeQueryLocation = useSelector(queryLocationSelector);
-    const isLoading = useSelector(covid19DataOnLoadingSelector);
 
     const fetchData = async () => {
         const modified = getModifiedTime();
@@ -252,9 +199,6 @@ const AppContainer = (): JSX.Element => {
             covid19USCountiesData={covid19USCountiesData}
             covid19USStatesData={covid19USStatesData}
             covid19LatestNumbers={covid19LatestNumbers}
-            covid19CasesByTimeQueryResults={covid19CasesByTimeQueryResults}
-            covid19CasesByTimeQueryLocation={covid19CasesByTimeQueryLocation}
-            isLoadingQueryResults={isLoading}
         />
     ) : null;
 };

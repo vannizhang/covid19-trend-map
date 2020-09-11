@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { loadModules } from 'esri-loader';
 import IMapView from 'esri/views/MapView';
@@ -6,14 +7,18 @@ import IGraphic from 'esri/Graphic';
 import IPolygon from 'esri/geometry/Polygon';
 import IGraphicsLayer from 'esri/layers/GraphicsLayer';
 import ISimpleFillSymbol from 'esri/symbols/SimpleFillSymbol';
-import { QueryLocationFeature } from 'covid19-trend-map';
+// import { QueryLocationFeature } from 'covid19-trend-map';
+
+import { queryLocationSelector } from '../../store/reducers/Covid19Data';
 
 type Props = {
-    queryResult: QueryLocationFeature;
+    // queryResult: QueryLocationFeature;
     mapView?: IMapView;
 };
 
-const QueryTaskResultLayer: React.FC<Props> = ({ queryResult, mapView }) => {
+const QueryTaskResultLayer: React.FC<Props> = ({ mapView }) => {
+    const queryResult = useSelector(queryLocationSelector);
+
     const [graphicLayer, setGraphicLayer] = useState<IGraphicsLayer>();
 
     const init = async () => {
@@ -48,7 +53,7 @@ const QueryTaskResultLayer: React.FC<Props> = ({ queryResult, mapView }) => {
         ]) as Promise<Modules>);
 
         const graphic = new Graphic({
-            geometry: new Polygon(queryResult.geometry),
+            geometry: new Polygon(queryResult.graphic.geometry),
         });
 
         graphic.symbol = new SimpleFillSymbol({
