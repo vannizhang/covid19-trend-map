@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import { 
     useDispatch, 
@@ -18,31 +18,51 @@ import { ThemeStyle } from '../../AppConfig';
 import Sparkline from './Sparkline';
 import { Covid19TrendData, PathFrame } from 'covid19-trend-map';
 
+const HeaderHeight = 155;
+
 type Pros = {
     visible: boolean;
     data: Covid19TrendData[];
     frame:PathFrame;
+    scrollToBottomHandler?:()=>void;
 }
 
 const GridList:React.FC<Pros> = ({
     visible,
     data,
-    frame
+    frame,
+    scrollToBottomHandler
 }) => {
+
+    const sparklinesContainerRef = React.createRef<HTMLDivElement>();
+
+    const onScrollHandler = ()=>{
+
+        if(!scrollToBottomHandler){
+            return;
+        }
+
+        const sidebarDiv = sparklinesContainerRef.current;
+
+        if( (sidebarDiv.scrollHeight - sidebarDiv.scrollTop) <= sidebarDiv.clientHeight ){
+            // console.log('hit to bottom');
+            scrollToBottomHandler();
+        }
+    };
 
     const getHeader = ()=>{
         return (
             <div
                 style={{
                     'width': '100%',
-                    'height': '120px',
+                    'height': HeaderHeight,
                     'backgroundColor': ThemeStyle["theme-color-khaki"]
                 }}
             ></div>
         )
     };
 
-    const getContent = ()=>{
+    const getSparklines = ()=>{
 
         const sparklines = data.map((d, i)=>{
             // console.log(d);
@@ -58,17 +78,15 @@ const GridList:React.FC<Pros> = ({
 
         return (
             <div
+                ref={sparklinesContainerRef}
                 style={{
-                    'position': 'absolute',
-                    'top': 0,
-                    'left': 0,
                     'width': '100%',
-                    'height': '100%',
-                    'paddingTop': '120px',
+                    'height': `calc(100% - ${HeaderHeight}px)`,
                     'paddingBottom': '60px',
                     'boxSizing': 'border-box',
                     'overflowY': 'auto', 
                 }}
+                onScroll={onScrollHandler}
             >
                 <div className='grid-container'>
                     <div className='column-24 leader-2'>
@@ -101,7 +119,7 @@ const GridList:React.FC<Pros> = ({
             }}
         >
             { getHeader() }
-            { getContent() }
+            { getSparklines() }
         </div>
     ) : null;
 }
@@ -117,9 +135,18 @@ const GridListContainer = () => {
         covid19LatestNumbers
     } = useContext(AppContext);
 
-    const getData = ()=>{
-        const { features, frames } = covid19USCountiesData;
-        return features.slice(0, 200);
+    const [ sparklinesData, setSparklinesData ] = useState<Covid19TrendData[]>([])
+
+    const loadSparklinesData = ()=>{
+        const { features } = covid19USCountiesData;
+
+        const endIndex = sparklinesData.length + 200 <= features.length 
+            ? sparklinesData.length + 200 
+            : sparklinesData.length;
+
+        const featuresSet = features.slice(0, endIndex);
+        
+        setSparklinesData(featuresSet);
     };
 
     const getFrame = ()=>{
@@ -128,11 +155,16 @@ const GridListContainer = () => {
         return frames.newCases;
     }
 
+    useEffect(()=>{
+        loadSparklinesData();
+    }, []);
+
     return (
         <GridList 
             visible={visible}
-            data={getData()}
+            data={sparklinesData}
             frame={getFrame()}
+            scrollToBottomHandler={loadSparklinesData}
         />
     )
 }
