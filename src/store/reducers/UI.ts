@@ -34,6 +34,7 @@ type UIState = {
     isLoadingChartData: boolean;
     showTrendCategories: boolean;
     isNarrowSreen: boolean;
+    isGridListVisible: boolean;
 };
 
 type ActiveTrendUpdatedAction = {
@@ -55,6 +56,7 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
+        isGridListVisible: true
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
@@ -69,6 +71,9 @@ const slice = createSlice({
         isNarrowSreenChanged: (state, action: BooleanPropChangedAction) => {
             state.isNarrowSreen = action.payload;
         },
+        isGridListVisibleToggled: (state) => {
+            state.isGridListVisible = !state.isGridListVisible;
+        },
     },
 });
 
@@ -79,6 +84,7 @@ export const {
     isAboutModalOpenToggled,
     isNarrowSreenChanged,
     showTrendCategoriesToggled,
+    isGridListVisibleToggled
 } = slice.actions;
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (
@@ -129,6 +135,11 @@ export const isMobileSeletor = createSelector(
 export const isNarrowSreenSeletor = createSelector(
     (state: RootState) => state.UI.isNarrowSreen,
     (isNarrowSreen) => isNarrowSreen
+);
+
+export const isGridListVisibleSelector = createSelector(
+    (state: RootState) => state.UI.isGridListVisible,
+    (isGridListVisible) => isGridListVisible
 );
 
 export default reducer;

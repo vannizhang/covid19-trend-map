@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { useDispatch } from 'react-redux';
-
-import axios from 'axios';
 
 import {
     updateTooltipData,
@@ -19,6 +17,7 @@ import {
 import About from '../About/About';
 import MapView from '../MapView/MapView';
 import Tooltip from '../Tooltip/Tooltip';
+import GridList from '../GridList/GridList';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
 import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
@@ -30,9 +29,11 @@ import {
     Covid19LatestNumbers,
 } from 'covid19-trend-map';
 
-import AppConfig from '../../AppConfig';
+import {
+    AppContext 
+} from '../../context/AppContextProvider';
 
-import { getModifiedTime } from '../../utils/getModifiedDate';
+import AppConfig from '../../AppConfig';
 
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
@@ -132,6 +133,8 @@ const App: React.FC<Props> = ({
                 />
             </MapView>
 
+            <GridList />
+
             <ControlPanel />
 
             <BottomPanel />
@@ -147,50 +150,12 @@ const App: React.FC<Props> = ({
 };
 
 const AppContainer = (): JSX.Element => {
-    const [covid19USCountiesData, setCovid19USCountiesData] = useState<
-        Covid19TrendDataQueryResponse
-    >();
-    const [covid19USStatesData, setCovid19USStatesData] = useState<
-        Covid19TrendDataQueryResponse
-    >();
-    const [covid19LatestNumbers, setCovid19LatestNumbers] = useState<
-        Covid19LatestNumbers
-    >();
 
-    const fetchData = async () => {
-        const modified = getModifiedTime();
-
-        try {
-            const HostUrl = AppConfig['static-files-host'];
-            const Url4CountiesJSON = `${HostUrl}${AppConfig['covid19-data-us-counties-json']}?modified=${modified}`;
-            const Url4StatesJSON = `${HostUrl}${AppConfig['covid19-data-us-states-json']}?modified=${modified}`;
-            const Url4LatestNumbers = `${HostUrl}${AppConfig['covid19-latest-numbers-json']}?modified=${modified}`;
-
-            const queryResUSStates = await axios.get<
-                Covid19TrendDataQueryResponse
-            >(Url4StatesJSON);
-            setCovid19USStatesData(queryResUSStates.data);
-            // console.log(queryResUSStates)
-
-            const queryResUSCounties = await axios.get<
-                Covid19TrendDataQueryResponse
-            >(Url4CountiesJSON);
-            setCovid19USCountiesData(queryResUSCounties.data);
-            // console.log(queryResUSCounties)
-
-            const queryResLatestNumbers = await axios.get<Covid19LatestNumbers>(
-                Url4LatestNumbers
-            );
-            setCovid19LatestNumbers(queryResLatestNumbers.data);
-            // dispatch(latestNumbersLoaded(queryResLatestNumbers.data));
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const { 
+        covid19USCountiesData, 
+        covid19USStatesData, 
+        covid19LatestNumbers 
+    } = useContext(AppContext);
 
     return covid19USCountiesData &&
         covid19USStatesData &&
