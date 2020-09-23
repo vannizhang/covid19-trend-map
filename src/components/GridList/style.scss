@@ -1,0 +1,15 @@
+.fancy-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fancy-scrollbar::-webkit-scrollbar-track {
+    background: rgb(232, 226, 210); 
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb {
+    background: #B2A584; 
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #B2A584; 
+}

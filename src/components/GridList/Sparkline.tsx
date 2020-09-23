@@ -8,7 +8,7 @@ type Props = {
     color: string;
 }
 
-const Width = 50;
+const Width = 40;
 
 const Sparkline:React.FC<Props> = ({
     path,

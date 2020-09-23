@@ -1,3 +1,5 @@
+import './style.scss';
+
 import React, { useContext, useState, useEffect } from 'react';
 
 import { 
@@ -79,6 +81,7 @@ const GridList:React.FC<Pros> = ({
         return (
             <div
                 ref={sparklinesContainerRef}
+                className='fancy-scrollbar'
                 style={{
                     'width': '100%',
                     'height': `calc(100% - ${HeaderHeight}px)`,
@@ -89,7 +92,7 @@ const GridList:React.FC<Pros> = ({
                 onScroll={onScrollHandler}
             >
                 <div className='grid-container'>
-                    <div className='column-24 leader-2'>
+                    <div className='column-19 center-column leader-2'>
                         <div
                             style={{
                                 'display': 'flex',
