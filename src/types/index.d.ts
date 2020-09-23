@@ -90,6 +90,16 @@ declare module 'covid19-trend-map' {
         [key: string]: Covid19LatestNumbersFeature;
     };
 
+    interface Covid19TrendDataWithLatestNumbers extends Covid19TrendData {
+        attributes: {
+            FIPS: string;
+            Confirmed: number;
+            Deaths: number;
+            NewCases: number;
+            NewDeaths: number;
+        }
+    }
+    
     export {
         PathData,
         PathFrame,
@@ -103,5 +113,6 @@ declare module 'covid19-trend-map' {
         Covid19LatestNumbersFeature,
         Covid19LatestNumbers,
         QueryLocationFeature,
+        Covid19TrendDataWithLatestNumbers,
     };
 }

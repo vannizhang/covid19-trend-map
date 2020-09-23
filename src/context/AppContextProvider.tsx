@@ -8,7 +8,9 @@ import axios from 'axios';
 
 import {
     Covid19TrendDataQueryResponse,
-    Covid19LatestNumbers,
+    Covid19LatestNumbers, 
+    Covid19TrendData,
+    Covid19TrendDataWithLatestNumbers
 } from 'covid19-trend-map';
 
 import AppConfig from '../AppConfig';
@@ -19,6 +21,7 @@ type AppContextProps = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
     covid19LatestNumbers: Covid19LatestNumbers;
+    covid19TrendData4USCountiesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[];
 }
 
 type AppContextProviderProps = {
@@ -60,10 +63,35 @@ const AppContextProvider:React.FC<AppContextProviderProps> = ({
             // setCovid19LatestNumbers(queryResLatestNumbers.data);
             // dispatch(latestNumbersLoaded(queryResLatestNumbers.data));
 
+            const covid19TrendData4USCountiesWithLatestNumbers:Covid19TrendDataWithLatestNumbers[] =  queryResUSCounties.data.features
+            .map(feature=>{
+
+                const { FIPS } = feature.attributes;
+    
+                const {
+                    Confirmed,
+                    Deaths,
+                    NewCases,
+                    NewDeaths,
+                } = queryResLatestNumbers.data[FIPS];
+    
+                return {
+                    ...feature,
+                    attributes: {
+                        FIPS,
+                        Confirmed,
+                        Deaths,
+                        NewCases,
+                        NewDeaths,
+                    }
+                }
+            });
+
             setContextProps({
                 covid19USCountiesData: queryResUSCounties.data,
                 covid19USStatesData: queryResUSStates.data,
-                covid19LatestNumbers: queryResLatestNumbers.data
+                covid19LatestNumbers: queryResLatestNumbers.data,
+                covid19TrendData4USCountiesWithLatestNumbers
             })
 
         } catch (err) {

@@ -17,9 +17,9 @@ import {
 import About from '../About/About';
 import MapView from '../MapView/MapView';
 import Tooltip from '../Tooltip/Tooltip';
-import GridList from '../GridList/GridList';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
+import GridViewPanel from '../GridView/GridViewPanel';
 import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer';
@@ -133,7 +133,7 @@ const App: React.FC<Props> = ({
                 />
             </MapView>
 
-            <GridList />
+            <GridViewPanel />
 
             <ControlPanel />
 
