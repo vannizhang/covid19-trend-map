@@ -1,6 +1,6 @@
 import './style.scss';
 
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useMemo, useCallback } from 'react';
 
 import { 
     useDispatch, 
@@ -9,7 +9,8 @@ import {
 
 import {
     isGridListVisibleSelector,
-    isGridListVisibleToggled
+    isGridListVisibleToggled,
+    activeTrendSelector
 } from '../../store/reducers/UI'
 
 import {
@@ -19,19 +20,23 @@ import {
 import { ThemeStyle } from '../../AppConfig';
 
 import Sparkline from './Sparkline';
-import { Covid19TrendData, Covid19TrendDataWithLatestNumbers, PathFrame } from 'covid19-trend-map';
+import { Covid19TrendData, Covid19TrendDataWithLatestNumbers, Covid19TrendName, PathData, PathFrame } from 'covid19-trend-map';
 
 import {
     HeaderHeight
 } from './Header';
 
+const FeatureSetSize = 500;
+
 type Pros = {
+    activeTrend: Covid19TrendName;
     data: Covid19TrendDataWithLatestNumbers[];
     frame:PathFrame;
     scrollToBottomHandler?:()=>void;
 }
 
 const GridList:React.FC<Pros> = ({
+    activeTrend,
     data,
     frame,
     scrollToBottomHandler
@@ -58,12 +63,24 @@ const GridList:React.FC<Pros> = ({
         const sparklines = data.map((d, i)=>{
             // console.log(d);
 
-            const { attributes } = d;
+            const { attributes, confirmed, deaths, newCases } = d;
+
+            const pathDataByTrendName: {
+                [key in Covid19TrendName]: PathData;
+            } = {
+                'confirmed': confirmed,
+                'death': deaths,
+                'new-cases': newCases,
+            };
+
+            const pathData = pathDataByTrendName[activeTrend];
+
+            const { path } = pathData;
 
             return (
                 <Sparkline 
                     key={attributes.FIPS}
-                    path={d.newCases.path}
+                    path={path}
                     color={ThemeStyle["theme-color-red"]}
                     frame={frame}
                 />
@@ -113,24 +130,9 @@ const GridListContainer = () => {
         covid19TrendData4USCountiesWithLatestNumbers
     } = useContext(AppContext);
 
+    const activeTrend = useSelector(activeTrendSelector);
+
     const [ sparklinesData, setSparklinesData ] = useState<Covid19TrendDataWithLatestNumbers[]>([]);
-
-    const loadSparklinesData = (endIndex?:number)=>{
-
-        endIndex = endIndex || sparklinesData.length + 200 <= sortedData.length 
-            ? sparklinesData.length + 200 
-            : sparklinesData.length;
-
-        const featuresSet = sortedData.slice(0, endIndex);
-        
-        setSparklinesData(featuresSet);
-    };
-
-    const getFrame = ()=>{
-        const { frames } = covid19USCountiesData;
-        // console.log(frames);
-        return frames.newCases;
-    }
 
     const sortedData = useMemo(()=>{
         const sortedFeatures = [...covid19TrendData4USCountiesWithLatestNumbers].sort((a, b)=>{
@@ -141,12 +143,43 @@ const GridListContainer = () => {
         return sortedFeatures;
     }, []);
 
+    const loadSparklinesData = (endIndex?:number)=>{
+
+        if(!endIndex){
+            endIndex = sparklinesData.length + FeatureSetSize <= sortedData.length 
+                ? sparklinesData.length + FeatureSetSize 
+                : sparklinesData.length;
+        }
+
+        const featuresSet = sortedData.slice(0, endIndex);
+        
+        setSparklinesData(featuresSet);
+    };
+
+    const getFrame = useCallback(()=>{
+
+        const { frames } = covid19USCountiesData;
+
+        const pathFrameByTrendName: {
+            [key in Covid19TrendName]: PathFrame;
+        } = {
+            'confirmed': frames.confirmed,
+            'death': frames.deaths,
+            'new-cases': frames.newCases,
+        };
+
+        return pathFrameByTrendName[activeTrend];
+
+    }, [ activeTrend ]);
+
     useEffect(()=>{
-        loadSparklinesData(200);
+        // reload sparklines data if sorted data is changed
+        loadSparklinesData(FeatureSetSize);
     }, [sortedData]);
 
     return (
         <GridList
+            activeTrend={activeTrend}
             data={sparklinesData}
             frame={getFrame()}
             scrollToBottomHandler={loadSparklinesData}
