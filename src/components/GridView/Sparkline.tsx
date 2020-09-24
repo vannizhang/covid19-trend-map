@@ -39,7 +39,7 @@ const Sparkline:React.FC<Props> = ({
             <path 
                 d={d} 
                 stroke={color} 
-                strokeWidth={1}
+                strokeWidth={1.5}
                 fill="transparent"
                 vectorEffect="non-scaling-stroke"
             />

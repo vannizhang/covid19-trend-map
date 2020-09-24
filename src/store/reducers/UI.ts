@@ -27,6 +27,8 @@ const activeTrendDefaultVal = getDefaultValueFromHashParams(
     'trendType'
 ) as Covid19TrendName;
 
+export type GridListSortField = 'Confirmed' | 'Deaths' | 'ConfirmedPerCapita' | 'DeathsPerCapita' | 'CaseFatalityRate';
+
 type UIState = {
     isMobile: boolean;
     activeTrend: Covid19TrendName;
@@ -35,6 +37,7 @@ type UIState = {
     showTrendCategories: boolean;
     isNarrowSreen: boolean;
     isGridListVisible: boolean;
+    gridListSortField: GridListSortField;
 };
 
 type ActiveTrendUpdatedAction = {
@@ -47,6 +50,11 @@ type BooleanPropChangedAction = {
     payload: boolean;
 };
 
+type GridListSortFieldUpdatedAction = {
+    type: string;
+    payload: GridListSortField;
+};
+
 const slice = createSlice({
     name: 'map',
     initialState: {
@@ -56,7 +64,8 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        isGridListVisible: true
+        isGridListVisible: true,
+        gridListSortField: 'Confirmed'
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
@@ -74,6 +83,9 @@ const slice = createSlice({
         isGridListVisibleToggled: (state) => {
             state.isGridListVisible = !state.isGridListVisible;
         },
+        gridListSortFieldUpdated: (state, action:GridListSortFieldUpdatedAction) => {
+            state.gridListSortField = action.payload;
+        },
     },
 });
 
@@ -84,7 +96,8 @@ export const {
     isAboutModalOpenToggled,
     isNarrowSreenChanged,
     showTrendCategoriesToggled,
-    isGridListVisibleToggled
+    isGridListVisibleToggled,
+    gridListSortFieldUpdated
 } = slice.actions;
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (
@@ -140,6 +153,11 @@ export const isNarrowSreenSeletor = createSelector(
 export const isGridListVisibleSelector = createSelector(
     (state: RootState) => state.UI.isGridListVisible,
     (isGridListVisible) => isGridListVisible
+);
+
+export const gridListSortFieldSelector = createSelector(
+    (state: RootState) => state.UI.gridListSortField,
+    (gridListSortField) => gridListSortField
 );
 
 export default reducer;

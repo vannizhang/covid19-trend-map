@@ -10,7 +10,8 @@ import {
 import {
     isGridListVisibleSelector,
     isGridListVisibleToggled,
-    activeTrendSelector
+    activeTrendSelector,
+    gridListSortFieldSelector
 } from '../../store/reducers/UI'
 
 import {
@@ -132,16 +133,18 @@ const GridListContainer = () => {
 
     const activeTrend = useSelector(activeTrendSelector);
 
+    const sortField =  useSelector(gridListSortFieldSelector);
+
     const [ sparklinesData, setSparklinesData ] = useState<Covid19TrendDataWithLatestNumbers[]>([]);
 
     const sortedData = useMemo(()=>{
         const sortedFeatures = [...covid19TrendData4USCountiesWithLatestNumbers].sort((a, b)=>{
-            return b.attributes.NewDeaths - a.attributes.NewDeaths
+            return b.attributes[sortField] - a.attributes[sortField]
         });
-        // console.log('sortedFeatures', sortedFeatures);
+        console.log('sortedFeatures', sortedFeatures);
         
         return sortedFeatures;
-    }, []);
+    }, [ sortField ]);
 
     const loadSparklinesData = (endIndex?:number)=>{
 
@@ -175,7 +178,7 @@ const GridListContainer = () => {
     useEffect(()=>{
         // reload sparklines data if sorted data is changed
         loadSparklinesData(FeatureSetSize);
-    }, [sortedData]);
+    }, [ sortedData ]);
 
     return (
         <GridList

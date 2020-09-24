@@ -73,6 +73,7 @@ const AppContextProvider:React.FC<AppContextProviderProps> = ({
                     Deaths,
                     NewCases,
                     NewDeaths,
+                    Population
                 } = queryResLatestNumbers.data[FIPS];
     
                 return {
@@ -81,8 +82,9 @@ const AppContextProvider:React.FC<AppContextProviderProps> = ({
                         FIPS,
                         Confirmed,
                         Deaths,
-                        NewCases,
-                        NewDeaths,
+                        ConfirmedPerCapita: Confirmed / Population,
+                        DeathsPerCapita: Deaths / Population,
+                        CaseFatalityRate: Confirmed > 0 ? Deaths / Confirmed : 0
                     }
                 }
             });

@@ -95,8 +95,9 @@ declare module 'covid19-trend-map' {
             FIPS: string;
             Confirmed: number;
             Deaths: number;
-            NewCases: number;
-            NewDeaths: number;
+            ConfirmedPerCapita: number;
+            DeathsPerCapita: number;
+            CaseFatalityRate: number;
         }
     }
     
