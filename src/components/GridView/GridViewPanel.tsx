@@ -6,7 +6,7 @@ import {
 import { ThemeStyle } from '../../AppConfig';
 
 import {
-    isGridListVisibleSelector
+    activeViewModeSelector
 } from '../../store/reducers/UI'
 
 import GridList from './GridList';
@@ -14,9 +14,9 @@ import Header from './Header'
 
 const GridViewPanel = () => {
 
-    const visible = useSelector(isGridListVisibleSelector);
+    const activeViewMode = useSelector(activeViewModeSelector);
     
-    return visible ? (
+    return activeViewMode === 'grid' ? (
         <div
             style={{
                 'position': 'absolute',

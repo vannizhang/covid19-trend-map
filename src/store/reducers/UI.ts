@@ -29,6 +29,8 @@ const activeTrendDefaultVal = getDefaultValueFromHashParams(
 
 export type GridListSortField = 'Confirmed' | 'Deaths' | 'ConfirmedPerCapita' | 'DeathsPerCapita' | 'CaseFatalityRate';
 
+export type ViewMode = 'map' | 'grid'
+
 type UIState = {
     isMobile: boolean;
     activeTrend: Covid19TrendName;
@@ -36,7 +38,7 @@ type UIState = {
     isLoadingChartData: boolean;
     showTrendCategories: boolean;
     isNarrowSreen: boolean;
-    isGridListVisible: boolean;
+    activeViewMode: ViewMode;
     gridListSortField: GridListSortField;
 };
 
@@ -55,6 +57,11 @@ type GridListSortFieldUpdatedAction = {
     payload: GridListSortField;
 };
 
+type ActiveViewModeUpdatedAction = {
+    type: string;
+    payload: ViewMode;
+};
+
 const slice = createSlice({
     name: 'map',
     initialState: {
@@ -64,7 +71,7 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        isGridListVisible: true,
+        activeViewMode: 'map',
         gridListSortField: 'Confirmed'
     } as UIState,
     reducers: {
@@ -80,8 +87,8 @@ const slice = createSlice({
         isNarrowSreenChanged: (state, action: BooleanPropChangedAction) => {
             state.isNarrowSreen = action.payload;
         },
-        isGridListVisibleToggled: (state) => {
-            state.isGridListVisible = !state.isGridListVisible;
+        activeViewModeUpdated: (state, action:ActiveViewModeUpdatedAction) => {
+            state.activeViewMode = action.payload;
         },
         gridListSortFieldUpdated: (state, action:GridListSortFieldUpdatedAction) => {
             state.gridListSortField = action.payload;
@@ -96,7 +103,7 @@ export const {
     isAboutModalOpenToggled,
     isNarrowSreenChanged,
     showTrendCategoriesToggled,
-    isGridListVisibleToggled,
+    activeViewModeUpdated,
     gridListSortFieldUpdated
 } = slice.actions;
 
@@ -150,9 +157,9 @@ export const isNarrowSreenSeletor = createSelector(
     (isNarrowSreen) => isNarrowSreen
 );
 
-export const isGridListVisibleSelector = createSelector(
-    (state: RootState) => state.UI.isGridListVisible,
-    (isGridListVisible) => isGridListVisible
+export const activeViewModeSelector = createSelector(
+    (state: RootState) => state.UI.activeViewMode,
+    (activeViewMode) => activeViewMode
 );
 
 export const gridListSortFieldSelector = createSelector(
