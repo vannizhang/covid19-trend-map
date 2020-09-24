@@ -9,7 +9,7 @@ const Header = () => {
             style={{
                 'width': '100%',
                 'height': HeaderHeight,
-                'backgroundColor': ThemeStyle["theme-color-khaki"]
+                // 'backgroundColor': ThemeStyle["theme-color-khaki"]
             }}
         ></div>
     )

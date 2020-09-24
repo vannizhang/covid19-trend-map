@@ -26,7 +26,7 @@ import {
     HeaderHeight
 } from './Header';
 
-const FeatureSetSize = 500;
+const FeatureSetSize = 300;
 
 type Pros = {
     activeTrend: Covid19TrendName;
@@ -104,7 +104,7 @@ const GridList:React.FC<Pros> = ({
             onScroll={onScrollHandler}
         >
             <div className='grid-container'>
-                <div className='column-19 center-column leader-2'>
+                <div className='column-24 leader-0'>
                     <div
                         style={{
                             'display': 'flex',

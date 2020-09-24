@@ -181,29 +181,32 @@ const ControlPanel: React.FC = () => {
                 left: isMobile ? '10px' : 'unset',
             }}
         >
-            <div
-                style={{
-                    boxShadow: `0 0 10px 2px #B1A483`,
-                }}
-            >
-                {getTitleText()}
-
+            <div>
                 <div
                     style={{
-                        display: 'flex',
-                        height: '60px',
-                        width: '100%',
-                        boxSizing: 'border-box',
-
-                        backgroundColor: ThemeStyle['theme-color-khaki'],
+                        boxShadow: `0 0 10px 2px #B1A483`,
                     }}
                 >
-                    {getSwitchBtns()}
-                    {getInfoBtn()}
+                    {getTitleText()}
+
+                    <div
+                        style={{
+                            display: 'flex',
+                            height: '60px',
+                            width: '100%',
+                            boxSizing: 'border-box',
+
+                            backgroundColor: ThemeStyle['theme-color-khaki'],
+                        }}
+                    >
+                        {getSwitchBtns()}
+                        {getInfoBtn()}
+                    </div>
                 </div>
+
+                <TrendCategoriesToggle />
             </div>
 
-            <TrendCategoriesToggle />
         </div>
     );
 };

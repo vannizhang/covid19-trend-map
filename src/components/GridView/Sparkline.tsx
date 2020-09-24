@@ -8,42 +8,13 @@ type Props = {
     color: string;
 }
 
-const Width = 40;
+const Size = 60;
 
 const Sparkline:React.FC<Props> = ({
     path,
     frame,
     color
 }:Props) => {
-
-    // const canvasRef = useRef<HTMLCanvasElement>(null)
-
-    // useEffect(()=>{
-
-    //     const canvas = canvasRef.current;
-    //     const context = canvas.getContext('2d');
-        
-    //     // context.translate(0.5, 0)
-    //     context.beginPath();
-
-    //     path.forEach(([x, y], index)=>{
-
-    //         y = 200 - y
-
-    //         if(index === 0){
-    //             context.moveTo(x, y);
-    //         } else {
-    //             context.lineTo(x, y);
-    //         }
-    //     })
-
-    //     // context.translate(-0.5, 0);
-
-    //     context.lineWidth = 2;
-    //     // context.strokeStyle = color;
-    //     context.stroke();
-
-    // }, []);
 
     const getPath = ()=>{
         // const origin = path[0];
@@ -79,7 +50,7 @@ const Sparkline:React.FC<Props> = ({
     const getHeight = ()=>{
         const { xmax, ymax } = frame;
         const ratio = ymax / xmax;
-        return Width * ratio;
+        return Size * ratio;
     }
 
     return (
@@ -94,13 +65,21 @@ const Sparkline:React.FC<Props> = ({
         // />
         <div
             style={{
+                'position': 'relative',
+                'width': Size,
+                'height': Size,
                 'margin': '.5rem'
             }}
         >
             <svg 
-                width={Width} 
+                width={Size} 
                 height={getHeight()}
                 viewBox={`0 0 ${frame.xmax} ${frame.ymax}`}
+                style={{
+                    'position': 'absolute',
+                    'left': 0,
+                    'bottom': 0
+                }}
             >
                 { getPath() }
             </svg>
