@@ -77,7 +77,7 @@ const slice = createSlice({
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
         activeViewMode: 'grid',
-        gridListSortField: 'Confirmed',
+        gridListSortField: 'CaseFatalityRate',
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
