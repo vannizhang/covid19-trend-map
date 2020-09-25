@@ -98,9 +98,9 @@ declare module 'covid19-trend-map' {
             ConfirmedPerCapita: number;
             DeathsPerCapita: number;
             CaseFatalityRate: number;
-        }
+        };
     }
-    
+
     export {
         PathData,
         PathFrame,

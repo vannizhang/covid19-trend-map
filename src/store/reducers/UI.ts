@@ -27,9 +27,14 @@ const activeTrendDefaultVal = getDefaultValueFromHashParams(
     'trendType'
 ) as Covid19TrendName;
 
-export type GridListSortField = 'Confirmed' | 'Deaths' | 'ConfirmedPerCapita' | 'DeathsPerCapita' | 'CaseFatalityRate';
+export type GridListSortField =
+    | 'Confirmed'
+    | 'Deaths'
+    | 'ConfirmedPerCapita'
+    | 'DeathsPerCapita'
+    | 'CaseFatalityRate';
 
-export type ViewMode = 'map' | 'grid'
+export type ViewMode = 'map' | 'grid';
 
 type UIState = {
     isMobile: boolean;
@@ -72,7 +77,7 @@ const slice = createSlice({
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
         activeViewMode: 'map',
-        gridListSortField: 'Confirmed'
+        gridListSortField: 'Confirmed',
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
@@ -87,10 +92,13 @@ const slice = createSlice({
         isNarrowSreenChanged: (state, action: BooleanPropChangedAction) => {
             state.isNarrowSreen = action.payload;
         },
-        activeViewModeUpdated: (state, action:ActiveViewModeUpdatedAction) => {
+        activeViewModeUpdated: (state, action: ActiveViewModeUpdatedAction) => {
             state.activeViewMode = action.payload;
         },
-        gridListSortFieldUpdated: (state, action:GridListSortFieldUpdatedAction) => {
+        gridListSortFieldUpdated: (
+            state,
+            action: GridListSortFieldUpdatedAction
+        ) => {
             state.gridListSortField = action.payload;
         },
     },
@@ -104,7 +112,7 @@ export const {
     isNarrowSreenChanged,
     showTrendCategoriesToggled,
     activeViewModeUpdated,
-    gridListSortFieldUpdated
+    gridListSortFieldUpdated,
 } = slice.actions;
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (

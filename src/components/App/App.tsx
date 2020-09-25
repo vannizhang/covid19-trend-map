@@ -29,9 +29,7 @@ import {
     Covid19LatestNumbers,
 } from 'covid19-trend-map';
 
-import {
-    AppContext 
-} from '../../context/AppContextProvider';
+import { AppContext } from '../../context/AppContextProvider';
 
 import AppConfig from '../../AppConfig';
 
@@ -150,11 +148,10 @@ const App: React.FC<Props> = ({
 };
 
 const AppContainer = (): JSX.Element => {
-
-    const { 
-        covid19USCountiesData, 
-        covid19USStatesData, 
-        covid19LatestNumbers 
+    const {
+        covid19USCountiesData,
+        covid19USStatesData,
+        covid19LatestNumbers,
     } = useContext(AppContext);
 
     return covid19USCountiesData &&
