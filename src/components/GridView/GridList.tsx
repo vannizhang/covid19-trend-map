@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     activeTrendSelector,
     gridListSortFieldSelector,
+    gridListSortOrderSelector
 } from '../../store/reducers/UI';
 
 import { AppContext } from '../../context/AppContextProvider';
@@ -136,6 +137,8 @@ const GridListContainer = () => {
 
     const sortField = useSelector(gridListSortFieldSelector);
 
+    const sortOrder = useSelector(gridListSortOrderSelector);
+
     const [sparklinesData, setSparklinesData] = useState<
         Covid19TrendDataWithLatestNumbers[]
     >([]);
@@ -144,12 +147,14 @@ const GridListContainer = () => {
         const sortedFeatures = [
             ...covid19TrendData4USCountiesWithLatestNumbers,
         ].sort((a, b) => {
-            return b.attributes[sortField] - a.attributes[sortField];
+            return sortOrder === 'descending' 
+                ? b.attributes[sortField] - a.attributes[sortField]
+                : a.attributes[sortField] - b.attributes[sortField];
         });
-        console.log('sortedFeatures', sortedFeatures);
+        // console.log('sortedFeatures', sortedFeatures);
 
         return sortedFeatures;
-    }, [sortField]);
+    }, [sortField, sortOrder]);
 
     const loadSparklinesData = (endIndex?: number) => {
         if (!endIndex) {

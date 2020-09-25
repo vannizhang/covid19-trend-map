@@ -9,8 +9,11 @@ import {
 
 import useOnClickOutside from '../../hooks/useOnClickOutside';
 
-const SortFieldSelectorHeight = 60;
-const BackgroundColor = '#EFEADC'
+import {
+    HeaderItemHeight,
+    HeaderItemBackgroundColor,
+    HeaderItemBorder
+} from './constants';
 
 const SortFields: {
     label: string;
@@ -82,8 +85,8 @@ const SortFieldSelector: React.FC = ()=>{
                     style={{
                         width: '100%',
                         padding: '.5rem 1.5rem',
-                        backgroundColor: BackgroundColor,
-                        borderBottom: `1px solid ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                        backgroundColor: HeaderItemBackgroundColor,
+                        borderBottom: HeaderItemBorder,
                         borderLeft: `4px solid ${borderLeftColor}`,
                         cursor: 'pointer'
                     }}
@@ -100,11 +103,11 @@ const SortFieldSelector: React.FC = ()=>{
             <div
                 style={{
                     position: 'absolute',
-                    top: SortFieldSelectorHeight - 1,
+                    top: HeaderItemHeight - 1,
                     left: 0,
                     width: '100%',
-                    backgroundColor: BackgroundColor,
-                    border: `1px solid ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                    backgroundColor: HeaderItemBackgroundColor,
+                    border: HeaderItemBorder,
                     borderBottom: 'none',
                     zIndex: 1
                 }}
@@ -118,9 +121,9 @@ const SortFieldSelector: React.FC = ()=>{
             style={{
                 position: 'relative',
                 width: '350px',
-                height: SortFieldSelectorHeight,
-                backgroundColor: BackgroundColor,
-                border: `1px solid ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                height: HeaderItemHeight,
+                backgroundColor: HeaderItemBackgroundColor,
+                border: HeaderItemBorder,
                 color: ThemeStyle["theme-color-red"]
             }}
         >

@@ -34,6 +34,8 @@ export type GridListSortField =
     | 'DeathsPerCapita'
     | 'CaseFatalityRate';
 
+export type GridListSortOrder = 'ascending' | 'descending'
+
 export type ViewMode = 'map' | 'grid';
 
 type UIState = {
@@ -45,6 +47,7 @@ type UIState = {
     isNarrowSreen: boolean;
     activeViewMode: ViewMode;
     gridListSortField: GridListSortField;
+    gridListSortOrder: GridListSortOrder;
 };
 
 type ActiveTrendUpdatedAction = {
@@ -60,6 +63,11 @@ type BooleanPropChangedAction = {
 type GridListSortFieldUpdatedAction = {
     type: string;
     payload: GridListSortField;
+};
+
+type GridListSortOrderUpdatedAction = {
+    type: string;
+    payload: GridListSortOrder;
 };
 
 type ActiveViewModeUpdatedAction = {
@@ -78,6 +86,7 @@ const slice = createSlice({
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
         activeViewMode: 'grid',
         gridListSortField: 'CaseFatalityRate',
+        gridListSortOrder: 'descending'
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
@@ -101,6 +110,9 @@ const slice = createSlice({
         ) => {
             state.gridListSortField = action.payload;
         },
+        gridListSortOrderUpdated: (state, action:GridListSortOrderUpdatedAction)=>{
+            state.gridListSortOrder = action.payload;
+        }
     },
 });
 
@@ -113,6 +125,7 @@ export const {
     showTrendCategoriesToggled,
     activeViewModeUpdated,
     gridListSortFieldUpdated,
+    gridListSortOrderUpdated,
 } = slice.actions;
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (
@@ -173,6 +186,11 @@ export const activeViewModeSelector = createSelector(
 export const gridListSortFieldSelector = createSelector(
     (state: RootState) => state.UI.gridListSortField,
     (gridListSortField) => gridListSortField
+);
+
+export const gridListSortOrderSelector = createSelector(
+    (state: RootState) => state.UI.gridListSortOrder,
+    (gridListSortOrder) => gridListSortOrder
 );
 
 export default reducer;

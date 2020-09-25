@@ -1,5 +1,6 @@
 import React from 'react';
 import SortFieldSelector from './SortFieldSelector';
+import SortOrderSelector from './SortOrder';
 
 export const HeaderHeight = 155;
 
@@ -25,6 +26,8 @@ const Header: React.FC = () => {
                 }}
             >
                 <SortFieldSelector />
+
+                <SortOrderSelector />
             </div>
         </div>
     );
