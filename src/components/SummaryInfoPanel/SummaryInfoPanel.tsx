@@ -56,7 +56,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
             padding: isMobile ? '0' : '0 .65rem',
             borderRight: isMobile
                 ? 'none'
-                : `solid 1px rgba(178, 165, 132, .5)`,
+                : `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
             display: isMobile ? 'block' : 'flex',
             alignItems: 'center',
         };

@@ -76,7 +76,7 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        activeViewMode: 'map',
+        activeViewMode: 'grid',
         gridListSortField: 'Confirmed',
     } as UIState,
     reducers: {

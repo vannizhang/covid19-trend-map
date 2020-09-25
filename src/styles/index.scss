@@ -3,6 +3,10 @@
 html, body {
 	background-color: #E8E2D2;
 	overflow: hidden;
+
+	* {
+		box-sizing: border-box;
+	}
 }
 
 $theme-color-red: #A10D22;

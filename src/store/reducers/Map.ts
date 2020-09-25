@@ -12,7 +12,7 @@ import {
 
 import { TooltipPosition, TooltipData } from '../../components/Tooltip/Tooltip';
 import {
-    Covid19LatestNumbers,
+    // Covid19LatestNumbers,
     Covid19LatestNumbersFeature,
 } from 'covid19-trend-map';
 
@@ -20,7 +20,7 @@ type MapState = {
     tooltipPosition: TooltipPosition;
     tooltipData: TooltipData;
     isStateLayerVisilbe: boolean;
-    latestNumbers: Covid19LatestNumbers;
+    // latestNumbers: Covid19LatestNumbers;
 };
 
 type TooltipPositionChangedAction = {

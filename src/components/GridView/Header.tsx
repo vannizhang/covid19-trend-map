@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeStyle } from '../../AppConfig';
+import SortFieldSelector from './SortFieldSelector';
 
 export const HeaderHeight = 155;
 
@@ -9,9 +9,24 @@ const Header: React.FC = () => {
             style={{
                 width: '100%',
                 height: HeaderHeight,
-                // 'backgroundColor': ThemeStyle["theme-color-khaki"]
+                padding: '10px',
+                boxSizing: 'border-box'
             }}
-        ></div>
+        >
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: 'calc(100% - 610px)',
+                    height: '110px',
+                    backgroundColor: '#E8E2D3',
+                    boxSizing: 'border-box',
+                    padding: '0 25px'
+                }}
+            >
+                <SortFieldSelector />
+            </div>
+        </div>
     );
 };
 

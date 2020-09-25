@@ -229,6 +229,7 @@ const ControlPanel: React.FC = () => {
                         borderBottom: isActive
                             ? `4px solid ${ThemeStyle['theme-color-red']}`
                             : `4px solid transparent`,
+                        borderTop: `solid 1px #E0D8C1`,
                     }}
                 >
                     {icon}
@@ -240,7 +241,7 @@ const ControlPanel: React.FC = () => {
             <div
                 className="margin-right-half"
                 style={{
-                    boxShadow: `0 0 10px 2px #B1A483`,
+                    boxShadow: `0 0 8px 2px ${ThemeStyle["floating-panel-box-shadow"]}`,
                     cursor: 'pointer',
                 }}
             >
@@ -267,7 +268,7 @@ const ControlPanel: React.FC = () => {
 
                 <div
                     style={{
-                        boxShadow: `0 0 10px 2px #B1A483`,
+                        boxShadow: `0 0 10px 2px ${ThemeStyle["floating-panel-box-shadow"]}`,
                     }}
                 >
                     {getTitleText()}
