@@ -1,4 +1,5 @@
 import React from 'react';
+import { ThemeStyle } from '../../AppConfig';
 import SortFieldSelector from './SortFieldSelector';
 import SortOrderSelector from './SortOrder';
 
@@ -16,18 +17,30 @@ const Header: React.FC = () => {
         >
             <div
                 style={{
-                    display: 'flex',
-                    alignItems: 'center',
                     width: 'calc(100% - 610px)',
                     height: '110px',
                     backgroundColor: '#E8E2D3',
                     boxSizing: 'border-box',
-                    padding: '0 25px'
+                    padding: '8px 25px'
                 }}
             >
-                <SortFieldSelector />
+                <div>
+                    <span className='font-size--3 text-theme-color-khaki avenir-demi'>Choose a metric by which to sort these trend lines</span>
+                </div>
 
-                <SortOrderSelector />
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        width: '100%',
+                        // height: '100%',
+                    }}
+                >
+                    <SortFieldSelector />
+
+                    <SortOrderSelector />
+                </div>
+                
             </div>
         </div>
     );
