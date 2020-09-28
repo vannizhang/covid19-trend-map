@@ -225,6 +225,7 @@ const ControlPanel: React.FC = () => {
                             ? ThemeStyle['theme-color-khaki-bright']
                             : ThemeStyle['theme-color-khaki'],
                         display: 'flex',
+                        justifyContent: 'center',
                         alignItems: 'center',
                         borderBottom: isActive
                             ? `4px solid ${ThemeStyle['theme-color-red']}`

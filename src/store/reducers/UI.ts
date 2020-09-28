@@ -84,7 +84,7 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        activeViewMode: 'grid',
+        activeViewMode: 'map',
         gridListSortField: 'CaseFatalityRate',
         gridListSortOrder: 'descending'
     } as UIState,

@@ -169,7 +169,9 @@ const GridListContainer = () => {
     const sortedData = useMemo(() => {
         const sortedFeatures = [
             ...covid19TrendData4USCountiesWithLatestNumbers,
-        ].sort((a, b) => {
+        ]
+        .filter(d=>d.attributes.Deaths > 0)
+        .sort((a, b) => {
             return sortOrder === 'descending' 
                 ? b.attributes[sortField] - a.attributes[sortField]
                 : a.attributes[sortField] - b.attributes[sortField];

@@ -83,6 +83,8 @@ declare module 'covid19-trend-map' {
         Deaths: number;
         NewCases: number;
         NewDeaths: number;
+        NewCases100Days: number;
+        NewDeaths100Days: number;
         Population: number;
         TrendType: COVID19TrendCategoryType;
     };
