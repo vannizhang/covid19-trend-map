@@ -78,7 +78,7 @@ const QueryTaskResultLayer: React.FC<Props> = ({ mapView }) => {
         if (graphicLayer) {
             graphicLayer.removeAll();
 
-            if (queryResult) {
+            if (queryResult && queryResult.graphic) {
                 showQueryResult();
             }
         }

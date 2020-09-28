@@ -73,7 +73,7 @@ export const {
 } = slice.actions;
 
 export const updateTooltipData = (
-    locationName: string,
+    // locationName: string,
     data: Covid19LatestNumbersFeature
 ) => (
     dispatch: StoreDispatch
@@ -81,8 +81,9 @@ export const updateTooltipData = (
 ): void => {
     let tooltipData: TooltipData;
 
-    if (locationName && data) {
+    if (data) {
         const {
+            Name,
             Confirmed,
             Deaths,
             NewCases,
@@ -92,7 +93,7 @@ export const updateTooltipData = (
         } = data;
 
         tooltipData = {
-            locationName,
+            locationName: Name,
             confirmed: Confirmed,
             deaths: Deaths,
             newCasesPast7Days: NewCases,

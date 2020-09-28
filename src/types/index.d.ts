@@ -78,6 +78,7 @@ declare module 'covid19-trend-map' {
     };
 
     type Covid19LatestNumbersFeature = {
+        Name: string;
         Confirmed: number;
         Deaths: number;
         NewCases: number;

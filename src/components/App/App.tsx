@@ -75,21 +75,26 @@ const App: React.FC<Props> = ({
                 <QueryTaskLayer
                     key="query-4-US-Counties"
                     url={AppConfig['us-counties-feature-layer-item-url']}
-                    outFields={['FIPS', 'NAME', 'STATE_NAME']}
+                    outFields={['FIPS']}
                     visibleScale={AppConfig['us-counties-layer-visible-scale']}
                     onSelect={(feature) => {
-                        const featureJSON = feature
-                            ? feature.toJSON()
+
+                        const FIPS = feature
+                            ? feature.attributes['FIPS']
                             : undefined;
-                        dispatch(queryCountyData(featureJSON));
+
+                        const data = covid19LatestNumbers[FIPS];
+
+                        dispatch(queryCountyData({
+                            FIPS,
+                            name: data.Name,
+                            feature: feature ? feature.toJSON() : undefined,
+                        }));
                     }}
                     pointerOnMove={(position) => {
                         dispatch(tooltipPositionChanged(position));
                     }}
                     featureOnHover={(feature) => {
-                        const locationName = feature
-                            ? `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`
-                            : undefined;
 
                         const FIPS = feature
                             ? feature.attributes['FIPS']
@@ -97,28 +102,35 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(locationName, tooltipData));
+                        dispatch(updateTooltipData(tooltipData));
                     }}
                 />
 
                 <QueryTaskLayer
                     key="query-4-US-States"
                     url={AppConfig['us-states-feature-layer-item-url']}
-                    outFields={['STATE_NAME', 'STATE_FIPS']}
+                    outFields={['STATE_FIPS']}
                     visibleScale={AppConfig['us-states-layer-visible-scale']}
                     onSelect={(feature) => {
-                        const featureJSON = feature
-                            ? feature.toJSON()
+                        // const featureJSON = feature
+                        //     ? feature.toJSON()
+                        //     : undefined;
+
+                        const FIPS = feature
+                            ? feature.attributes['STATE_FIPS']
                             : undefined;
-                        dispatch(queryStateData(featureJSON));
+
+                        const data = covid19LatestNumbers[FIPS];
+
+                        dispatch(queryStateData({
+                            name: data.Name,
+                            feature: feature ? feature.toJSON() : undefined
+                        }));
                     }}
                     pointerOnMove={(position) => {
                         dispatch(tooltipPositionChanged(position));
                     }}
                     featureOnHover={(feature) => {
-                        const locationName = feature
-                            ? `${feature.attributes['STATE_NAME']}`
-                            : undefined;
 
                         const FIPS = feature
                             ? feature.attributes['STATE_FIPS']
@@ -126,7 +138,7 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(locationName, tooltipData));
+                        dispatch(updateTooltipData(tooltipData));
                     }}
                 />
             </MapView>

@@ -21,6 +21,10 @@ import {
     tooltipPositionChanged,
 } from '../../store/reducers/Map';
 
+import {
+    queryCountyData
+} from '../../store/reducers/Covid19Data';
+
 import { AppContext } from '../../context/AppContextProvider';
 
 import { ThemeStyle } from '../../AppConfig';
@@ -46,6 +50,7 @@ type Props = {
     frame: PathFrame;
     scrollToBottomHandler?: () => void;
     onHoverHandler: (FIPS:string, tooltipPosition: TooltipPosition)=>void;
+    onClickHandler: (FIPS: string)=>void;
 };
 
 const GridList: React.FC<Props> = ({
@@ -53,7 +58,8 @@ const GridList: React.FC<Props> = ({
     data,
     frame,
     scrollToBottomHandler,
-    onHoverHandler
+    onHoverHandler,
+    onClickHandler
 }: Props) => {
     const sparklinesContainerRef = React.createRef<HTMLDivElement>();
 
@@ -103,6 +109,7 @@ const GridList: React.FC<Props> = ({
                     onHoverHandler={(tooltipPosition)=>{
                         onHoverHandler(FIPS, tooltipPosition)
                     }}
+                    onClickHandler={onClickHandler.bind(this, FIPS)}
                 />
             );
         });
@@ -214,8 +221,16 @@ const GridListContainer = () => {
                 // console.log(FIPS, tooltipPosition);
 
                 const tooltipData = covid19LatestNumbers[FIPS];
-                dispatch(updateTooltipData(FIPS, tooltipData));
+                dispatch(updateTooltipData(tooltipData));
                 dispatch(tooltipPositionChanged(tooltipPosition));
+            }}
+            onClickHandler={(FIPS)=>{
+                const data = covid19LatestNumbers[FIPS];
+
+                dispatch(queryCountyData({
+                    FIPS,
+                    name: data.Name,
+                }));
             }}
         />
     );

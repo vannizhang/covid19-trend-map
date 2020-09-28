@@ -7,7 +7,8 @@ type Props = {
     frame: PathFrame;
     color: string;
     size: number;
-    onHoverHandler: (data?:TooltipPosition)=>void
+    onHoverHandler: (data?:TooltipPosition)=>void;
+    onClickHandler: ()=>void;
 };
 
 const Sparkline: React.FC<Props> = ({ 
@@ -15,7 +16,8 @@ const Sparkline: React.FC<Props> = ({
     frame, 
     color, 
     size, 
-    onHoverHandler 
+    onHoverHandler,
+    onClickHandler
 }: Props) => {
 
     const containerRef = React.createRef<HTMLDivElement>();
@@ -76,6 +78,7 @@ const Sparkline: React.FC<Props> = ({
                 })
             }}
             onMouseOut={onHoverHandler.bind(this, null)}
+            onClick={onClickHandler}
         >
             <svg
                 width={size}

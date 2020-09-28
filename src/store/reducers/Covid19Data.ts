@@ -106,29 +106,36 @@ const { reducer } = slice;
 
 const { queryResultsReset, queryLocationUpdated } = slice.actions;
 
-export const queryCountyData = (feature: QueryLocationFeature) => (
+export const queryCountyData = ({
+    FIPS, name, feature
+}:{
+    FIPS: string;
+    name: string;
+    feature?: QueryLocationFeature,
+}) => (
     dispatch: StoreDispatch
     // getState: StoreGetState
 ): void => {
-    if (feature) {
-        const countyFIPS = feature.attributes['FIPS'];
 
-        const isNYCCounties = FIPSCodes4NYCCounties.indexOf(countyFIPS) > -1;
+    if ( FIPS && name ) {
+        // const countyFIPS = feature.attributes['FIPS'];
 
-        const locationName = isNYCCounties
-            ? 'NEW YORK, NEW YORK'
-            : `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`;
+        const isNYCCounties = FIPSCodes4NYCCounties.indexOf(FIPS) > -1;
+
+        // const locationName = isNYCCounties
+        //     ? 'NEW YORK, NEW YORK'
+        //     : `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`;
 
         const queryLocation = {
             graphic: feature,
-            locationName,
+            locationName: name,
         };
 
         dispatch(queryLocationUpdated(queryLocation));
 
         dispatch(
             fetchData({
-                countyFIPS,
+                countyFIPS: FIPS,
                 isNYCCounties,
             })
         );
@@ -137,23 +144,28 @@ export const queryCountyData = (feature: QueryLocationFeature) => (
     }
 };
 
-export const queryStateData = (feature: QueryLocationFeature) => (
+export const queryStateData = ({
+    name, feature
+}:{
+    name: string;
+    feature?: QueryLocationFeature,
+}) => (
     dispatch: StoreDispatch
     // getState: StoreGetState
 ): void => {
-    if (feature) {
-        const stateName = feature.attributes['STATE_NAME'];
+    if (name) {
+        // const stateName = feature.attributes['STATE_NAME'];
 
         const queryLocation = {
             graphic: feature,
-            locationName: stateName,
+            locationName: name,
         };
 
         dispatch(queryLocationUpdated(queryLocation));
 
         dispatch(
             fetchData({
-                stateName,
+                stateName: name,
             })
         );
     } else {
