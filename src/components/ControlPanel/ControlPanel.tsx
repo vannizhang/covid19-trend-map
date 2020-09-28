@@ -289,14 +289,18 @@ const ControlPanel: React.FC = () => {
                 </div>
             </div>
 
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                }}
-            >
-                <TrendCategoriesToggle />
-            </div>
+            {
+                activeViewMode === 'map' ? (
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                        }}
+                    >
+                        <TrendCategoriesToggle />
+                    </div>
+                ) : null
+            }
         </div>
     );
 };

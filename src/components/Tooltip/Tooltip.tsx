@@ -10,6 +10,10 @@ import {
     tooltipPositionSelector,
 } from '../../store/reducers/Map';
 import { COVID19TrendCategoryType } from 'covid19-trend-map';
+import { activeViewModeSelector } from '../../store/reducers/UI';
+import {
+    SparklineSize
+} from '../GridView/GridList';
 
 export type TooltipPosition = {
     x: number;
@@ -29,13 +33,14 @@ export type TooltipData = {
 type Props = {
     position: TooltipPosition;
     data: TooltipData;
+    offsetX?: number;
 };
 
 // const TooltipWidth = 200;
 // const TooltipHeight = 150;
 const PositionOffset = 10;
 
-const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
+const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
     const containerRef = useRef<HTMLDivElement>();
 
     const [width, height] = useWindowSize();
@@ -48,9 +53,11 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
         const tooltipWidth = containerRef.current
             ? containerRef.current.offsetWidth
             : 200;
+        
+        const offset = offsetX || PositionOffset;
 
         if (position.x + tooltipWidth > width) {
-            return position.x - tooltipWidth - PositionOffset;
+            return position.x - tooltipWidth - offset;
         }
 
         return position.x + PositionOffset;
@@ -216,8 +223,15 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
 const TooltipConatiner = () => {
     const position = useSelector(tooltipPositionSelector);
     const data = useSelector(tooltipDataSelector);
+    const activeViewMode = useSelector(activeViewModeSelector);
 
-    return <Tooltip position={position} data={data} />;
+    return (
+        <Tooltip 
+            position={position} 
+            data={data} 
+            offsetX={ activeViewMode === 'grid' ? SparklineSize : undefined }
+        />
+    );
 };
 
 export default TooltipConatiner;

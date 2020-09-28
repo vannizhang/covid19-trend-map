@@ -42,7 +42,7 @@ import { HeaderHeight } from './Header';
 import { TooltipPosition } from '../Tooltip/Tooltip';
 
 const FeatureSetSize = 300;
-const SparklineSize = 60;
+export const SparklineSize = 60;
 
 type Props = {
     activeTrend: Covid19TrendName;
