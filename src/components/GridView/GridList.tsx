@@ -94,25 +94,16 @@ const GridList: React.FC<Props> = ({
             const { path } = pathData;
 
             return (
-                <div
+                <Sparkline
                     key={FIPS}
-                    style={{
-                        position: 'relative',
-                        width: SparklineSize,
-                        height: SparklineSize,
-                        margin: '.5rem',
+                    path={path}
+                    color={ThemeStyle['theme-color-red']}
+                    frame={frame}
+                    size={SparklineSize}
+                    onHoverHandler={(tooltipPosition)=>{
+                        onHoverHandler(FIPS, tooltipPosition)
                     }}
-                >
-                    <Sparkline
-                        path={path}
-                        color={ThemeStyle['theme-color-red']}
-                        frame={frame}
-                        size={SparklineSize}
-                        onHoverHandler={(tooltipPosition)=>{
-                            onHoverHandler(FIPS, tooltipPosition)
-                        }}
-                    />
-                </div>
+                />
             );
         });
 
@@ -221,9 +212,9 @@ const GridListContainer = () => {
             scrollToBottomHandler={loadSparklinesData}
             onHoverHandler={(FIPS, tooltipPosition)=>{
                 // console.log(FIPS, tooltipPosition);
-                
+
                 const tooltipData = covid19LatestNumbers[FIPS];
-                dispatch(updateTooltipData('foobar', tooltipData));
+                dispatch(updateTooltipData(FIPS, tooltipData));
                 dispatch(tooltipPositionChanged(tooltipPosition));
             }}
         />

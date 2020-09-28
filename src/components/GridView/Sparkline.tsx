@@ -10,9 +10,15 @@ type Props = {
     onHoverHandler: (data?:TooltipPosition)=>void
 };
 
-const Sparkline: React.FC<Props> = ({ path, frame, color, size, onHoverHandler }: Props) => {
+const Sparkline: React.FC<Props> = ({ 
+    path, 
+    frame, 
+    color, 
+    size, 
+    onHoverHandler 
+}: Props) => {
 
-    const sparklineRef = React.createRef<SVGSVGElement>();
+    const containerRef = React.createRef<HTMLDivElement>();
 
     const getPath = () => {
         // const origin = path[0];
@@ -51,29 +57,42 @@ const Sparkline: React.FC<Props> = ({ path, frame, color, size, onHoverHandler }
     };
 
     return (
-        <svg
-            ref={sparklineRef}
-            width={size}
-            height={getHeight()}
-            viewBox={`0 0 ${frame.xmax} ${frame.ymax}`}
+        <div
+            ref={containerRef}
             style={{
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
+                position: 'relative',
+                width: size,
+                height: size,
+                margin: '.5rem',
+                // border: '2px solid #000'
             }}
-            onMouseEnter={()=>{
-                const svg = sparklineRef.current;
-                const { top, right } = svg.getBoundingClientRect();
+            onMouseOver={()=>{
+                const conatiner = containerRef.current;
+                const { top, right } = conatiner.getBoundingClientRect();
         
                 onHoverHandler({
                     x: right,
                     y: top
                 })
             }}
-            onMouseLeave={onHoverHandler.bind(this, null)}
+            onMouseOut={onHoverHandler.bind(this, null)}
         >
-            {getPath()}
-        </svg>
+            <svg
+                width={size}
+                height={getHeight()}
+                viewBox={`0 0 ${frame.xmax} ${frame.ymax}`}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    bottom: 0,
+                    pointerEvents: 'none'
+                }}
+            >
+                {getPath()}
+            </svg>
+        </div>
+
+
     );
 };
 
