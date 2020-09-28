@@ -1,15 +1,19 @@
 import { PathFrame } from 'covid19-trend-map';
 import React from 'react';
+import { TooltipPosition } from '../Tooltip/Tooltip';
 
 type Props = {
     path: number[][];
     frame: PathFrame;
     color: string;
+    size: number;
+    onHoverHandler: (data?:TooltipPosition)=>void
 };
 
-const Size = 60;
+const Sparkline: React.FC<Props> = ({ path, frame, color, size, onHoverHandler }: Props) => {
 
-const Sparkline: React.FC<Props> = ({ path, frame, color }: Props) => {
+    const sparklineRef = React.createRef<SVGSVGElement>();
+
     const getPath = () => {
         // const origin = path[0];
 
@@ -43,31 +47,33 @@ const Sparkline: React.FC<Props> = ({ path, frame, color }: Props) => {
     const getHeight = () => {
         const { xmax, ymax } = frame;
         const ratio = ymax / xmax;
-        return Size * ratio;
+        return size * ratio;
     };
 
     return (
-        <div
+        <svg
+            ref={sparklineRef}
+            width={size}
+            height={getHeight()}
+            viewBox={`0 0 ${frame.xmax} ${frame.ymax}`}
             style={{
-                position: 'relative',
-                width: Size,
-                height: Size,
-                margin: '.5rem',
+                position: 'absolute',
+                left: 0,
+                bottom: 0,
             }}
+            onMouseEnter={()=>{
+                const svg = sparklineRef.current;
+                const { top, right } = svg.getBoundingClientRect();
+        
+                onHoverHandler({
+                    x: right,
+                    y: top
+                })
+            }}
+            onMouseLeave={onHoverHandler.bind(this, null)}
         >
-            <svg
-                width={Size}
-                height={getHeight()}
-                viewBox={`0 0 ${frame.xmax} ${frame.ymax}`}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    bottom: 0,
-                }}
-            >
-                {getPath()}
-            </svg>
-        </div>
+            {getPath()}
+        </svg>
     );
 };
 

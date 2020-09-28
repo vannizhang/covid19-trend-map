@@ -45,6 +45,7 @@ const SortOrder = () => {
 
             return (
                 <div
+                    key={value}
                     style={{
                         display: 'flex',
                         alignItems: 'center',

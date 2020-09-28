@@ -16,6 +16,11 @@ import {
     gridListSortOrderSelector
 } from '../../store/reducers/UI';
 
+import {
+    updateTooltipData,
+    tooltipPositionChanged,
+} from '../../store/reducers/Map';
+
 import { AppContext } from '../../context/AppContextProvider';
 
 import { ThemeStyle } from '../../AppConfig';
@@ -30,14 +35,17 @@ import {
 } from 'covid19-trend-map';
 
 import { HeaderHeight } from './Header';
+import { TooltipPosition } from '../Tooltip/Tooltip';
 
 const FeatureSetSize = 300;
+const SparklineSize = 60;
 
 type Props = {
     activeTrend: Covid19TrendName;
     data: Covid19TrendDataWithLatestNumbers[];
     frame: PathFrame;
     scrollToBottomHandler?: () => void;
+    onHoverHandler: (FIPS:string, tooltipPosition: TooltipPosition)=>void;
 };
 
 const GridList: React.FC<Props> = ({
@@ -45,6 +53,7 @@ const GridList: React.FC<Props> = ({
     data,
     frame,
     scrollToBottomHandler,
+    onHoverHandler
 }: Props) => {
     const sparklinesContainerRef = React.createRef<HTMLDivElement>();
 
@@ -70,6 +79,8 @@ const GridList: React.FC<Props> = ({
 
             const { attributes, confirmed, deaths, newCases } = d;
 
+            const { FIPS } = attributes;
+
             const pathDataByTrendName: {
                 [key in Covid19TrendName]: PathData;
             } = {
@@ -83,12 +94,25 @@ const GridList: React.FC<Props> = ({
             const { path } = pathData;
 
             return (
-                <Sparkline
-                    key={attributes.FIPS}
-                    path={path}
-                    color={ThemeStyle['theme-color-red']}
-                    frame={frame}
-                />
+                <div
+                    key={FIPS}
+                    style={{
+                        position: 'relative',
+                        width: SparklineSize,
+                        height: SparklineSize,
+                        margin: '.5rem',
+                    }}
+                >
+                    <Sparkline
+                        path={path}
+                        color={ThemeStyle['theme-color-red']}
+                        frame={frame}
+                        size={SparklineSize}
+                        onHoverHandler={(tooltipPosition)=>{
+                            onHoverHandler(FIPS, tooltipPosition)
+                        }}
+                    />
+                </div>
             );
         });
 
@@ -126,9 +150,10 @@ const GridList: React.FC<Props> = ({
 };
 
 const GridListContainer = () => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const {
+        covid19LatestNumbers,
         covid19USCountiesData,
         covid19TrendData4USCountiesWithLatestNumbers,
     } = useContext(AppContext);
@@ -194,6 +219,13 @@ const GridListContainer = () => {
             data={sparklinesData}
             frame={getFrame()}
             scrollToBottomHandler={loadSparklinesData}
+            onHoverHandler={(FIPS, tooltipPosition)=>{
+                // console.log(FIPS, tooltipPosition);
+                
+                const tooltipData = covid19LatestNumbers[FIPS];
+                dispatch(updateTooltipData('foobar', tooltipData));
+                dispatch(tooltipPositionChanged(tooltipPosition));
+            }}
         />
     );
 };
