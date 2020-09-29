@@ -138,6 +138,7 @@ const SortFieldSelector: React.FC = ()=>{
                     display: 'flex',
                     alignItems: 'center',
                     padding: '.75rem',
+                    paddingLeft: '1rem',
                     cursor: 'pointer'
                 }}
                 onClick={setIsDropdownMenuOpen.bind(this, !isDropdownMenuOpen)}
@@ -149,7 +150,7 @@ const SortFieldSelector: React.FC = ()=>{
                         textTransform: 'uppercase'
                     }}
                 >
-                    <span className='margin-left-1 avenir-bold'>{getLabelForActiveSortField()}</span>
+                    <span className='avenir-bold'>{getLabelForActiveSortField()}</span>
                 </div>
 
                 <div>

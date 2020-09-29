@@ -48,7 +48,7 @@ type Props = {
     activeTrend: Covid19TrendName;
     data: Covid19TrendDataWithLatestNumbers[];
     frame: PathFrame;
-    scrollToBottomHandler?: () => void;
+    // scrollToBottomHandler?: () => void;
     onHoverHandler: (FIPS:string, tooltipPosition: TooltipPosition)=>void;
     onClickHandler: (FIPS: string)=>void;
 };
@@ -57,27 +57,27 @@ const GridList: React.FC<Props> = ({
     activeTrend,
     data,
     frame,
-    scrollToBottomHandler,
+    // scrollToBottomHandler,
     onHoverHandler,
     onClickHandler
 }: Props) => {
-    const sparklinesContainerRef = React.createRef<HTMLDivElement>();
+    // const sparklinesContainerRef = React.createRef<HTMLDivElement>();
 
-    const onScrollHandler = () => {
-        if (!scrollToBottomHandler) {
-            return;
-        }
+    // const onScrollHandler = () => {
+    //     if (!scrollToBottomHandler) {
+    //         return;
+    //     }
 
-        const sidebarDiv = sparklinesContainerRef.current;
+    //     const sidebarDiv = sparklinesContainerRef.current;
 
-        if (
-            sidebarDiv.scrollHeight - sidebarDiv.scrollTop <=
-            sidebarDiv.clientHeight
-        ) {
-            // console.log('hit to bottom');
-            scrollToBottomHandler();
-        }
-    };
+    //     if (
+    //         sidebarDiv.scrollHeight - sidebarDiv.scrollTop <=
+    //         sidebarDiv.clientHeight
+    //     ) {
+    //         // console.log('hit to bottom');
+    //         scrollToBottomHandler();
+    //     }
+    // };
 
     const getSparklines = () => {
         const sparklines = data.map((d) => {
@@ -118,30 +118,17 @@ const GridList: React.FC<Props> = ({
     };
 
     return (
-        <div
-            ref={sparklinesContainerRef}
-            className="fancy-scrollbar"
-            style={{
-                width: '100%',
-                height: `calc(100% - ${HeaderHeight}px)`,
-                paddingBottom: '60px',
-                boxSizing: 'border-box',
-                overflowY: 'auto',
-            }}
-            onScroll={onScrollHandler}
-        >
-            <div className="grid-container">
-                <div className="column-24 leader-0">
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',
-                            paddingTop: 60
-                        }}
-                    >
-                        {getSparklines()}
-                    </div>
+        <div className="grid-container">
+            <div className="column-24 leader-0">
+                <div
+                    style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        paddingTop: 60
+                    }}
+                >
+                    {getSparklines()}
                 </div>
             </div>
         </div>
@@ -149,6 +136,9 @@ const GridList: React.FC<Props> = ({
 };
 
 const GridListContainer = () => {
+
+    const sparklinesContainerRef = React.createRef<HTMLDivElement>();
+
     const dispatch = useDispatch();
 
     const {
@@ -183,6 +173,7 @@ const GridListContainer = () => {
     }, [sortField, sortOrder]);
 
     const loadSparklinesData = (endIndex?: number) => {
+        console.log('calling loadSparklinesData', endIndex)
         if (!endIndex) {
             endIndex =
                 sparklinesData.length + FeatureSetSize <= sortedData.length
@@ -209,33 +200,64 @@ const GridListContainer = () => {
         return pathFrameByTrendName[activeTrend];
     }, [activeTrend]);
 
+    const onScrollHandler = () => {
+
+        const conatinerDiv = sparklinesContainerRef.current;
+
+        if (
+            conatinerDiv.scrollHeight - conatinerDiv.scrollTop <=
+            conatinerDiv.clientHeight
+        ) {
+            // console.log('hit to bottom');
+            loadSparklinesData();
+        }
+    };
+
     useEffect(() => {
+        const conatinerDiv = sparklinesContainerRef.current;
+        conatinerDiv.scrollTo(0, 0);
+
         // reload sparklines data if sorted data is changed
         loadSparklinesData(FeatureSetSize);
     }, [sortedData]);
 
     return (
-        <GridList
-            activeTrend={activeTrend}
-            data={sparklinesData}
-            frame={getFrame()}
-            scrollToBottomHandler={loadSparklinesData}
-            onHoverHandler={(FIPS, tooltipPosition)=>{
-                // console.log(FIPS, tooltipPosition);
-
-                const tooltipData = covid19LatestNumbers[FIPS];
-                dispatch(updateTooltipData(tooltipData));
-                dispatch(tooltipPositionChanged(tooltipPosition));
+        <div
+            ref={sparklinesContainerRef}
+            className="fancy-scrollbar"
+            style={{
+                width: '100%',
+                height: `calc(100% - ${HeaderHeight}px)`,
+                paddingBottom: '60px',
+                boxSizing: 'border-box',
+                overflowY: 'auto',
             }}
-            onClickHandler={(FIPS)=>{
-                const data = covid19LatestNumbers[FIPS];
+            onScroll={onScrollHandler}
+        >
 
-                dispatch(queryCountyData({
-                    FIPS,
-                    name: data.Name,
-                }));
-            }}
-        />
+            <GridList
+                activeTrend={activeTrend}
+                data={sparklinesData}
+                frame={getFrame()}
+                // scrollToBottomHandler={loadSparklinesData}
+                onHoverHandler={(FIPS, tooltipPosition)=>{
+                    // console.log(FIPS, tooltipPosition);
+
+                    const tooltipData = covid19LatestNumbers[FIPS];
+                    dispatch(updateTooltipData(tooltipData));
+                    dispatch(tooltipPositionChanged(tooltipPosition));
+                }}
+                onClickHandler={(FIPS)=>{
+                    const data = covid19LatestNumbers[FIPS];
+
+                    dispatch(queryCountyData({
+                        FIPS,
+                        name: data.Name,
+                    }));
+                }}
+            />
+        </div>
+
     );
 };
 
