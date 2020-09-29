@@ -5,7 +5,8 @@ import { ThemeStyle } from '../../AppConfig';
 import { 
     GridListSortOrder,
     gridListSortOrderSelector,
-    gridListSortOrderUpdated
+    gridListSortOrderUpdated,
+    isMobileSeletor
 } from '../../store/reducers/UI';
 
 import {
@@ -35,6 +36,8 @@ const SortOrder = () => {
 
     const activeSortOrder = useSelector(gridListSortOrderSelector);
 
+    const isMobile = useSelector(isMobileSeletor);
+
     const getBtns = ()=>{
         return SortOrderData.map(({
             label, 
@@ -50,6 +53,7 @@ const SortOrder = () => {
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 .75rem',
+                        width: isMobile ? '50%' : 'auto',
                         backgroundColor: isActive ? ThemeStyle["theme-color-khaki-bright"] : ThemeStyle["theme-color-khaki"],
                         borderBottom: isActive 
                             ? `4px solid ${ThemeStyle['theme-color-red']}`
@@ -76,8 +80,10 @@ const SortOrder = () => {
                 backgroundColor: HeaderItemBackgroundColor,
                 border: HeaderItemBorder,
                 color: ThemeStyle["theme-color-red"],
-                marginLeft: '1rem',
-                display: 'flex'
+                marginLeft: isMobile ? 'unset' : '1rem',
+                marginTop: isMobile ? '.25rem' : 'unset',
+                display: 'flex',
+                width: isMobile ? '100%' : 'auto',
             }}
         >
             { getBtns() }

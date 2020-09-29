@@ -10,6 +10,10 @@ import {
 } from '../../store/reducers/Map';
 
 import {
+    updateIsNarrowSreen
+} from '../../store/reducers/UI';
+
+import {
     queryCountyData,
     queryStateData,
 } from '../../store/reducers/Covid19Data';
@@ -33,6 +37,8 @@ import { AppContext } from '../../context/AppContextProvider';
 
 import AppConfig from '../../AppConfig';
 
+import useWindowSize from '@rehooks/window-size';
+
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
@@ -45,6 +51,13 @@ const App: React.FC<Props> = ({
     covid19LatestNumbers,
 }: Props) => {
     const dispatch = useDispatch();
+
+    const windowSize = useWindowSize();
+
+    React.useEffect(() => {
+        // console.log(windowSize.outerWidth)
+        dispatch(updateIsNarrowSreen(windowSize.outerWidth));
+    }, [windowSize]);
 
     return (
         <>

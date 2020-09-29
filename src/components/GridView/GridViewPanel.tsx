@@ -3,13 +3,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { ThemeStyle } from '../../AppConfig';
 
-import { activeViewModeSelector } from '../../store/reducers/UI';
+import { activeViewModeSelector, isNarrowSreenSeletor } from '../../store/reducers/UI';
 
 import GridList from './GridList';
 import Header from './Header';
 
 const GridViewPanel: React.FC = () => {
     const activeViewMode = useSelector(activeViewModeSelector);
+    const isNarrowScreen = useSelector(isNarrowSreenSeletor);
 
     return activeViewMode === 'grid' ? (
         <div
@@ -21,6 +22,7 @@ const GridViewPanel: React.FC = () => {
                 right: 0,
                 backgroundColor: ThemeStyle['theme-color-khaki-bright'],
                 color: ThemeStyle['theme-color-red'],
+                zIndex: isNarrowScreen ? 1 : 'unset'
             }}
         >
             <Header />

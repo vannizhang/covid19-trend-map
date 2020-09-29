@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import useWindowSize from '@rehooks/window-size';
+// import useWindowSize from '@rehooks/window-size';
 
 import {
     isMobileSeletor,
-    updateIsNarrowSreen,
+    // updateIsNarrowSreen,
     activeTrendSelector,
     isNarrowSreenSeletor,
 } from '../../store/reducers/UI';
@@ -47,9 +47,9 @@ type TooltipData = {
 };
 
 const ChartPanel: React.FC<Props> = ({ data }: Props) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    const windowSize = useWindowSize();
+    // const windowSize = useWindowSize();
 
     const activeTrend = useSelector(activeTrendSelector);
 
@@ -190,10 +190,10 @@ const ChartPanel: React.FC<Props> = ({ data }: Props) => {
         );
     };
 
-    React.useEffect(() => {
-        // console.log(windowSize.outerWidth)
-        dispatch(updateIsNarrowSreen(windowSize.outerWidth));
-    }, [windowSize]);
+    // React.useEffect(() => {
+    //     // console.log(windowSize.outerWidth)
+    //     dispatch(updateIsNarrowSreen(windowSize.outerWidth));
+    // }, [windowSize]);
 
     return (
         <div

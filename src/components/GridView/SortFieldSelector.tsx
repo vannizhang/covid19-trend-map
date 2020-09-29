@@ -4,7 +4,8 @@ import { ThemeStyle } from '../../AppConfig';
 import { 
     GridListSortField ,
     gridListSortFieldSelector,
-    gridListSortFieldUpdated
+    gridListSortFieldUpdated,
+    isMobileSeletor
 } from '../../store/reducers/UI';
 
 import useOnClickOutside from '../../hooks/useOnClickOutside';
@@ -50,6 +51,8 @@ const SortFieldSelector: React.FC = ()=>{
     const dispatch = useDispatch();
 
     const activeSortField = useSelector(gridListSortFieldSelector);
+
+    const isMobile = useSelector(isMobileSeletor);
 
     const [ isDropdownMenuOpen, setIsDropdownMenuOpen ] = useState<boolean>(false);
 
@@ -124,7 +127,7 @@ const SortFieldSelector: React.FC = ()=>{
             ref={containerRef}
             style={{
                 position: 'relative',
-                width: '350px',
+                width: isMobile ? '100%' : '350px',
                 height: HeaderItemHeight,
                 backgroundColor: HeaderItemBackgroundColor,
                 border: HeaderItemBorder,
