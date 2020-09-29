@@ -3,7 +3,7 @@ import { ThemeStyle } from '../../AppConfig';
 import SortFieldSelector from './SortFieldSelector';
 import SortOrderSelector from './SortOrder';
 
-export const HeaderHeight = 155;
+export const HeaderHeight = 130;
 
 const Header: React.FC = () => {
     return (

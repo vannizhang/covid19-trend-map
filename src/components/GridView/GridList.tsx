@@ -137,6 +137,7 @@ const GridList: React.FC<Props> = ({
                             display: 'flex',
                             flexWrap: 'wrap',
                             justifyContent: 'center',
+                            paddingTop: 60
                         }}
                     >
                         {getSparklines()}
@@ -170,7 +171,7 @@ const GridListContainer = () => {
         const sortedFeatures = [
             ...covid19TrendData4USCountiesWithLatestNumbers,
         ]
-        .filter(d=>d.attributes.Deaths > 0)
+        .filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
         .sort((a, b) => {
             return sortOrder === 'descending' 
                 ? b.attributes[sortField] - a.attributes[sortField]

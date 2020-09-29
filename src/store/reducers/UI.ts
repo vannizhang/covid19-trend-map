@@ -12,6 +12,7 @@ import { miscFns } from 'helper-toolkit-ts';
 import {
     getDefaultValueFromHashParams,
     updateTrendCategoriesInURLHashParams,
+    updateIsGridListVisibleInURLHashParams,
 } from '../../utils/UrlSearchParams';
 
 const NarrowScreenBreakPoint = 1020;
@@ -27,12 +28,17 @@ const activeTrendDefaultVal = getDefaultValueFromHashParams(
     'trendType'
 ) as Covid19TrendName;
 
+const activeViewModeDefaultVal:ViewMode = getDefaultValueFromHashParams( 'grid' ) && getDefaultValueFromHashParams('grid') === '1'
+    ? 'grid'
+    : 'map';
+
 export type GridListSortField =
     | 'Confirmed'
     | 'Deaths'
     | 'ConfirmedPerCapita'
     | 'DeathsPerCapita'
-    | 'CaseFatalityRate';
+    | 'CaseFatalityRate'
+    | 'CaseFatalityRate100Day';
 
 export type GridListSortOrder = 'ascending' | 'descending'
 
@@ -84,8 +90,8 @@ const slice = createSlice({
         // isLoadingChartData: false,
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        activeViewMode: 'map',
-        gridListSortField: 'CaseFatalityRate',
+        activeViewMode: activeViewModeDefaultVal,
+        gridListSortField: 'CaseFatalityRate100Day',
         gridListSortOrder: 'descending'
     } as UIState,
     reducers: {
@@ -127,6 +133,15 @@ export const {
     gridListSortFieldUpdated,
     gridListSortOrderUpdated,
 } = slice.actions;
+
+export const updateActiveMode = (viewMode:ViewMode) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void=>{
+    dispatch(activeViewModeUpdated(viewMode));
+
+    updateIsGridListVisibleInURLHashParams(viewMode === 'grid');
+}
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (
     dispatch: StoreDispatch

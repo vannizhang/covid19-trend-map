@@ -10,7 +10,7 @@ import {
     activeTrendUpdated,
     isAboutModalOpenToggled,
     activeViewModeSelector,
-    activeViewModeUpdated,
+    updateActiveMode,
     ViewMode,
 } from '../../store/reducers/UI';
 
@@ -214,7 +214,7 @@ const ControlPanel: React.FC = () => {
                 <div
                     key={value}
                     onClick={() => {
-                        dispatch(activeViewModeUpdated(value));
+                        dispatch(updateActiveMode(value));
                     }}
                     style={{
                         height: '50%',

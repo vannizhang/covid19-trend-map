@@ -20,8 +20,12 @@ const SortFields: {
     value: GridListSortField
 }[] = [
     {
-        label: 'Case Fatality Rate',
-        value: 'CaseFatalityRate' //"Confirmed" | "Deaths" | "ConfirmedPerCapita" | "DeathsPerCapita" | "CaseFatalityRate"
+        label: '100 Day Case Fatality Rate',
+        value: 'CaseFatalityRate100Day'
+    },
+    {
+        label: 'Overall Case Fatality Rate',
+        value: 'CaseFatalityRate'
     },
     {
         label: 'Total Cases per Capita',

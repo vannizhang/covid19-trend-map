@@ -8,7 +8,7 @@ type HashParams = {
     [key: string]: string;
 };
 
-type UrlHashParamKey = '@' | 'trendCategories' | 'trendType';
+type UrlHashParamKey = '@' | 'trendCategories' | 'trendType' | 'grid';
 
 const DefaultHashParams: HashParams = urlFns.parseHash();
 
@@ -62,6 +62,15 @@ export const updateTrendTypeInURLHashParams = (value: Covid19TrendName) => {
     urlFns.updateHashParam({
         key,
         value: index && index > -1 ? index.toString() : '0',
+    });
+};
+
+export const updateIsGridListVisibleInURLHashParams = (isVisible: boolean) => {
+    const key: UrlHashParamKey = 'grid';
+
+    urlFns.updateHashParam({
+        key,
+        value: isVisible ? '1' : '0',
     });
 };
 
