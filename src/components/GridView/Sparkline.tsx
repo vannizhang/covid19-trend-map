@@ -66,7 +66,7 @@ const Sparkline: React.FC<Props> = ({
                 width: size,
                 height: size,
                 margin: '.5rem',
-                // border: '2px solid #000'
+                cursor: 'pointer'
             }}
             onMouseOver={()=>{
                 const conatiner = containerRef.current;
@@ -88,7 +88,6 @@ const Sparkline: React.FC<Props> = ({
                     position: 'absolute',
                     left: 0,
                     bottom: 0,
-                    pointerEvents: 'none'
                 }}
             >
                 {getPath()}
