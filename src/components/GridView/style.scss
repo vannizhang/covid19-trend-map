@@ -13,3 +13,25 @@
 .fancy-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #B2A584; 
 }
+
+.st0{
+    fill-rule:evenodd;
+    clip-rule:evenodd;
+    fill:#EFEADC;
+    stroke:#D0C8B1;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-miterlimit:10;
+}
+
+.st0.is-hightlight{
+    fill-rule:evenodd;
+    clip-rule:evenodd;
+    fill:#A10D22;
+    stroke:#A10D22;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-miterlimit:10;
+}

@@ -13,7 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     activeTrendSelector,
     gridListSortFieldSelector,
-    gridListSortOrderSelector
+    gridListSortOrderSelector,
+    isOverviewMapVisibleToggled,
+    state2highlightInOverviewMapUpdated
 } from '../../store/reducers/UI';
 
 import {
@@ -243,9 +245,12 @@ const GridListContainer = () => {
                 onHoverHandler={(FIPS, tooltipPosition)=>{
                     // console.log(FIPS, tooltipPosition);
 
+                    const stateFIPS = FIPS && tooltipPosition ? FIPS.substr(0,2) : null;
                     const tooltipData = covid19LatestNumbers[FIPS];
                     dispatch(updateTooltipData(tooltipData));
                     dispatch(tooltipPositionChanged(tooltipPosition));
+                    dispatch(state2highlightInOverviewMapUpdated(stateFIPS));
+                    dispatch(isOverviewMapVisibleToggled())
                 }}
                 onClickHandler={(FIPS)=>{
                     const data = covid19LatestNumbers[FIPS];

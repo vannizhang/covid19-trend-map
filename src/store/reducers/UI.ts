@@ -54,6 +54,9 @@ type UIState = {
     activeViewMode: ViewMode;
     gridListSortField: GridListSortField;
     gridListSortOrder: GridListSortOrder;
+    isOverviewMapVisible: boolean;
+    // state abbreviation that will be used to highlight the path in overview map svg
+    state2highlightInOverviewMap: string;
 };
 
 type ActiveTrendUpdatedAction = {
@@ -81,6 +84,11 @@ type ActiveViewModeUpdatedAction = {
     payload: ViewMode;
 };
 
+type State2highlightInOverviewMapUpdatedAction = {
+    type: string;
+    payload: string;
+};
+
 const slice = createSlice({
     name: 'map',
     initialState: {
@@ -92,7 +100,9 @@ const slice = createSlice({
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
         activeViewMode: activeViewModeDefaultVal,
         gridListSortField: 'CaseFatalityRate100Day',
-        gridListSortOrder: 'descending'
+        gridListSortOrder: 'descending',
+        isOverviewMapVisible: false,
+        state2highlightInOverviewMap: ''
     } as UIState,
     reducers: {
         activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
@@ -118,7 +128,13 @@ const slice = createSlice({
         },
         gridListSortOrderUpdated: (state, action:GridListSortOrderUpdatedAction)=>{
             state.gridListSortOrder = action.payload;
-        }
+        },
+        isOverviewMapVisibleToggled: (state) => {
+            state.isOverviewMapVisible = !state.isOverviewMapVisible;
+        },
+        state2highlightInOverviewMapUpdated: (state, action: State2highlightInOverviewMapUpdatedAction) => {
+            state.state2highlightInOverviewMap = action.payload;
+        },
     },
 });
 
@@ -132,6 +148,8 @@ export const {
     activeViewModeUpdated,
     gridListSortFieldUpdated,
     gridListSortOrderUpdated,
+    isOverviewMapVisibleToggled,
+    state2highlightInOverviewMapUpdated
 } = slice.actions;
 
 export const updateActiveMode = (viewMode:ViewMode) => (
@@ -206,6 +224,16 @@ export const gridListSortFieldSelector = createSelector(
 export const gridListSortOrderSelector = createSelector(
     (state: RootState) => state.UI.gridListSortOrder,
     (gridListSortOrder) => gridListSortOrder
+);
+
+export const isOverviewMapVisibleSelector = createSelector(
+    (state: RootState) => state.UI.isOverviewMapVisible,
+    (isOverviewMapVisible) => isOverviewMapVisible
+);
+
+export const state2highlightInOverviewMapSelector = createSelector(
+    (state: RootState) => state.UI.state2highlightInOverviewMap,
+    (state2highlightInOverviewMap) => state2highlightInOverviewMap
 );
 
 export default reducer;

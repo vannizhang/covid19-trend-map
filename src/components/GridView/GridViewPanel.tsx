@@ -7,6 +7,7 @@ import { activeViewModeSelector, isNarrowSreenSeletor } from '../../store/reduce
 
 import GridList from './GridList';
 import Header from './Header';
+import OverviewMap from './OverviewMap';
 
 const GridViewPanel: React.FC = () => {
     const activeViewMode = useSelector(activeViewModeSelector);
@@ -26,6 +27,7 @@ const GridViewPanel: React.FC = () => {
             }}
         >
             <Header />
+            <OverviewMap />
             <GridList />
         </div>
     ) : null;
