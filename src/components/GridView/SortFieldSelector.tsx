@@ -18,31 +18,38 @@ import {
 
 const SortFields: {
     label: string;
+    tooltip: string;
     value: GridListSortField
 }[] = [
     {
-        label: '100 Day Case Fatality Rate',
-        value: 'CaseFatalityRate100Day'
+        label: '100-Day Case Fatality Rate',
+        value: 'CaseFatalityRate100Day',
+        tooltip: 'The simple ratio of deaths to cases over the past 100 days.'
     },
     {
         label: 'Overall Case Fatality Rate',
-        value: 'CaseFatalityRate'
+        value: 'CaseFatalityRate',
+        tooltip: 'The simple ratio of deaths to cases since February, 2020.'
     },
     {
         label: 'Total Cases per Capita',
-        value: 'ConfirmedPerCapita'
+        value: 'ConfirmedPerCapita',
+        tooltip: 'Ratio of cumulative case counts to population.'
     },
     {
         label: 'Total Deaths per Capita',
-        value: 'DeathsPerCapita'
+        value: 'DeathsPerCapita',
+        tooltip: 'Ratio of deaths to population.'
     },
     {
         label: 'Total Cases',
-        value: 'Confirmed'
+        value: 'Confirmed',
+        tooltip: 'Total number of cases since February, 2020.'
     },
     {
         label: 'Total Deaths',
-        value: 'Deaths'
+        value: 'Deaths',
+        tooltip: 'Total number of Deaths since February, 2020.'
     }
 ]
 
@@ -79,7 +86,8 @@ const SortFieldSelector: React.FC = ()=>{
 
         const menuOptions = SortFields.map(({
             label,
-            value
+            value,
+            tooltip
         })=>{
 
             const borderLeftColor = value === activeSortField 
@@ -100,6 +108,7 @@ const SortFieldSelector: React.FC = ()=>{
                     onClick={()=>{
                         dispatch(gridListSortFieldUpdated(value))
                     }}
+                    title={tooltip}
                 >
                     <span className='font-size--2 avenir-demi'>{label}</span>
                 </div>
