@@ -59,7 +59,8 @@ const SortOrder = () => {
                             ? `4px solid ${ThemeStyle['theme-color-red']}`
                             : `4px solid transparent`,
                         borderRight: index === 0 ? HeaderItemBorder : 'none',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        zIndex: 5
                     }}
                     onClick={()=>{
                         dispatch(gridListSortOrderUpdated(value))

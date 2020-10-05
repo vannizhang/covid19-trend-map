@@ -115,7 +115,7 @@ const TrendCategoriesToggle = (): JSX.Element => {
                         boxSizing: 'border-box',
                         border: `1px solid ${ThemeStyle['theme-color-khaki']}`,
                         padding: '0 .25rem',
-                        minWidth: '540px',
+                        minWidth: isMobile ? 'auto' : '540px',
                     }}
                 >
                     <span className="avenir-demi">

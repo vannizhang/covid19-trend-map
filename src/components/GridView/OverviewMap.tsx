@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { ThemeStyle } from '../../AppConfig';
-import { isOverviewMapVisibleSelector, state2highlightInOverviewMapSelector } from '../../store/reducers/UI';
+import { isMobileSeletor, isOverviewMapVisibleSelector, state2highlightInOverviewMapSelector } from '../../store/reducers/UI';
 
 type USAStateSVGProps = {
     state2highlight: string;
@@ -360,9 +360,10 @@ const USAStateSVG:React.FC<USAStateSVGProps> = ({
 const OverviewMap = () => {
 
     const isVisible = useSelector(isOverviewMapVisibleSelector);
-    const state2highlight = useSelector(state2highlightInOverviewMapSelector)
+    const state2highlight = useSelector(state2highlightInOverviewMapSelector);
+    const isMobile = useSelector(isMobileSeletor);
 
-    return isVisible ? (
+    return isVisible && !isMobile ? (
         <div
             style={{
                 position: 'absolute',
