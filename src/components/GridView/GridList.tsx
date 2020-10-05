@@ -43,6 +43,10 @@ import {
 import { HeaderHeight } from './Header';
 import { TooltipPosition } from '../Tooltip/Tooltip';
 
+import {
+    getStateAbbrev
+} from '../../utils/getStateName'
+
 const FeatureSetSize = 300;
 export const SparklineSize = 60;
 
@@ -246,10 +250,11 @@ const GridListContainer = () => {
                     // console.log(FIPS, tooltipPosition);
 
                     const stateFIPS = FIPS && tooltipPosition ? FIPS.substr(0,2) : null;
+                    const stateAbbr = getStateAbbrev(stateFIPS);
                     const tooltipData = covid19LatestNumbers[FIPS];
                     dispatch(updateTooltipData(tooltipData));
                     dispatch(tooltipPositionChanged(tooltipPosition));
-                    dispatch(state2highlightInOverviewMapUpdated(stateFIPS));
+                    dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
                     dispatch(isOverviewMapVisibleToggled())
                 }}
                 onClickHandler={(FIPS)=>{

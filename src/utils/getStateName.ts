@@ -56,6 +56,6 @@ const Lookup = {
     "09": "CT"
 };
 
-const getStateAbbrev = (FIPS:string)=>{
+export const getStateAbbrev = (FIPS:string)=>{
     return Lookup[FIPS];
 }
