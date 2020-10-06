@@ -164,11 +164,15 @@ const GridListContainer = () => {
     >([]);
 
     const sortedData = useMemo(() => {
-        const sortedFeatures = [
+        let sortedFeatures = [
             ...covid19TrendData4USCountiesWithLatestNumbers,
-        ]
-        .filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
-        .sort((a, b) => {
+        ];
+
+        if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
+            sortedFeatures = sortedFeatures.filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
+        }
+
+        sortedFeatures.sort((a, b) => {
             return sortOrder === 'descending' 
                 ? b.attributes[sortField] - a.attributes[sortField]
                 : a.attributes[sortField] - b.attributes[sortField];

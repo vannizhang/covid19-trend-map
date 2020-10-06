@@ -24,12 +24,12 @@ const SortFields: {
     {
         label: '100-Day Case Fatality Rate',
         value: 'CaseFatalityRate100Day',
-        tooltip: 'The simple ratio of deaths to cases over the past 100 days.'
+        tooltip: 'The simple ratio of deaths to cases over the past 100 days. Counties with no deaths are omitted from this list.'
     },
     {
         label: 'Overall Case Fatality Rate',
         value: 'CaseFatalityRate',
-        tooltip: 'The simple ratio of deaths to cases since February, 2020.'
+        tooltip: 'The simple ratio of deaths to cases since February, 2020. Counties with no deaths are omitted from this list.'
     },
     {
         label: 'Total Cases per Capita',
