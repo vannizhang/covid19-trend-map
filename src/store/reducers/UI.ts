@@ -2,6 +2,7 @@ import {
     createSlice,
     createSelector,
     // createAsyncThunk
+    PayloadAction
 } from '@reduxjs/toolkit';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
@@ -59,36 +60,6 @@ type UIState = {
     state2highlightInOverviewMap: string;
 };
 
-type ActiveTrendUpdatedAction = {
-    type: string;
-    payload: Covid19TrendName;
-};
-
-type BooleanPropChangedAction = {
-    type: string;
-    payload: boolean;
-};
-
-type GridListSortFieldUpdatedAction = {
-    type: string;
-    payload: GridListSortField;
-};
-
-type GridListSortOrderUpdatedAction = {
-    type: string;
-    payload: GridListSortOrder;
-};
-
-type ActiveViewModeUpdatedAction = {
-    type: string;
-    payload: ViewMode;
-};
-
-type State2highlightInOverviewMapUpdatedAction = {
-    type: string;
-    payload: string;
-};
-
 const slice = createSlice({
     name: 'map',
     initialState: {
@@ -105,7 +76,7 @@ const slice = createSlice({
         state2highlightInOverviewMap: ''
     } as UIState,
     reducers: {
-        activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
+        activeTrendUpdated: (state, action: PayloadAction<Covid19TrendName>) => {
             state.activeTrend = action.payload;
         },
         isAboutModalOpenToggled: (state) => {
@@ -114,25 +85,25 @@ const slice = createSlice({
         showTrendCategoriesToggled: (state) => {
             state.showTrendCategories = !state.showTrendCategories;
         },
-        isNarrowSreenChanged: (state, action: BooleanPropChangedAction) => {
+        isNarrowSreenChanged: (state, action: PayloadAction<boolean>) => {
             state.isNarrowSreen = action.payload;
         },
-        activeViewModeUpdated: (state, action: ActiveViewModeUpdatedAction) => {
+        activeViewModeUpdated: (state, action: PayloadAction<ViewMode>) => {
             state.activeViewMode = action.payload;
         },
         gridListSortFieldUpdated: (
             state,
-            action: GridListSortFieldUpdatedAction
+            action: PayloadAction<GridListSortField>
         ) => {
             state.gridListSortField = action.payload;
         },
-        gridListSortOrderUpdated: (state, action:GridListSortOrderUpdatedAction)=>{
+        gridListSortOrderUpdated: (state, action:PayloadAction<GridListSortOrder>)=>{
             state.gridListSortOrder = action.payload;
         },
         isOverviewMapVisibleToggled: (state) => {
             state.isOverviewMapVisible = !state.isOverviewMapVisible;
         },
-        state2highlightInOverviewMapUpdated: (state, action: State2highlightInOverviewMapUpdatedAction) => {
+        state2highlightInOverviewMapUpdated: (state, action: PayloadAction<string>) => {
             state.state2highlightInOverviewMap = action.payload;
         },
     },

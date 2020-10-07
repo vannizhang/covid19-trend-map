@@ -2,6 +2,7 @@ import {
     createSlice,
     createSelector,
     // createAsyncThunk
+    PayloadAction
 } from '@reduxjs/toolkit';
 
 import {
@@ -23,21 +24,6 @@ type MapState = {
     // latestNumbers: Covid19LatestNumbers;
 };
 
-type TooltipPositionChangedAction = {
-    type: string;
-    payload: TooltipPosition;
-};
-
-type TooltipDataChangedAction = {
-    type: string;
-    payload: TooltipData;
-};
-
-type IsStateLayerVisilbeToggledAction = {
-    type: string;
-    payload: boolean;
-};
-
 const slice = createSlice({
     name: 'map',
     initialState: {
@@ -48,16 +34,16 @@ const slice = createSlice({
     reducers: {
         tooltipPositionChanged: (
             state,
-            action: TooltipPositionChangedAction
+            action: PayloadAction<TooltipPosition>
         ) => {
             state.tooltipPosition = action.payload;
         },
-        tooltipDataChanged: (state, action: TooltipDataChangedAction) => {
+        tooltipDataChanged: (state, action: PayloadAction<TooltipData>) => {
             state.tooltipData = action.payload;
         },
         isStateLayerVisilbeToggled: (
             state,
-            action: IsStateLayerVisilbeToggledAction
+            action: PayloadAction<boolean>
         ) => {
             state.isStateLayerVisilbe = action.payload;
         },

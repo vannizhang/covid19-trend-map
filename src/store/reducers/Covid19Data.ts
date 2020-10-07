@@ -2,6 +2,7 @@ import {
     createSlice,
     createSelector,
     createAsyncThunk,
+    PayloadAction
 } from '@reduxjs/toolkit';
 
 import {
@@ -28,24 +29,16 @@ type State = {
     queryLocation: QueryLocation4Covid19TrendData;
 };
 
-type QueryLocationUpdatedAction = {
-    type: string;
-    payload: QueryLocation4Covid19TrendData;
-};
-
 type FetchCovid19TimeSeriesDataParam = {
     countyFIPS?: string;
     stateName?: string;
     isNYCCounties?: boolean;
 };
 
-type FetchCovid19TimeSeriesDataFullfilledAction = {
-    type: string;
-    payload: FetchCovid19DataResponse;
-};
+const SliceName = 'covid19TimeSeriesData'
 
 const fetchData = createAsyncThunk(
-    'covid19TimeSeriesData/fetchData',
+    `${SliceName}/fetchData`,
     async ({
         countyFIPS,
         stateName,
@@ -71,7 +64,7 @@ const fetchData = createAsyncThunk(
 );
 
 const slice = createSlice({
-    name: 'covid19TimeSeriesData',
+    name: SliceName,
     initialState: {
         loading: false,
         data: null,
@@ -83,7 +76,7 @@ const slice = createSlice({
             state.queryLocation = null;
             state.loading = null;
         },
-        queryLocationUpdated: (state, action: QueryLocationUpdatedAction) => {
+        queryLocationUpdated: (state, action: PayloadAction<QueryLocation4Covid19TrendData>) => {
             state.queryLocation = action.payload;
         },
     },
@@ -94,7 +87,7 @@ const slice = createSlice({
         },
         [fetchData.fulfilled.type]: (
             state,
-            action: FetchCovid19TimeSeriesDataFullfilledAction
+            action: PayloadAction<FetchCovid19DataResponse>
         ) => {
             state.loading = false;
             state.data = action.payload;
@@ -118,13 +111,8 @@ export const queryCountyData = ({
 ): void => {
 
     if ( FIPS && name ) {
-        // const countyFIPS = feature.attributes['FIPS'];
 
         const isNYCCounties = FIPSCodes4NYCCounties.indexOf(FIPS) > -1;
-
-        // const locationName = isNYCCounties
-        //     ? 'NEW YORK, NEW YORK'
-        //     : `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`;
 
         const queryLocation = {
             graphic: feature,
