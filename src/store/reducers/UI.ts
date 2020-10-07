@@ -8,30 +8,12 @@ import {
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import { Covid19TrendName } from 'covid19-trend-map';
 
-import { miscFns } from 'helper-toolkit-ts';
-
 import {
-    getDefaultValueFromHashParams,
     updateTrendCategoriesInURLHashParams,
     updateIsGridListVisibleInURLHashParams,
 } from '../../utils/UrlSearchParams';
 
-const NarrowScreenBreakPoint = 1020;
-const isMobile = miscFns.isMobileDevice();
-
-const showTrendCategoriesDefaultVal = getDefaultValueFromHashParams(
-    'trendCategories'
-)
-    ? getDefaultValueFromHashParams('trendCategories') === '1'
-    : true;
-
-const activeTrendDefaultVal = getDefaultValueFromHashParams(
-    'trendType'
-) as Covid19TrendName;
-
-const activeViewModeDefaultVal:ViewMode = getDefaultValueFromHashParams( 'grid' ) && getDefaultValueFromHashParams('grid') === '1'
-    ? 'grid'
-    : 'map';
+export const NarrowScreenBreakPoint = 1020;
 
 export type GridListSortField =
     | 'Confirmed'
@@ -63,13 +45,13 @@ type UIState = {
 const slice = createSlice({
     name: 'map',
     initialState: {
-        isMobile,
-        activeTrend: activeTrendDefaultVal,
+        isMobile: false,
+        activeTrend: 'new-cases',
         isAboutModalOpen: false,
         // isLoadingChartData: false,
-        showTrendCategories: showTrendCategoriesDefaultVal,
-        isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-        activeViewMode: activeViewModeDefaultVal,
+        showTrendCategories: true,
+        isNarrowSreen: false,
+        activeViewMode: 'map',
         gridListSortField: 'CaseFatalityRate100Day',
         gridListSortOrder: 'descending',
         isOverviewMapVisible: false,
