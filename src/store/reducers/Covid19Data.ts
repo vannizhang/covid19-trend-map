@@ -5,6 +5,8 @@ import {
     PayloadAction
 } from '@reduxjs/toolkit';
 
+import { batch } from 'react-redux'
+
 import {
     RootState,
     StoreDispatch,
@@ -119,14 +121,19 @@ export const queryCountyData = ({
             locationName: name,
         };
 
-        dispatch(queryLocationUpdated(queryLocation));
+        // should only result in one combined re-render, not two
+        batch(()=>{
 
-        dispatch(
-            fetchData({
-                countyFIPS: FIPS,
-                isNYCCounties,
-            })
-        );
+            dispatch(queryLocationUpdated(queryLocation));
+
+            dispatch(
+                fetchData({
+                    countyFIPS: FIPS,
+                    isNYCCounties,
+                })
+            );
+        })
+
     } else {
         dispatch(resetQueryData());
     }
@@ -149,13 +156,17 @@ export const queryStateData = ({
             locationName: name,
         };
 
-        dispatch(queryLocationUpdated(queryLocation));
+        // should only result in one combined re-render, not two
+        batch(()=>{
+            dispatch(queryLocationUpdated(queryLocation));
 
-        dispatch(
-            fetchData({
-                stateName: name,
-            })
-        );
+            dispatch(
+                fetchData({
+                    stateName: name,
+                })
+            );
+        })
+
     } else {
         dispatch(resetQueryData());
     }
