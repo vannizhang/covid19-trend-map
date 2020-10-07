@@ -7,11 +7,17 @@ import {
 } from '../utils/UrlSearchParams';
 
 import { Covid19TrendName } from 'covid19-trend-map';
-import { ViewMode, NarrowScreenBreakPoint } from '../store/reducers/UI';
+import { initialUIState, UIState, ViewMode, NarrowScreenBreakPoint } from '../store/reducers/UI';
 import { miscFns } from 'helper-toolkit-ts';
 
 const getPreloadedState = ():PartialRootState=>{
+    return {
+        UI: getPreloadedUIState()
+    };
+}
 
+const getPreloadedUIState = ():UIState=>{
+    
     const isMobile = miscFns.isMobileDevice();
 
     const showTrendCategoriesDefaultVal = getDefaultValueFromHashParams(
@@ -29,13 +35,12 @@ const getPreloadedState = ():PartialRootState=>{
         : 'map';
 
     return {
-        UI: {
-            isMobile,
-            activeTrend: activeTrendDefaultVal,
-            showTrendCategories: showTrendCategoriesDefaultVal,
-            isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-            activeViewMode: activeViewModeDefaultVal,
-        }
+        ...initialUIState,
+        isMobile,
+        activeTrend: activeTrendDefaultVal,
+        showTrendCategories: showTrendCategoriesDefaultVal,
+        isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
+        activeViewMode: activeViewModeDefaultVal,
     };
 }
 

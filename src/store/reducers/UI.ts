@@ -27,7 +27,7 @@ export type GridListSortOrder = 'ascending' | 'descending'
 
 export type ViewMode = 'map' | 'grid';
 
-type UIState = {
+export type UIState = {
     isMobile: boolean;
     activeTrend: Covid19TrendName;
     isAboutModalOpen: boolean;
@@ -42,21 +42,23 @@ type UIState = {
     state2highlightInOverviewMap: string;
 };
 
+export const initialUIState = {
+    isMobile: false,
+    activeTrend: 'new-cases',
+    isAboutModalOpen: false,
+    // isLoadingChartData: false,
+    showTrendCategories: true,
+    isNarrowSreen: false,
+    activeViewMode: 'map',
+    gridListSortField: 'CaseFatalityRate100Day',
+    gridListSortOrder: 'descending',
+    isOverviewMapVisible: false,
+    state2highlightInOverviewMap: ''
+} as UIState;
+
 const slice = createSlice({
     name: 'map',
-    initialState: {
-        isMobile: false,
-        activeTrend: 'new-cases',
-        isAboutModalOpen: false,
-        // isLoadingChartData: false,
-        showTrendCategories: true,
-        isNarrowSreen: false,
-        activeViewMode: 'map',
-        gridListSortField: 'CaseFatalityRate100Day',
-        gridListSortOrder: 'descending',
-        isOverviewMapVisible: false,
-        state2highlightInOverviewMap: ''
-    } as UIState,
+    initialState: initialUIState,
     reducers: {
         activeTrendUpdated: (state, action: PayloadAction<Covid19TrendName>) => {
             state.activeTrend = action.payload;
