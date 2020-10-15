@@ -8,8 +8,8 @@ export const getModifiedTime = (): number => {
     const utcDate = now.getUTCDate();
     const utcHour = now.getUTCHours();
 
-    // the file can be modified at 13PM or 14PM UTC
-    const syncHourInUTC = utcHour === 13 ? utcHour : 14;
+    // the file can be modified at 13PM, 14PM or 15PM UTC
+    const syncHourInUTC = utcHour >= 13 || utcHour <= 15 ? utcHour : 15;
 
     let modifiedTime = new Date(
         Date.UTC(utcYear, utcMonth, utcDate, syncHourInUTC)
