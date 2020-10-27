@@ -8,7 +8,7 @@ import React, {
     useCallback,
 } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, batch } from 'react-redux';
 
 import {
     activeTrendSelector,
@@ -125,7 +125,7 @@ const GridList: React.FC<Props> = ({
 
     return (
         <div className="grid-container">
-            <div className="column-24 leader-0">
+            <div className="column-14 center-column leader-0">
                 <div
                     style={{
                         display: 'flex',
@@ -256,10 +256,14 @@ const GridListContainer = () => {
                     const stateFIPS = FIPS && tooltipPosition ? FIPS.substr(0,2) : null;
                     const stateAbbr = getStateAbbrev(stateFIPS);
                     const tooltipData = covid19LatestNumbers[FIPS];
-                    dispatch(updateTooltipData(tooltipData));
-                    dispatch(tooltipPositionChanged(tooltipPosition));
-                    dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
-                    dispatch(isOverviewMapVisibleToggled())
+
+                    batch(()=>{
+                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(tooltipPositionChanged(tooltipPosition));
+                        dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
+                        dispatch(isOverviewMapVisibleToggled())
+                    });
+
                 }}
                 onClickHandler={(FIPS)=>{
                     const data = covid19LatestNumbers[FIPS];

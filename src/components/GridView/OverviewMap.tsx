@@ -372,7 +372,7 @@ const OverviewMap = () => {
                 padding: '1rem',
                 zIndex: 1,
                 backgroundColor: ThemeStyle["theme-color-khaki"],
-                boxShadow: `0 0 6px 2px ${ThemeStyle["floating-panel-box-shadow"]}`
+                // boxShadow: `0 0 6px 2px ${ThemeStyle["floating-panel-box-shadow"]}`
                 // height: '100%'
             }}
         >
