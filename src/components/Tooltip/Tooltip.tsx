@@ -28,6 +28,12 @@ export type TooltipData = {
     newDeathsPast7Days: number;
     population: number;
     trendCategory?: COVID19TrendCategoryType;
+    percentiles?: {
+        casesPerCapita: number;
+        deathsPerCapita: number; 
+        caseFatalityRate: number; 
+        caseFatalityRatePast100Day: number;
+    }
 };
 
 type Props = {
@@ -104,6 +110,63 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
         );
     };
 
+    const getPercentileItem = (value:number, label:string)=>{
+        return (
+            <div>
+                <span
+                    style={{
+                        color: ThemeStyle["theme-color-red"],
+                        marginBottom: '.5rem'
+                    }}
+                >{value} percentile</span>
+                <br />
+                <span>{ label } </span>
+            </div>
+        )
+    }
+
+    const getPercentiles = ()=>{
+        if (!data || !data.percentiles) {
+            return null;
+        }
+
+        const {
+            casesPerCapita,
+            deathsPerCapita,
+            caseFatalityRate,
+            caseFatalityRatePast100Day
+        } = data.percentiles;
+
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    // maxWidth: '350px',
+                    margin: '.5rem 0 .5rem',
+                    padding: '.5rem 0',
+                    borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                    borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
+                }}
+            >
+                <div
+                    style={{
+                        marginRight: '.75rem'
+                    }}
+                >
+                    { getPercentileItem(casesPerCapita, 'Cases per Capita') }
+                    { getPercentileItem(deathsPerCapita, 'Deaths per Capita') }
+                </div>
+
+                <div>
+                    { getPercentileItem(caseFatalityRate, 'Case Fatality Rate') }
+                    { getPercentileItem(caseFatalityRatePast100Day, '100 Day Case Fatality Rate') }
+                </div>
+
+            </div>
+        )
+    }
+
     const getContent = () => {
         const {
             population,
@@ -169,7 +232,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                         <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> total deaths
                     </span> */}
 
-                    {getTrendType()}
+                    
                 </>
             );
 
@@ -181,7 +244,9 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     // 'maxWidth': '250px'
                 }}
             >
-                {content}
+                { content }
+                { getPercentiles() }
+                { getTrendType() }
             </div>
         );
     };
