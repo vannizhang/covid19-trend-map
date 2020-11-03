@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeStyle } from '../../AppConfig';
+import { AppContext } from '../../context/AppContextProvider';
 
 import {
     resetQueryData,
@@ -62,6 +63,8 @@ const BottomPanel: React.FC<Props> = ({
 const BottomPanelContainer: React.FC = () => {
     const dispatch = useDispatch();
 
+    const { covid19LatestNumbers } = useContext(AppContext)
+
     const covid19CasesByTimeQueryResults = useSelector(
         covid19DataByLocationSelector
     );
@@ -82,6 +85,11 @@ const BottomPanelContainer: React.FC = () => {
                     covid19CasesByTimeQueryResults
                         ? covid19CasesByTimeQueryResults.summaryInfo
                         : undefined
+                }
+                percentiles={
+                    covid19CasesByTimeQueryLocation 
+                        ? covid19LatestNumbers[covid19CasesByTimeQueryLocation.FIPS].Percentiles
+                        : []
                 }
                 closeBtnOnClick={() => {
                     dispatch(resetQueryData());

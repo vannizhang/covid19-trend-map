@@ -75,6 +75,7 @@ declare module 'covid19-trend-map' {
     type QueryLocation4Covid19TrendData = {
         graphic: QueryLocationFeature;
         locationName: string;
+        FIPS:string;
     };
 
     type Covid19LatestNumbersFeature = {

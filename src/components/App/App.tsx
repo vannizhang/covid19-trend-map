@@ -137,7 +137,8 @@ const App: React.FC<Props> = ({
 
                         dispatch(queryStateData({
                             name: data.Name,
-                            feature: feature ? feature.toJSON() : undefined
+                            feature: feature ? feature.toJSON() : undefined,
+                            FIPS
                         }));
                     }}
                     pointerOnMove={(position) => {

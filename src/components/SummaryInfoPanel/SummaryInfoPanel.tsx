@@ -5,23 +5,63 @@ import { useSelector } from 'react-redux';
 import { isMobileSeletor } from '../../store/reducers/UI';
 
 import { ThemeStyle } from '../../AppConfig';
-import { numberFns, stringFns } from 'helper-toolkit-ts';
+import { numberFns } from 'helper-toolkit-ts';
 import { format, parse } from 'date-fns';
 
 import { SummaryInfo } from '../../utils/queryCovid19Data';
 
+import {
+    PercentileInfo
+} from '../Tooltip/Tooltip';
+
 type Props = {
     locationName?: string;
     data: SummaryInfo;
+    // Percentiles for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+    percentiles?: number[]
     closeBtnOnClick: () => void;
 };
 
 const SummaryInfoPanel: React.FC<Props> = ({
     locationName,
     data,
+    percentiles,
     closeBtnOnClick,
 }: Props) => {
     const isMobile = useSelector(isMobileSeletor);
+
+    const getPercentileInfo = ()=>{
+
+        if(!percentiles || !percentiles.length){
+            return null;
+        }
+
+        const titles = [
+            'Cases per Capita',
+            'Deaths per Capita',
+            'Case Fatality Rate',
+            '100-Day Case Fatality Rate'
+        ];
+
+        const items = percentiles.map((num, index)=>{
+            return (
+                <div 
+                    key={index}
+                    className='margin-right-1'
+                >
+                    <PercentileInfo 
+                        value={num}
+                        label={titles[index]}
+                    />
+                </div>
+            )
+        })
+
+        return (
+            <>{ items }</>
+        );
+
+    }
 
     const getSummaryInfo = () => {
         if (!data) {
@@ -57,7 +97,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
             borderRight: isMobile
                 ? 'none'
                 : `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
-            display: isMobile ? 'block' : 'flex',
+            // display: isMobile ? 'block' : 'flex',
             alignItems: 'center',
         };
 
@@ -70,7 +110,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
                     padding: `0 ${isMobile ? '0' : '1rem'}`,
                 }}
             >
-                <div
+                {/* <div
                     style={{
                         ...blockStyle,
                         display: 'block',
@@ -83,17 +123,20 @@ const SummaryInfoPanel: React.FC<Props> = ({
                         {isMobile ? null : <br />}{' '}
                         {dateWithBiggestWeeklyIncreaseFormatted}
                     </span>
+                </div> */}
+
+                <div 
+                    style={blockStyle}
+                >
+                    <span className="text-theme-color-red">Population</span>
+                    <br/>
+                    <span>{population}</span>
                 </div>
 
-                <div style={blockStyle}>
-                    <span>
-                        <span className="text-theme-color-red">Population</span>{' '}
-                        {population}
-                    </span>
-                </div>
-
-                <div style={blockStyle}>
-                    <span>
+                <div 
+                    style={blockStyle}
+                >
+                    <div>
                         <span className="text-theme-color-red">
                             {newCasesThisWeek}
                         </span>{' '}
@@ -102,16 +145,9 @@ const SummaryInfoPanel: React.FC<Props> = ({
                             {deathsThisWeek}
                         </span>{' '}
                         deaths in past 7 days
-                    </span>
-                </div>
+                    </div>
 
-                <div
-                    style={{
-                        ...blockStyle,
-                        borderRight: 'none',
-                    }}
-                >
-                    <span>
+                    <div>
                         <span className="text-theme-color-red">
                             {cumulativeCases}
                         </span>{' '}
@@ -120,8 +156,37 @@ const SummaryInfoPanel: React.FC<Props> = ({
                             {cumulativeDeaths}
                         </span>{' '}
                         deaths
-                    </span>
+                    </div>
                 </div>
+
+                <div
+                    style={{
+                        ...blockStyle,
+                        display: 'flex',
+                        
+                        borderRight: 'unset',
+                    }}
+                >
+                    { getPercentileInfo() }
+                </div>
+
+                {/* <div
+                    style={{
+                        ...blockStyle,
+                        borderRight: 'none',
+                    }}
+                >
+                    <div>
+                        <span className="text-theme-color-red">
+                            {cumulativeCases}
+                        </span>{' '}
+                        cumulative cases and{' '}
+                        <span className="text-theme-color-red">
+                            {cumulativeDeaths}
+                        </span>{' '}
+                        deaths
+                    </div>
+                </div> */}
             </div>
         );
     };

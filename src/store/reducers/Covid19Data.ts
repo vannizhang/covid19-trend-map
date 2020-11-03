@@ -116,9 +116,10 @@ export const queryCountyData = ({
 
         const isNYCCounties = FIPSCodes4NYCCounties.indexOf(FIPS) > -1;
 
-        const queryLocation = {
+        const queryLocation:QueryLocation4Covid19TrendData = {
             graphic: feature,
             locationName: name,
+            FIPS
         };
 
         // should only result in one combined re-render, not two
@@ -140,10 +141,11 @@ export const queryCountyData = ({
 };
 
 export const queryStateData = ({
-    name, feature
+    name, feature, FIPS
 }:{
     name: string;
     feature?: QueryLocationFeature,
+    FIPS: string
 }) => (
     dispatch: StoreDispatch
     // getState: StoreGetState
@@ -154,6 +156,7 @@ export const queryStateData = ({
         const queryLocation = {
             graphic: feature,
             locationName: name,
+            FIPS
         };
 
         // should only result in one combined re-render, not two
