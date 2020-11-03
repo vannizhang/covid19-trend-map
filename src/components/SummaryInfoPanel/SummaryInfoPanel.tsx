@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { isMobileSeletor } from '../../store/reducers/UI';
 
 import { ThemeStyle } from '../../AppConfig';
-import { numberFns } from 'helper-toolkit-ts';
+import { numberFns, stringFns } from 'helper-toolkit-ts';
 import { format, parse } from 'date-fns';
 
 import { SummaryInfo } from '../../utils/queryCovid19Data';
@@ -138,6 +138,17 @@ const SummaryInfoPanel: React.FC<Props> = ({
         };
     };
 
+    const serachBtnOnClick = ()=>{
+
+        const [ locationNamePart1, locationNamePart2 ]: string[] = locationName.split(',').map(d=>d.trim());
+
+        const locationName2Search = locationNamePart1 && locationNamePart2 
+            ? `${locationNamePart1}+County+${locationNamePart2}`
+            : locationNamePart1;
+
+        window.open(`https://www.google.com/search?q=${locationName2Search}+covid`, '_blank');
+    }
+
     return (
         <div
             style={{
@@ -152,12 +163,26 @@ const SummaryInfoPanel: React.FC<Props> = ({
         >
             <div
                 style={{
+                    position: 'relative',
                     color: ThemeStyle['theme-color-red'],
                     textTransform: 'uppercase',
                     maxWidth: isMobile ? '320px' : 'auto',
                 }}
             >
                 <span className="avenir-bold font-size-2">{locationName}</span>
+
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: '-5px' ,
+                        right:'-15px',
+                        cursor: 'pointer',
+                    }}
+                    title='Find more on the web'
+                    onClick={serachBtnOnClick}
+                >
+                    <svg height="16" width="16" viewBox="0 0 16 16" fill={ThemeStyle["theme-color-khaki-dark"]}><path d="M14.482 13.784L9.708 9.011a4.8 4.8 0 1 0-.69.69l4.773 4.773zM3.315 8.687a3.8 3.8 0 1 1 2.687 1.112 3.806 3.806 0 0 1-2.687-1.112z"/><path fill="none" d="M0 0h16v16H0z"/></svg>
+                </div>
             </div>
 
             <div

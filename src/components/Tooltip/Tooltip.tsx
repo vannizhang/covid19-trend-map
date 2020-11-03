@@ -113,15 +113,29 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
     const getPercentileItem = (value:number, label:string)=>{
         const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
         return (
-            <div>
-                <span
+            <div
+                className='trailer-quarter'
+            >
+                <div
                     style={{
-                        color: ThemeStyle["theme-color-red"],
-                        marginBottom: '.5rem'
+                        lineHeight: '18px'
                     }}
-                >{percentile}th percentile</span>
-                <br />
-                <span>{ label } </span>
+                >
+                    <span
+                        style={{
+                            color: ThemeStyle["theme-color-red"],
+                        }}
+                    >{percentile}th percentile</span>
+                </div>
+
+                <div
+                    style={{
+                        lineHeight: '18px'
+                    }}
+                >
+                    <span>{ label } </span>
+                </div>
+
             </div>
         )
     }
@@ -145,7 +159,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     flexWrap: 'wrap',
                     // maxWidth: '350px',
                     margin: '.5rem 0 .5rem',
-                    padding: '.5rem 0',
+                    padding: '.5rem 0 .25rem',
                     borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
                     borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
                 }}
@@ -161,7 +175,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
 
                 <div>
                     { getPercentileItem(caseFatalityRate, 'Case Fatality Rate') }
-                    { getPercentileItem(caseFatalityRatePast100Day, '100 Day Case Fatality Rate') }
+                    { getPercentileItem(caseFatalityRatePast100Day, '100-Day Case Fatality Rate') }
                 </div>
 
             </div>
