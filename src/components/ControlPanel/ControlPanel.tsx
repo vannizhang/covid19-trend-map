@@ -81,7 +81,7 @@ const ControlPanel: React.FC = () => {
                 }}
             >
                 Esri CovidPulse &nbsp;--&nbsp; United States novel coronavirus
-                trend lines, since February
+                trend lines, since March
             </span>
         );
 

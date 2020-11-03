@@ -162,7 +162,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
                         >
                             US County Cases
                         </a>{' '}
-                        since February 22, 2020, and normalized into
+                        since March 1st, 2020, and normalized into
                         population-normalized rates using the population
                         attribute also provided in the JHU service. Care has
                         been taken to note, via county tooltip, when state
