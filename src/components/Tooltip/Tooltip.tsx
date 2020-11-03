@@ -111,6 +111,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
     };
 
     const getPercentileItem = (value:number, label:string)=>{
+        const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
         return (
             <div>
                 <span
@@ -118,7 +119,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                         color: ThemeStyle["theme-color-red"],
                         marginBottom: '.5rem'
                     }}
-                >{value} percentile</span>
+                >{percentile}th percentile</span>
                 <br />
                 <span>{ label } </span>
             </div>
