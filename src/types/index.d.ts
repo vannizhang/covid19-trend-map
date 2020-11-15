@@ -88,8 +88,10 @@ declare module 'covid19-trend-map' {
         NewDeaths100Days: number;
         Population: number;
         TrendType: COVID19TrendCategoryType;
-        // Percentiles for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
-        Percentiles?: [number, number, number, number];
+        // // Percentiles for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+        // Percentiles?: [number, number, number, number];
+        // Ranks for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+        Ranks?: [number, number, number, number];
     };
 
     type Covid19LatestNumbers = {

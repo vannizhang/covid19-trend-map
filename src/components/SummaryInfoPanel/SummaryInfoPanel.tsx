@@ -11,28 +11,28 @@ import { format, parse } from 'date-fns';
 import { SummaryInfo } from '../../utils/queryCovid19Data';
 
 import {
-    PercentileInfo
+    RankInfo
 } from '../Tooltip/Tooltip';
 
 type Props = {
     locationName?: string;
     data: SummaryInfo;
-    // Percentiles for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
-    percentiles?: number[]
+    // Ranks for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+    ranks?: number[]
     closeBtnOnClick: () => void;
 };
 
 const SummaryInfoPanel: React.FC<Props> = ({
     locationName,
     data,
-    percentiles,
+    ranks,
     closeBtnOnClick,
 }: Props) => {
     const isMobile = useSelector(isMobileSeletor);
 
-    const getPercentileInfo = ()=>{
+    const getRanksInfo = ()=>{
 
-        if(!percentiles || !percentiles.length){
+        if(!ranks || !ranks.length){
             return null;
         }
 
@@ -43,13 +43,13 @@ const SummaryInfoPanel: React.FC<Props> = ({
             '100-Day Case Fatality Rate'
         ];
 
-        const items = percentiles.map((num, index)=>{
+        const items = ranks.map((num, index)=>{
             return (
                 <div 
                     key={index}
                     className='margin-right-1'
                 >
-                    <PercentileInfo 
+                    <RankInfo 
                         value={num}
                         label={titles[index]}
                     />
@@ -167,7 +167,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
                         borderRight: 'unset',
                     }}
                 >
-                    { getPercentileInfo() }
+                    { getRanksInfo() }
                 </div>
 
                 {/* <div

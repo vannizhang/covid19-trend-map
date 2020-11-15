@@ -86,9 +86,9 @@ const BottomPanelContainer: React.FC = () => {
                         ? covid19CasesByTimeQueryResults.summaryInfo
                         : undefined
                 }
-                percentiles={
+                ranks={
                     covid19CasesByTimeQueryLocation 
-                        ? covid19LatestNumbers[covid19CasesByTimeQueryLocation.FIPS].Percentiles
+                        ? covid19LatestNumbers[covid19CasesByTimeQueryLocation.FIPS].Ranks
                         : []
                 }
                 closeBtnOnClick={() => {

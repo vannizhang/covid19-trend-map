@@ -14,6 +14,9 @@ import { activeViewModeSelector } from '../../store/reducers/UI';
 import {
     SparklineSize
 } from '../GridView/GridList';
+import {
+    getNumberWithOrdinalIndicator
+} from '../../utils/getNumberWithOrdinalIndicator';
 
 export type TooltipPosition = {
     x: number;
@@ -28,7 +31,7 @@ export type TooltipData = {
     newDeathsPast7Days: number;
     population: number;
     trendCategory?: COVID19TrendCategoryType;
-    percentiles?: {
+    ranks?: {
         casesPerCapita: number;
         deathsPerCapita: number; 
         caseFatalityRate: number; 
@@ -46,7 +49,7 @@ type Props = {
 // const TooltipHeight = 150;
 const PositionOffset = 10;
 
-export const PercentileInfo:React.FC<{
+export const RankInfo:React.FC<{
     value:number, 
     label:string,
     // margin bottom in rem unit
@@ -54,7 +57,8 @@ export const PercentileInfo:React.FC<{
 }> = ({
     value, label, marginBottom
 })=> {
-    const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
+    const rank = getNumberWithOrdinalIndicator(value);
+
     return (
         <div
             style={{
@@ -70,7 +74,7 @@ export const PercentileInfo:React.FC<{
                     style={{
                         color: ThemeStyle["theme-color-red"],
                     }}
-                >{percentile}th percentile</span>
+                >{rank}</span>
             </div>
 
             <div
@@ -149,38 +153,38 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
         );
     };
 
-    const getPercentileItem = (value:number, label:string)=>{
-        const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
-        return (
-            <div
-                className='trailer-quarter'
-            >
-                <div
-                    style={{
-                        lineHeight: '18px'
-                    }}
-                >
-                    <span
-                        style={{
-                            color: ThemeStyle["theme-color-red"],
-                        }}
-                    >{percentile}th percentile</span>
-                </div>
+    // const getPercentileItem = (value:number, label:string)=>{
+    //     const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
+    //     return (
+    //         <div
+    //             className='trailer-quarter'
+    //         >
+    //             <div
+    //                 style={{
+    //                     lineHeight: '18px'
+    //                 }}
+    //             >
+    //                 <span
+    //                     style={{
+    //                         color: ThemeStyle["theme-color-red"],
+    //                     }}
+    //                 >{percentile}th percentile</span>
+    //             </div>
 
-                <div
-                    style={{
-                        lineHeight: '18px'
-                    }}
-                >
-                    <span>{ label } </span>
-                </div>
+    //             <div
+    //                 style={{
+    //                     lineHeight: '18px'
+    //                 }}
+    //             >
+    //                 <span>{ label } </span>
+    //             </div>
 
-            </div>
-        )
-    }
+    //         </div>
+    //     )
+    // }
 
-    const getPercentiles = ()=>{
-        if (!data || !data.percentiles) {
+    const getRanks = ()=>{
+        if (!data || !data.ranks) {
             return null;
         }
 
@@ -189,7 +193,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
             deathsPerCapita,
             caseFatalityRate,
             caseFatalityRatePast100Day
-        } = data.percentiles;
+        } = data.ranks;
 
         return (
             <div
@@ -208,26 +212,26 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                         marginRight: '.75rem'
                     }}
                 >
-                    <PercentileInfo 
+                    <RankInfo 
                         value={casesPerCapita}
                         label='Cases per Capita'
                         marginBottom={.5}
                     />
 
-                    <PercentileInfo 
+                    <RankInfo 
                         value={deathsPerCapita}
                         label='Deaths per Capita'
                     />
                 </div>
 
                 <div>
-                    <PercentileInfo 
+                    <RankInfo 
                         value={caseFatalityRate}
                         label='Case Fatality Rate'
                         marginBottom={.5}
                     />
 
-                    <PercentileInfo 
+                    <RankInfo 
                         value={caseFatalityRatePast100Day}
                         label='100-Day Case Fatality Rate'
                     />
@@ -315,7 +319,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                 }}
             >
                 { content }
-                { getPercentiles() }
+                { getRanks() }
                 { getTrendType() }
             </div>
         );

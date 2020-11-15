@@ -76,7 +76,7 @@ export const updateTooltipData = (
             NewDeaths,
             Population,
             TrendType,
-            Percentiles
+            Ranks
         } = data;
 
         tooltipData = {
@@ -87,11 +87,11 @@ export const updateTooltipData = (
             newDeathsPast7Days: NewDeaths || 0,
             population: Population,
             trendCategory: TrendType,
-            percentiles: {
-                casesPerCapita: Percentiles && Percentiles[0] ? Percentiles[0] : 0,
-                deathsPerCapita: Percentiles && Percentiles[1] ? Percentiles[1] : 0,
-                caseFatalityRate: Percentiles && Percentiles[2] ? Percentiles[2] : 0,
-                caseFatalityRatePast100Day: Percentiles && Percentiles[3] ? Percentiles[3] : 0,
+            ranks: {
+                casesPerCapita: Ranks && Ranks[0] ? Ranks[0] : 0,
+                deathsPerCapita: Ranks && Ranks[1] ? Ranks[1] : 0,
+                caseFatalityRate: Ranks && Ranks[2] ? Ranks[2] : 0,
+                caseFatalityRatePast100Day: Ranks && Ranks[3] ? Ranks[3] : 0,
             }
         };
     }
