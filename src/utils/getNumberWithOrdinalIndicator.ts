@@ -8,15 +8,15 @@ export const getNumberWithOrdinalIndicator = (num:number):string => {
 
     let ordinalIndicator = 'th';
 
-    if(lastDigit === 1 || last2Digit !== 11){
+    if(lastDigit === 1 && last2Digit !== 11){
         ordinalIndicator = 'st'
     }
 
-    if(lastDigit === 2 || last2Digit !== 12){
+    if(lastDigit === 2 && last2Digit !== 12){
         ordinalIndicator = 'nd'
     }
 
-    if(lastDigit === 3 || last2Digit !== 13){
+    if(lastDigit === 3 && last2Digit !== 13){
         ordinalIndicator = 'rd'
     }
 
