@@ -25,7 +25,8 @@ import {
 
 import {
     queryCountyData,
-    queryStateData
+    queryStateData,
+    queryLocationSelector
 } from '../../store/reducers/Covid19Data';
 
 import { AppContext } from '../../context/AppContextProvider';
@@ -55,6 +56,7 @@ type Props = {
     activeTrend: Covid19TrendName;
     data: Covid19TrendDataWithLatestNumbers[];
     frame: PathFrame;
+    queryLocationFIPS: string;
     showTopBorder?: boolean;
     paddingTop?: number;
     // scrollToBottomHandler?: () => void;
@@ -66,6 +68,7 @@ const GridList: React.FC<Props> = ({
     activeTrend,
     data,
     frame,
+    queryLocationFIPS,
     showTopBorder,
     paddingTop,
     // scrollToBottomHandler,
@@ -91,7 +94,7 @@ const GridList: React.FC<Props> = ({
     // };
 
     const getSparklines = () => {
-        const sparklines = data.map((d) => {
+        const sparklines = data.map((d, i) => {
             // console.log(d);
 
             const { attributes, confirmed, deaths, newCases } = d;
@@ -115,6 +118,7 @@ const GridList: React.FC<Props> = ({
                     key={FIPS}
                     path={path}
                     color={ThemeStyle['theme-color-red']}
+                    backgroundColor={ FIPS === queryLocationFIPS ? '#E8E2D3' : undefined}
                     frame={frame}
                     size={SparklineSize}
                     onHoverHandler={(tooltipPosition)=>{
@@ -166,6 +170,8 @@ const GridListContainer = () => {
     const sortField = useSelector(gridListSortFieldSelector);
 
     const sortOrder = useSelector(gridListSortOrderSelector);
+
+    const covid19CasesByTimeQueryLocation = useSelector(queryLocationSelector);
 
     const [sparklinesData4Counties, setSparklinesData4Counties] = useState<
         Covid19TrendDataWithLatestNumbers[]
@@ -274,6 +280,10 @@ const GridListContainer = () => {
                 activeTrend={activeTrend}
                 data={sortedData4States}
                 frame={getFrame()}
+                queryLocationFIPS={covid19CasesByTimeQueryLocation && covid19CasesByTimeQueryLocation.FIPS 
+                    ? covid19CasesByTimeQueryLocation.FIPS 
+                    : ''
+                }
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{
                     console.log(FIPS, tooltipPosition);
@@ -304,6 +314,10 @@ const GridListContainer = () => {
                 activeTrend={activeTrend}
                 data={sparklinesData4Counties}
                 frame={getFrame()}
+                queryLocationFIPS={covid19CasesByTimeQueryLocation && covid19CasesByTimeQueryLocation.FIPS 
+                    ? covid19CasesByTimeQueryLocation.FIPS 
+                    : ''
+                }
                 // paddingTop={40}
                 showTopBorder={true}
                 // scrollToBottomHandler={loadSparklinesData}

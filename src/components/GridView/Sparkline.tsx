@@ -6,6 +6,7 @@ type Props = {
     path: number[][];
     frame: PathFrame;
     color: string;
+    backgroundColor?: string;
     size: number;
     onHoverHandler: (data?:TooltipPosition)=>void;
     onClickHandler: ()=>void;
@@ -15,6 +16,7 @@ const Sparkline: React.FC<Props> = ({
     path, 
     frame, 
     color, 
+    backgroundColor,
     size, 
     onHoverHandler,
     onClickHandler
@@ -66,7 +68,8 @@ const Sparkline: React.FC<Props> = ({
                 width: size,
                 height: size,
                 margin: '.5rem',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                backgroundColor: backgroundColor || 'transparent'
             }}
             onMouseOver={()=>{
                 const conatiner = containerRef.current;
