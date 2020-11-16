@@ -159,13 +159,13 @@ const GridListContainer = () => {
 
     const sortOrder = useSelector(gridListSortOrderSelector);
 
-    const [sparklinesData, setSparklinesData] = useState<
+    const [sparklinesData4Counties, setSparklinesData4Counties] = useState<
         Covid19TrendDataWithLatestNumbers[]
     >([]);
 
-    const sortedData = useMemo(() => {
+    const sortData = (features:Covid19TrendDataWithLatestNumbers[]):Covid19TrendDataWithLatestNumbers[] => {
         let sortedFeatures = [
-            ...covid19TrendData4USCountiesWithLatestNumbers,
+            ...features,
         ];
 
         if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
@@ -180,20 +180,42 @@ const GridListContainer = () => {
         // console.log('sortedFeatures', sortedFeatures);
 
         return sortedFeatures;
+    }
+
+    const sortedData4Counties = useMemo(() => {
+        // let sortedFeatures = [
+        //     ...covid19TrendData4USCountiesWithLatestNumbers,
+        // ];
+
+        // if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
+        //     sortedFeatures = sortedFeatures.filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
+        // }
+
+        // sortedFeatures.sort((a, b) => {
+        //     return sortOrder === 'descending' 
+        //         ? b.attributes[sortField] - a.attributes[sortField]
+        //         : a.attributes[sortField] - b.attributes[sortField];
+        // });
+        // // console.log('sortedFeatures', sortedFeatures);
+
+        return sortData([
+            ...covid19TrendData4USCountiesWithLatestNumbers
+        ]);
+        
     }, [sortField, sortOrder]);
 
     const loadSparklinesData = (endIndex?: number) => {
         console.log('calling loadSparklinesData', endIndex)
         if (!endIndex) {
             endIndex =
-                sparklinesData.length + FeatureSetSize <= sortedData.length
-                    ? sparklinesData.length + FeatureSetSize
-                    : sparklinesData.length;
+                sparklinesData4Counties.length + FeatureSetSize <= sortedData4Counties.length
+                    ? sparklinesData4Counties.length + FeatureSetSize
+                    : sparklinesData4Counties.length;
         }
 
-        const featuresSet = sortedData.slice(0, endIndex);
+        const featuresSet = sortedData4Counties.slice(0, endIndex);
 
-        setSparklinesData(featuresSet);
+        setSparklinesData4Counties(featuresSet);
     };
 
     const getFrame = useCallback(() => {
@@ -229,7 +251,7 @@ const GridListContainer = () => {
 
         // reload sparklines data if sorted data is changed
         loadSparklinesData(FeatureSetSize);
-    }, [sortedData]);
+    }, [sortedData4Counties]);
 
     return (
         <div
@@ -247,7 +269,7 @@ const GridListContainer = () => {
 
             <GridList
                 activeTrend={activeTrend}
-                data={sparklinesData}
+                data={sparklinesData4Counties}
                 frame={getFrame()}
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{
