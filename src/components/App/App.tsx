@@ -115,7 +115,7 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                     }}
                 />
 
@@ -152,7 +152,7 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                     }}
                 />
             </MapView>

@@ -60,6 +60,7 @@ export const {
 
 export const updateTooltipData = (
     // locationName: string,
+    FIPS: string,
     data: Covid19LatestNumbersFeature
 ) => (
     dispatch: StoreDispatch
@@ -80,6 +81,7 @@ export const updateTooltipData = (
         } = data;
 
         tooltipData = {
+            FIPS,
             locationName: Name,
             confirmed: Confirmed,
             deaths: Deaths,

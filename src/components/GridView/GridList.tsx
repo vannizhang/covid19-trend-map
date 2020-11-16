@@ -55,6 +55,8 @@ type Props = {
     activeTrend: Covid19TrendName;
     data: Covid19TrendDataWithLatestNumbers[];
     frame: PathFrame;
+    showTopBorder?: boolean;
+    paddingTop?: number;
     // scrollToBottomHandler?: () => void;
     onHoverHandler: (FIPS:string, tooltipPosition: TooltipPosition)=>void;
     onClickHandler: (FIPS: string)=>void;
@@ -64,6 +66,8 @@ const GridList: React.FC<Props> = ({
     activeTrend,
     data,
     frame,
+    showTopBorder,
+    paddingTop,
     // scrollToBottomHandler,
     onHoverHandler,
     onClickHandler
@@ -132,7 +136,9 @@ const GridList: React.FC<Props> = ({
                         display: 'flex',
                         flexWrap: 'wrap',
                         justifyContent: 'center',
-                        paddingTop: 60
+                        paddingTop: paddingTop || 60,
+                        paddingBottom: 60,
+                        borderTop: showTopBorder ? 'solid 1px #E8E2D3' : 'unset'
                     }}
                 >
                     {getSparklines()}
@@ -277,7 +283,7 @@ const GridListContainer = () => {
                     const tooltipData = covid19LatestNumbers[FIPS];
 
                     batch(()=>{
-                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                         dispatch(tooltipPositionChanged(tooltipPosition));
                         dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
                         dispatch(isOverviewMapVisibleToggled())
@@ -298,6 +304,8 @@ const GridListContainer = () => {
                 activeTrend={activeTrend}
                 data={sparklinesData4Counties}
                 frame={getFrame()}
+                // paddingTop={40}
+                showTopBorder={true}
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{
                     // console.log(FIPS, tooltipPosition);
@@ -307,7 +315,7 @@ const GridListContainer = () => {
                     const tooltipData = covid19LatestNumbers[FIPS];
 
                     batch(()=>{
-                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                         dispatch(tooltipPositionChanged(tooltipPosition));
                         dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
                         dispatch(isOverviewMapVisibleToggled())

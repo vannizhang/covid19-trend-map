@@ -24,6 +24,7 @@ export type TooltipPosition = {
 };
 
 export type TooltipData = {
+    FIPS: string;
     locationName: string;
     confirmed: number;
     deaths: number;
@@ -153,36 +154,6 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
         );
     };
 
-    // const getPercentileItem = (value:number, label:string)=>{
-    //     const percentile = value === 1 ? '100' : (value * 100).toFixed(2)
-    //     return (
-    //         <div
-    //             className='trailer-quarter'
-    //         >
-    //             <div
-    //                 style={{
-    //                     lineHeight: '18px'
-    //                 }}
-    //             >
-    //                 <span
-    //                     style={{
-    //                         color: ThemeStyle["theme-color-red"],
-    //                     }}
-    //                 >{percentile}th percentile</span>
-    //             </div>
-
-    //             <div
-    //                 style={{
-    //                     lineHeight: '18px'
-    //                 }}
-    //             >
-    //                 <span>{ label } </span>
-    //             </div>
-
-    //         </div>
-    //     )
-    // }
-
     const getRanks = ()=>{
         if (!data || !data.ranks) {
             return null;
@@ -195,49 +166,61 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
             caseFatalityRatePast100Day
         } = data.ranks;
 
+        const isState = data.FIPS && data.FIPS.length === 2;
+
         return (
             <div
                 style={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    // maxWidth: '350px',
                     margin: '.5rem 0 .5rem',
                     padding: '.5rem 0',
                     borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
                     borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
                 }}
             >
+                <div className='trailer-quarter'>
+                    <span>{isState ? 'State' : 'County'} Rank out of {isState ? '51' : '3,141'}</span>
+                </div>
+
                 <div
                     style={{
-                        marginRight: '.75rem'
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        // maxWidth: '350px',
                     }}
                 >
-                    <RankInfo 
-                        value={casesPerCapita}
-                        label='Cases per Capita'
-                        marginBottom={.5}
-                    />
+                    <div
+                        style={{
+                            marginRight: '.75rem'
+                        }}
+                    >
+                        <RankInfo 
+                            value={casesPerCapita}
+                            label='Cases per Capita'
+                            marginBottom={.5}
+                        />
 
-                    <RankInfo 
-                        value={deathsPerCapita}
-                        label='Deaths per Capita'
-                    />
+                        <RankInfo 
+                            value={deathsPerCapita}
+                            label='Deaths per Capita'
+                        />
+                    </div>
+
+                    <div>
+                        <RankInfo 
+                            value={caseFatalityRate}
+                            label='Case Fatality Rate'
+                            marginBottom={.5}
+                        />
+
+                        <RankInfo 
+                            value={caseFatalityRatePast100Day}
+                            label='100-Day Case Fatality Rate'
+                        />
+                    </div>
+
                 </div>
-
-                <div>
-                    <RankInfo 
-                        value={caseFatalityRate}
-                        label='Case Fatality Rate'
-                        marginBottom={.5}
-                    />
-
-                    <RankInfo 
-                        value={caseFatalityRatePast100Day}
-                        label='100-Day Case Fatality Rate'
-                    />
-                </div>
-
             </div>
+
         )
     }
 
