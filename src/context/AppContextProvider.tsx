@@ -18,6 +18,7 @@ type AppContextProps = {
     covid19USStatesData: Covid19TrendDataQueryResponse;
     covid19LatestNumbers: Covid19LatestNumbers;
     covid19TrendData4USCountiesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[];
+    covid19TrendData4USStatesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[];
 };
 
 type AppContextProviderProps = {
@@ -58,42 +59,45 @@ const AppContextProvider: React.FC = ({
             // setCovid19LatestNumbers(queryResLatestNumbers.data);
             // dispatch(latestNumbersLoaded(queryResLatestNumbers.data));
 
-            const covid19TrendData4USCountiesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[] = queryResUSCounties.data.features.map(
-                (feature) => {
-                    const { FIPS } = feature.attributes;
-
-                    const {
+            const addLatestNumbers2TrendData = (feature:Covid19TrendData):Covid19TrendDataWithLatestNumbers=>{
+                const { FIPS } = feature.attributes;
+            
+                const {
+                    Confirmed,
+                    Deaths,
+                    // NewCases,
+                    NewCases100Days,
+                    // NewDeaths,
+                    NewDeaths100Days,
+                    Population,
+                } = queryResLatestNumbers.data[FIPS];
+            
+                return {
+                    ...feature,
+                    attributes: {
+                        FIPS,
                         Confirmed,
                         Deaths,
-                        NewCases,
-                        NewCases100Days,
-                        NewDeaths,
-                        NewDeaths100Days,
-                        Population,
-                    } = queryResLatestNumbers.data[FIPS];
+                        ConfirmedPerCapita: Confirmed / Population,
+                        DeathsPerCapita: Deaths / Population,
+                        CaseFatalityRate:
+                            Confirmed > 0 ? Deaths / Confirmed : 0,
+                        CaseFatalityRate100Day: 
+                            NewCases100Days > 0 ? NewDeaths100Days / NewCases100Days : 0
+                    },
+                };
+            }
 
-                    return {
-                        ...feature,
-                        attributes: {
-                            FIPS,
-                            Confirmed,
-                            Deaths,
-                            ConfirmedPerCapita: Confirmed / Population,
-                            DeathsPerCapita: Deaths / Population,
-                            CaseFatalityRate:
-                                Confirmed > 0 ? Deaths / Confirmed : 0,
-                            CaseFatalityRate100Day: 
-                                NewCases100Days > 0 ? NewDeaths100Days / NewCases100Days : 0
-                        },
-                    };
-                }
-            );
+            const covid19TrendData4USCountiesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[] = queryResUSCounties.data.features.map(addLatestNumbers2TrendData);
+
+            const covid19TrendData4USStatesWithLatestNumbers: Covid19TrendDataWithLatestNumbers[] = queryResUSStates.data.features.map(addLatestNumbers2TrendData);
 
             setContextProps({
                 covid19USCountiesData: queryResUSCounties.data,
                 covid19USStatesData: queryResUSStates.data,
                 covid19LatestNumbers: queryResLatestNumbers.data,
                 covid19TrendData4USCountiesWithLatestNumbers,
+                covid19TrendData4USStatesWithLatestNumbers
             });
         } catch (err) {
             console.error(err);

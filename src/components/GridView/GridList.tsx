@@ -24,7 +24,8 @@ import {
 } from '../../store/reducers/Map';
 
 import {
-    queryCountyData
+    queryCountyData,
+    queryStateData
 } from '../../store/reducers/Covid19Data';
 
 import { AppContext } from '../../context/AppContextProvider';
@@ -151,6 +152,7 @@ const GridListContainer = () => {
         covid19LatestNumbers,
         covid19USCountiesData,
         covid19TrendData4USCountiesWithLatestNumbers,
+        covid19TrendData4USStatesWithLatestNumbers
     } = useContext(AppContext);
 
     const activeTrend = useSelector(activeTrendSelector);
@@ -183,25 +185,20 @@ const GridListContainer = () => {
     }
 
     const sortedData4Counties = useMemo(() => {
-        // let sortedFeatures = [
-        //     ...covid19TrendData4USCountiesWithLatestNumbers,
-        // ];
-
-        // if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
-        //     sortedFeatures = sortedFeatures.filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
-        // }
-
-        // sortedFeatures.sort((a, b) => {
-        //     return sortOrder === 'descending' 
-        //         ? b.attributes[sortField] - a.attributes[sortField]
-        //         : a.attributes[sortField] - b.attributes[sortField];
-        // });
-        // // console.log('sortedFeatures', sortedFeatures);
 
         return sortData([
             ...covid19TrendData4USCountiesWithLatestNumbers
         ]);
-        
+
+    }, [sortField, sortOrder]);
+
+    
+    const sortedData4States = useMemo(() => {
+
+        return sortData([
+            ...covid19TrendData4USStatesWithLatestNumbers
+        ]);
+
     }, [sortField, sortOrder]);
 
     const loadSparklinesData = (endIndex?: number) => {
@@ -266,6 +263,36 @@ const GridListContainer = () => {
             }}
             onScroll={onScrollHandler}
         >
+
+            <GridList
+                activeTrend={activeTrend}
+                data={sortedData4States}
+                frame={getFrame()}
+                // scrollToBottomHandler={loadSparklinesData}
+                onHoverHandler={(FIPS, tooltipPosition)=>{
+                    console.log(FIPS, tooltipPosition);
+
+                    const stateFIPS = FIPS && tooltipPosition ? FIPS.substr(0,2) : null;
+                    const stateAbbr = getStateAbbrev(stateFIPS);
+                    const tooltipData = covid19LatestNumbers[FIPS];
+
+                    batch(()=>{
+                        dispatch(updateTooltipData(tooltipData));
+                        dispatch(tooltipPositionChanged(tooltipPosition));
+                        dispatch(state2highlightInOverviewMapUpdated(stateAbbr));
+                        dispatch(isOverviewMapVisibleToggled())
+                    });
+
+                }}
+                onClickHandler={(FIPS)=>{
+                    const data = covid19LatestNumbers[FIPS];
+
+                    dispatch(queryStateData({
+                        name: data.Name,
+                        FIPS
+                    }));
+                }}
+            />
 
             <GridList
                 activeTrend={activeTrend}
