@@ -11,11 +11,13 @@ import { format, parse } from 'date-fns';
 import { SummaryInfo } from '../../utils/queryCovid19Data';
 
 import {
-    RankInfo
+    RankInfo,
+    RankLabel
 } from '../Tooltip/Tooltip';
 
 type Props = {
     locationName?: string;
+    FIPS:string;
     data: SummaryInfo;
     // Ranks for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
     ranks?: number[]
@@ -24,6 +26,7 @@ type Props = {
 
 const SummaryInfoPanel: React.FC<Props> = ({
     locationName,
+    FIPS,
     data,
     ranks,
     closeBtnOnClick,
@@ -82,15 +85,15 @@ const SummaryInfoPanel: React.FC<Props> = ({
 
         const population = numberFns.numberWithCommas(data.population);
 
-        const dateWithBiggestWeeklyIncrease = parse(
-            data.dateWithBiggestWeeklyIncrease,
-            'yyyy-MM-dd',
-            new Date()
-        );
-        const dateWithBiggestWeeklyIncreaseFormatted = format(
-            dateWithBiggestWeeklyIncrease,
-            'MMMM dd, yyyy'
-        );
+        // const dateWithBiggestWeeklyIncrease = parse(
+        //     data.dateWithBiggestWeeklyIncrease,
+        //     'yyyy-MM-dd',
+        //     new Date()
+        // );
+        // const dateWithBiggestWeeklyIncreaseFormatted = format(
+        //     dateWithBiggestWeeklyIncrease,
+        //     'MMMM dd, yyyy'
+        // );
 
         const blockStyle: React.CSSProperties = {
             padding: isMobile ? '0' : '0 .65rem',
@@ -167,6 +170,15 @@ const SummaryInfoPanel: React.FC<Props> = ({
                         borderRight: 'unset',
                     }}
                 >
+                    <div
+                        className='margin-right-half'
+                        style={{
+                            maxWidth: 90
+                        }}
+                    >
+                        <RankLabel isState={FIPS && FIPS.length === 2} />
+                    </div>
+
                     { getRanksInfo() }
                 </div>
 

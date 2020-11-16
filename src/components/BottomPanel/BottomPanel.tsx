@@ -81,6 +81,11 @@ const BottomPanelContainer: React.FC = () => {
                         ? covid19CasesByTimeQueryLocation.locationName
                         : undefined
                 }
+                FIPS={
+                    covid19CasesByTimeQueryLocation
+                    ? covid19CasesByTimeQueryLocation.FIPS
+                    : undefined
+                }
                 data={
                     covid19CasesByTimeQueryResults
                         ? covid19CasesByTimeQueryResults.summaryInfo

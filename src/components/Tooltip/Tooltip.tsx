@@ -90,6 +90,16 @@ export const RankInfo:React.FC<{
     );
 }
 
+export const RankLabel:React.FC<{
+    isState: boolean;
+}> = ({
+    isState
+})=>{
+    return (
+        <span>{isState ? 'State' : 'County'} Rank out of {isState ? '51' : '3,141'}</span>
+    )
+};
+
 const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
     const containerRef = useRef<HTMLDivElement>();
 
@@ -178,7 +188,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                 }}
             >
                 <div className='trailer-quarter'>
-                    <span>{isState ? 'State' : 'County'} Rank out of {isState ? '51' : '3,141'}</span>
+                    <RankLabel isState={isState} />
                 </div>
 
                 <div
