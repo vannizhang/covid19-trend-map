@@ -20,11 +20,11 @@ const SortOrderData: {
     value: GridListSortOrder
 }[] = [
     {
-        label: 'Largest to Smallest',
+        label: 'Highest to Lowest',
         value: 'descending'
     },
     {
-        label: 'Smallest to Largest',
+        label: 'Lowest to Highest',
         value: 'ascending'
     }
 ]
