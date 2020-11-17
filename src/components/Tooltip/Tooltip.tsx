@@ -243,6 +243,8 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
             deaths,
         } = data;
 
+        const death2PopulationRatio = +Math.round(population/deaths).toFixed(0)
+
         const content =
             data.confirmed === 0 && data.trendCategory ? (
                 <div
@@ -267,6 +269,13 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     <br />
 
                     <span>
+                        1 covid death per{' '} 
+                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(death2PopulationRatio)}</span>{' '}
+                        persons
+                    </span>
+                    <br/>
+                    
+                    <span>
                         <span className="text-theme-color-red">
                             {numberFns.numberWithCommas(newCasesPast7Days)}
                         </span>{' '}
@@ -277,11 +286,6 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                         deaths in past 7 days
                     </span>
                     <br />
-
-                    {/* <span>
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.newDeathsPast7Days)}</span> new deaths in past 7 days
-                    </span>
-                    <br/> */}
 
                     <span>
                         <span className="text-theme-color-red">

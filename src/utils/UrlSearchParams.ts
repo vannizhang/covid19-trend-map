@@ -4,11 +4,15 @@ import { MapCenterLocation } from '../components/MapView/MapView';
 
 import { Covid19TrendName } from 'covid19-trend-map';
 
+import { 
+    GridListSortField
+} from '../store/reducers/UI';
+
 type HashParams = {
     [key: string]: string;
 };
 
-type UrlHashParamKey = '@' | 'trendCategories' | 'trendType' | 'grid';
+type UrlHashParamKey = '@' | 'trendCategories' | 'trendType' | 'grid' | 'sort';
 
 const DefaultHashParams: HashParams = urlFns.parseHash();
 
@@ -17,6 +21,15 @@ const TrendTypesValuesInOrder: Covid19TrendName[] = [
     'death',
     'confirmed',
 ];
+
+const SortFieldValuesInOrder: GridListSortField[] = [
+    'CaseFatalityRate',
+    'CaseFatalityRate100Day',
+    'Confirmed',
+    'ConfirmedPerCapita',
+    'Deaths',
+    'DeathsPerCapita'
+]
 
 export const getDefaultValueFromHashParams = (key: UrlHashParamKey) => {
     if (key === '@') {
@@ -73,6 +86,17 @@ export const updateIsGridListVisibleInURLHashParams = (isVisible: boolean) => {
         value: isVisible ? '1' : '0',
     });
 };
+
+export const updateSortFieldInURLHashParams = (sortField:GridListSortField) =>{
+    const key: UrlHashParamKey = 'sort';
+
+    const index = SortFieldValuesInOrder.indexOf(sortField);
+
+    urlFns.updateHashParam({
+        key,
+        value: index && index > -1 ? index.toString() : 'none',
+    });
+}
 
 const getMapLocationFromUrlSearchParams = (hashParams?: HashParams) => {
     hashParams = hashParams || urlFns.parseQuery();
