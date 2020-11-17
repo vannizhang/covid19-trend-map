@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { useDispatch } from 'react-redux';
-
-import axios from 'axios';
 
 import {
     updateTooltipData,
@@ -10,6 +8,10 @@ import {
     tooltipPositionChanged,
     isStateLayerVisilbeToggled,
 } from '../../store/reducers/Map';
+
+import {
+    updateIsNarrowSreen
+} from '../../store/reducers/UI';
 
 import {
     queryCountyData,
@@ -21,6 +23,7 @@ import MapView from '../MapView/MapView';
 import Tooltip from '../Tooltip/Tooltip';
 import BottomPanel from '../BottomPanel/BottomPanel';
 import ControlPanel from '../ControlPanel/ControlPanel';
+import GridViewPanel from '../GridView/GridViewPanel';
 import QueryTaskLayer from '../QueryTaskLayer/QueryTaskLayer';
 import Covid19TrendLayer from '../Covid19TrendLayer/Covid19TrendLayer';
 import QueryTaskResultLayer from '../QueryTaskResultLayer/QueryTaskResultLayer';
@@ -30,9 +33,11 @@ import {
     Covid19LatestNumbers,
 } from 'covid19-trend-map';
 
+import { AppContext } from '../../context/AppContextProvider';
+
 import AppConfig from '../../AppConfig';
 
-import { getModifiedTime } from '../../utils/getModifiedDate';
+import useWindowSize from '@rehooks/window-size';
 
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
@@ -46,6 +51,13 @@ const App: React.FC<Props> = ({
     covid19LatestNumbers,
 }: Props) => {
     const dispatch = useDispatch();
+
+    const windowSize = useWindowSize();
+
+    React.useEffect(() => {
+        // console.log(windowSize.outerWidth)
+        dispatch(updateIsNarrowSreen(windowSize.outerWidth));
+    }, [windowSize]);
 
     return (
         <>
@@ -76,21 +88,26 @@ const App: React.FC<Props> = ({
                 <QueryTaskLayer
                     key="query-4-US-Counties"
                     url={AppConfig['us-counties-feature-layer-item-url']}
-                    outFields={['FIPS', 'NAME', 'STATE_NAME']}
+                    outFields={['FIPS']}
                     visibleScale={AppConfig['us-counties-layer-visible-scale']}
                     onSelect={(feature) => {
-                        const featureJSON = feature
-                            ? feature.toJSON()
+
+                        const FIPS = feature
+                            ? feature.attributes['FIPS']
                             : undefined;
-                        dispatch(queryCountyData(featureJSON));
+
+                        const data = covid19LatestNumbers[FIPS];
+
+                        dispatch(queryCountyData({
+                            FIPS,
+                            name: data.Name,
+                            feature: feature ? feature.toJSON() : undefined,
+                        }));
                     }}
                     pointerOnMove={(position) => {
                         dispatch(tooltipPositionChanged(position));
                     }}
                     featureOnHover={(feature) => {
-                        const locationName = feature
-                            ? `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`
-                            : undefined;
 
                         const FIPS = feature
                             ? feature.attributes['FIPS']
@@ -98,28 +115,36 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(locationName, tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                     }}
                 />
 
                 <QueryTaskLayer
                     key="query-4-US-States"
                     url={AppConfig['us-states-feature-layer-item-url']}
-                    outFields={['STATE_NAME', 'STATE_FIPS']}
+                    outFields={['STATE_FIPS']}
                     visibleScale={AppConfig['us-states-layer-visible-scale']}
                     onSelect={(feature) => {
-                        const featureJSON = feature
-                            ? feature.toJSON()
+                        // const featureJSON = feature
+                        //     ? feature.toJSON()
+                        //     : undefined;
+
+                        const FIPS = feature
+                            ? feature.attributes['STATE_FIPS']
                             : undefined;
-                        dispatch(queryStateData(featureJSON));
+
+                        const data = covid19LatestNumbers[FIPS];
+
+                        dispatch(queryStateData({
+                            name: data.Name,
+                            feature: feature ? feature.toJSON() : undefined,
+                            FIPS
+                        }));
                     }}
                     pointerOnMove={(position) => {
                         dispatch(tooltipPositionChanged(position));
                     }}
                     featureOnHover={(feature) => {
-                        const locationName = feature
-                            ? `${feature.attributes['STATE_NAME']}`
-                            : undefined;
 
                         const FIPS = feature
                             ? feature.attributes['STATE_FIPS']
@@ -127,10 +152,12 @@ const App: React.FC<Props> = ({
 
                         const tooltipData = covid19LatestNumbers[FIPS];
 
-                        dispatch(updateTooltipData(locationName, tooltipData));
+                        dispatch(updateTooltipData(FIPS, tooltipData));
                     }}
                 />
             </MapView>
+
+            <GridViewPanel />
 
             <ControlPanel />
 
@@ -147,50 +174,11 @@ const App: React.FC<Props> = ({
 };
 
 const AppContainer = (): JSX.Element => {
-    const [covid19USCountiesData, setCovid19USCountiesData] = useState<
-        Covid19TrendDataQueryResponse
-    >();
-    const [covid19USStatesData, setCovid19USStatesData] = useState<
-        Covid19TrendDataQueryResponse
-    >();
-    const [covid19LatestNumbers, setCovid19LatestNumbers] = useState<
-        Covid19LatestNumbers
-    >();
-
-    const fetchData = async () => {
-        const modified = getModifiedTime();
-
-        try {
-            const HostUrl = AppConfig['static-files-host'];
-            const Url4CountiesJSON = `${HostUrl}${AppConfig['covid19-data-us-counties-json']}?modified=${modified}`;
-            const Url4StatesJSON = `${HostUrl}${AppConfig['covid19-data-us-states-json']}?modified=${modified}`;
-            const Url4LatestNumbers = `${HostUrl}${AppConfig['covid19-latest-numbers-json']}?modified=${modified}`;
-
-            const queryResUSStates = await axios.get<
-                Covid19TrendDataQueryResponse
-            >(Url4StatesJSON);
-            setCovid19USStatesData(queryResUSStates.data);
-            // console.log(queryResUSStates)
-
-            const queryResUSCounties = await axios.get<
-                Covid19TrendDataQueryResponse
-            >(Url4CountiesJSON);
-            setCovid19USCountiesData(queryResUSCounties.data);
-            // console.log(queryResUSCounties)
-
-            const queryResLatestNumbers = await axios.get<Covid19LatestNumbers>(
-                Url4LatestNumbers
-            );
-            setCovid19LatestNumbers(queryResLatestNumbers.data);
-            // dispatch(latestNumbersLoaded(queryResLatestNumbers.data));
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+    const {
+        covid19USCountiesData,
+        covid19USStatesData,
+        covid19LatestNumbers,
+    } = useContext(AppContext);
 
     return covid19USCountiesData &&
         covid19USStatesData &&

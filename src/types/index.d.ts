@@ -75,20 +75,40 @@ declare module 'covid19-trend-map' {
     type QueryLocation4Covid19TrendData = {
         graphic: QueryLocationFeature;
         locationName: string;
+        FIPS:string;
     };
 
     type Covid19LatestNumbersFeature = {
+        Name: string;
         Confirmed: number;
         Deaths: number;
         NewCases: number;
         NewDeaths: number;
+        NewCases100Days: number;
+        NewDeaths100Days: number;
         Population: number;
         TrendType: COVID19TrendCategoryType;
+        // // Percentiles for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+        // Percentiles?: [number, number, number, number];
+        // Ranks for: casesPerCapita, deathsPerCapita, caseFatalityRate, caseFatalityRatePast100Day
+        Ranks?: [number, number, number, number];
     };
 
     type Covid19LatestNumbers = {
         [key: string]: Covid19LatestNumbersFeature;
     };
+
+    interface Covid19TrendDataWithLatestNumbers extends Covid19TrendData {
+        attributes: {
+            FIPS: string;
+            Confirmed: number;
+            Deaths: number;
+            ConfirmedPerCapita: number;
+            DeathsPerCapita: number;
+            CaseFatalityRate: number;
+            CaseFatalityRate100Day: number;
+        };
+    }
 
     export {
         PathData,
@@ -103,5 +123,6 @@ declare module 'covid19-trend-map' {
         Covid19LatestNumbersFeature,
         Covid19LatestNumbers,
         QueryLocationFeature,
+        Covid19TrendDataWithLatestNumbers,
     };
 }

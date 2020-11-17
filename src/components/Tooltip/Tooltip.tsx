@@ -10,6 +10,13 @@ import {
     tooltipPositionSelector,
 } from '../../store/reducers/Map';
 import { COVID19TrendCategoryType } from 'covid19-trend-map';
+import { activeViewModeSelector } from '../../store/reducers/UI';
+import {
+    SparklineSize
+} from '../GridView/GridList';
+import {
+    getNumberWithOrdinalIndicator
+} from '../../utils/getNumberWithOrdinalIndicator';
 
 export type TooltipPosition = {
     x: number;
@@ -17,6 +24,7 @@ export type TooltipPosition = {
 };
 
 export type TooltipData = {
+    FIPS: string;
     locationName: string;
     confirmed: number;
     deaths: number;
@@ -24,18 +32,75 @@ export type TooltipData = {
     newDeathsPast7Days: number;
     population: number;
     trendCategory?: COVID19TrendCategoryType;
+    ranks?: {
+        casesPerCapita: number;
+        deathsPerCapita: number; 
+        caseFatalityRate: number; 
+        caseFatalityRatePast100Day: number;
+    }
 };
 
 type Props = {
     position: TooltipPosition;
     data: TooltipData;
+    offsetX?: number;
 };
 
 // const TooltipWidth = 200;
 // const TooltipHeight = 150;
 const PositionOffset = 10;
 
-const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
+export const RankInfo:React.FC<{
+    value:number, 
+    label:string,
+    // margin bottom in rem unit
+    marginBottom?: number;
+}> = ({
+    value, label, marginBottom
+})=> {
+    const rank = getNumberWithOrdinalIndicator(value);
+
+    return (
+        <div
+            style={{
+                marginBottom: marginBottom ? `${marginBottom}rem` : 'unset'
+            }}
+        >
+            <div
+                style={{
+                    lineHeight: '18px'
+                }}
+            >
+                <span
+                    style={{
+                        color: ThemeStyle["theme-color-red"],
+                    }}
+                >{rank}</span>
+            </div>
+
+            <div
+                style={{
+                    lineHeight: '18px'
+                }}
+            >
+                <span>{ label } </span>
+            </div>
+
+        </div>
+    );
+}
+
+export const RankLabel:React.FC<{
+    isState: boolean;
+}> = ({
+    isState
+})=>{
+    return (
+        <span>{isState ? 'State' : 'County'} Rank out of {isState ? '51' : '3,141'}</span>
+    )
+};
+
+const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
     const containerRef = useRef<HTMLDivElement>();
 
     const [width, height] = useWindowSize();
@@ -48,9 +113,11 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
         const tooltipWidth = containerRef.current
             ? containerRef.current.offsetWidth
             : 200;
+        
+        const offset = offsetX || PositionOffset;
 
         if (position.x + tooltipWidth > width) {
-            return position.x - tooltipWidth - PositionOffset;
+            return position.x - tooltipWidth - offset;
         }
 
         return position.x + PositionOffset;
@@ -96,6 +163,76 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
             </div>
         );
     };
+
+    const getRanks = ()=>{
+        if (!data || !data.ranks) {
+            return null;
+        }
+
+        const {
+            casesPerCapita,
+            deathsPerCapita,
+            caseFatalityRate,
+            caseFatalityRatePast100Day
+        } = data.ranks;
+
+        const isState = data.FIPS && data.FIPS.length === 2;
+
+        return (
+            <div
+                style={{
+                    margin: '.5rem 0 .5rem',
+                    padding: '.5rem 0',
+                    borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                    borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
+                }}
+            >
+                <div className='trailer-quarter'>
+                    <RankLabel isState={isState} />
+                </div>
+
+                <div
+                    style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        // maxWidth: '350px',
+                    }}
+                >
+                    <div
+                        style={{
+                            marginRight: '.75rem'
+                        }}
+                    >
+                        <RankInfo 
+                            value={casesPerCapita}
+                            label='Cases per Capita'
+                            marginBottom={.5}
+                        />
+
+                        <RankInfo 
+                            value={deathsPerCapita}
+                            label='Deaths per Capita'
+                        />
+                    </div>
+
+                    <div>
+                        <RankInfo 
+                            value={caseFatalityRate}
+                            label='Case Fatality Rate'
+                            marginBottom={.5}
+                        />
+
+                        <RankInfo 
+                            value={caseFatalityRatePast100Day}
+                            label='100-Day Case Fatality Rate'
+                        />
+                    </div>
+
+                </div>
+            </div>
+
+        )
+    }
 
     const getContent = () => {
         const {
@@ -162,7 +299,7 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
                         <span className='text-theme-color-red'>{numberFns.numberWithCommas(data.deaths)}</span> total deaths
                     </span> */}
 
-                    {getTrendType()}
+                    
                 </>
             );
 
@@ -174,7 +311,9 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
                     // 'maxWidth': '250px'
                 }}
             >
-                {content}
+                { content }
+                { getRanks() }
+                { getTrendType() }
             </div>
         );
     };
@@ -216,8 +355,15 @@ const Tooltip: React.FC<Props> = ({ position, data }: Props) => {
 const TooltipConatiner = () => {
     const position = useSelector(tooltipPositionSelector);
     const data = useSelector(tooltipDataSelector);
+    const activeViewMode = useSelector(activeViewModeSelector);
 
-    return <Tooltip position={position} data={data} />;
+    return (
+        <Tooltip 
+            position={position} 
+            data={data} 
+            offsetX={ activeViewMode === 'grid' ? SparklineSize : undefined }
+        />
+    );
 };
 
 export default TooltipConatiner;

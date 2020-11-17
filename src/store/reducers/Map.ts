@@ -2,6 +2,7 @@ import {
     createSlice,
     createSelector,
     // createAsyncThunk
+    PayloadAction
 } from '@reduxjs/toolkit';
 
 import {
@@ -12,7 +13,7 @@ import {
 
 import { TooltipPosition, TooltipData } from '../../components/Tooltip/Tooltip';
 import {
-    Covid19LatestNumbers,
+    // Covid19LatestNumbers,
     Covid19LatestNumbersFeature,
 } from 'covid19-trend-map';
 
@@ -20,22 +21,7 @@ type MapState = {
     tooltipPosition: TooltipPosition;
     tooltipData: TooltipData;
     isStateLayerVisilbe: boolean;
-    latestNumbers: Covid19LatestNumbers;
-};
-
-type TooltipPositionChangedAction = {
-    type: string;
-    payload: TooltipPosition;
-};
-
-type TooltipDataChangedAction = {
-    type: string;
-    payload: TooltipData;
-};
-
-type IsStateLayerVisilbeToggledAction = {
-    type: string;
-    payload: boolean;
+    // latestNumbers: Covid19LatestNumbers;
 };
 
 const slice = createSlice({
@@ -48,16 +34,16 @@ const slice = createSlice({
     reducers: {
         tooltipPositionChanged: (
             state,
-            action: TooltipPositionChangedAction
+            action: PayloadAction<TooltipPosition>
         ) => {
             state.tooltipPosition = action.payload;
         },
-        tooltipDataChanged: (state, action: TooltipDataChangedAction) => {
+        tooltipDataChanged: (state, action: PayloadAction<TooltipData>) => {
             state.tooltipData = action.payload;
         },
         isStateLayerVisilbeToggled: (
             state,
-            action: IsStateLayerVisilbeToggledAction
+            action: PayloadAction<boolean>
         ) => {
             state.isStateLayerVisilbe = action.payload;
         },
@@ -73,7 +59,8 @@ export const {
 } = slice.actions;
 
 export const updateTooltipData = (
-    locationName: string,
+    // locationName: string,
+    FIPS: string,
     data: Covid19LatestNumbersFeature
 ) => (
     dispatch: StoreDispatch
@@ -81,24 +68,33 @@ export const updateTooltipData = (
 ): void => {
     let tooltipData: TooltipData;
 
-    if (locationName && data) {
+    if (data) {
         const {
+            Name,
             Confirmed,
             Deaths,
             NewCases,
             NewDeaths,
             Population,
             TrendType,
+            Ranks
         } = data;
 
         tooltipData = {
-            locationName,
+            FIPS,
+            locationName: Name,
             confirmed: Confirmed,
             deaths: Deaths,
             newCasesPast7Days: NewCases,
             newDeathsPast7Days: NewDeaths || 0,
             population: Population,
             trendCategory: TrendType,
+            ranks: {
+                casesPerCapita: Ranks && Ranks[0] ? Ranks[0] : 0,
+                deathsPerCapita: Ranks && Ranks[1] ? Ranks[1] : 0,
+                caseFatalityRate: Ranks && Ranks[2] ? Ranks[2] : 0,
+                caseFatalityRatePast100Day: Ranks && Ranks[3] ? Ranks[3] : 0,
+            }
         };
     }
 

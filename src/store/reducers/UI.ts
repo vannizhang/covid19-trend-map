@@ -2,62 +2,65 @@ import {
     createSlice,
     createSelector,
     // createAsyncThunk
+    PayloadAction
 } from '@reduxjs/toolkit';
 
 import { RootState, StoreDispatch, StoreGetState } from '../configureStore';
 import { Covid19TrendName } from 'covid19-trend-map';
 
-import { miscFns } from 'helper-toolkit-ts';
-
 import {
-    getDefaultValueFromHashParams,
     updateTrendCategoriesInURLHashParams,
+    updateIsGridListVisibleInURLHashParams,
 } from '../../utils/UrlSearchParams';
 
-const NarrowScreenBreakPoint = 1020;
-const isMobile = miscFns.isMobileDevice();
+export const NarrowScreenBreakPoint = 1020;
 
-const showTrendCategoriesDefaultVal = getDefaultValueFromHashParams(
-    'trendCategories'
-)
-    ? getDefaultValueFromHashParams('trendCategories') === '1'
-    : true;
+export type GridListSortField =
+    | 'Confirmed'
+    | 'Deaths'
+    | 'ConfirmedPerCapita'
+    | 'DeathsPerCapita'
+    | 'CaseFatalityRate'
+    | 'CaseFatalityRate100Day';
 
-const activeTrendDefaultVal = getDefaultValueFromHashParams(
-    'trendType'
-) as Covid19TrendName;
+export type GridListSortOrder = 'ascending' | 'descending'
 
-type UIState = {
+export type ViewMode = 'map' | 'grid';
+
+export type UIState = {
     isMobile: boolean;
     activeTrend: Covid19TrendName;
     isAboutModalOpen: boolean;
     isLoadingChartData: boolean;
     showTrendCategories: boolean;
     isNarrowSreen: boolean;
+    activeViewMode: ViewMode;
+    gridListSortField: GridListSortField;
+    gridListSortOrder: GridListSortOrder;
+    isOverviewMapVisible: boolean;
+    // state abbreviation that will be used to highlight the path in overview map svg
+    state2highlightInOverviewMap: string;
 };
 
-type ActiveTrendUpdatedAction = {
-    type: string;
-    payload: Covid19TrendName;
-};
-
-type BooleanPropChangedAction = {
-    type: string;
-    payload: boolean;
-};
+export const initialUIState = {
+    isMobile: false,
+    activeTrend: 'new-cases',
+    isAboutModalOpen: false,
+    // isLoadingChartData: false,
+    showTrendCategories: true,
+    isNarrowSreen: false,
+    activeViewMode: 'map',
+    gridListSortField: 'CaseFatalityRate100Day',
+    gridListSortOrder: 'descending',
+    isOverviewMapVisible: false,
+    state2highlightInOverviewMap: ''
+} as UIState;
 
 const slice = createSlice({
     name: 'map',
-    initialState: {
-        isMobile,
-        activeTrend: activeTrendDefaultVal,
-        isAboutModalOpen: false,
-        // isLoadingChartData: false,
-        showTrendCategories: showTrendCategoriesDefaultVal,
-        isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
-    } as UIState,
+    initialState: initialUIState,
     reducers: {
-        activeTrendUpdated: (state, action: ActiveTrendUpdatedAction) => {
+        activeTrendUpdated: (state, action: PayloadAction<Covid19TrendName>) => {
             state.activeTrend = action.payload;
         },
         isAboutModalOpenToggled: (state) => {
@@ -66,8 +69,26 @@ const slice = createSlice({
         showTrendCategoriesToggled: (state) => {
             state.showTrendCategories = !state.showTrendCategories;
         },
-        isNarrowSreenChanged: (state, action: BooleanPropChangedAction) => {
+        isNarrowSreenChanged: (state, action: PayloadAction<boolean>) => {
             state.isNarrowSreen = action.payload;
+        },
+        activeViewModeUpdated: (state, action: PayloadAction<ViewMode>) => {
+            state.activeViewMode = action.payload;
+        },
+        gridListSortFieldUpdated: (
+            state,
+            action: PayloadAction<GridListSortField>
+        ) => {
+            state.gridListSortField = action.payload;
+        },
+        gridListSortOrderUpdated: (state, action:PayloadAction<GridListSortOrder>)=>{
+            state.gridListSortOrder = action.payload;
+        },
+        isOverviewMapVisibleToggled: (state) => {
+            state.isOverviewMapVisible = !state.isOverviewMapVisible;
+        },
+        state2highlightInOverviewMapUpdated: (state, action: PayloadAction<string>) => {
+            state.state2highlightInOverviewMap = action.payload;
         },
     },
 });
@@ -79,7 +100,21 @@ export const {
     isAboutModalOpenToggled,
     isNarrowSreenChanged,
     showTrendCategoriesToggled,
+    activeViewModeUpdated,
+    gridListSortFieldUpdated,
+    gridListSortOrderUpdated,
+    isOverviewMapVisibleToggled,
+    state2highlightInOverviewMapUpdated
 } = slice.actions;
+
+export const updateActiveMode = (viewMode:ViewMode) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void=>{
+    dispatch(activeViewModeUpdated(viewMode));
+
+    updateIsGridListVisibleInURLHashParams(viewMode === 'grid');
+}
 
 export const updateIsNarrowSreen = (windowOuterWidth: number) => (
     dispatch: StoreDispatch
@@ -129,6 +164,31 @@ export const isMobileSeletor = createSelector(
 export const isNarrowSreenSeletor = createSelector(
     (state: RootState) => state.UI.isNarrowSreen,
     (isNarrowSreen) => isNarrowSreen
+);
+
+export const activeViewModeSelector = createSelector(
+    (state: RootState) => state.UI.activeViewMode,
+    (activeViewMode) => activeViewMode
+);
+
+export const gridListSortFieldSelector = createSelector(
+    (state: RootState) => state.UI.gridListSortField,
+    (gridListSortField) => gridListSortField
+);
+
+export const gridListSortOrderSelector = createSelector(
+    (state: RootState) => state.UI.gridListSortOrder,
+    (gridListSortOrder) => gridListSortOrder
+);
+
+export const isOverviewMapVisibleSelector = createSelector(
+    (state: RootState) => state.UI.isOverviewMapVisible,
+    (isOverviewMapVisible) => isOverviewMapVisible
+);
+
+export const state2highlightInOverviewMapSelector = createSelector(
+    (state: RootState) => state.UI.state2highlightInOverviewMap,
+    (state2highlightInOverviewMap) => state2highlightInOverviewMap
 );
 
 export default reducer;

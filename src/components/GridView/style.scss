@@ -1,0 +1,37 @@
+.fancy-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fancy-scrollbar::-webkit-scrollbar-track {
+    background: rgb(232, 226, 210); 
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb {
+    background: #B2A584; 
+}
+
+.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #B2A584; 
+}
+
+.st0{
+    fill-rule:evenodd;
+    clip-rule:evenodd;
+    fill:#DED8C3;
+    stroke:#EFEADC;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-miterlimit:10;
+}
+
+.st0.is-highlight{
+    fill-rule:evenodd;
+    clip-rule:evenodd;
+    fill:#A10D22;
+    stroke:#A10D22;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-miterlimit:10;
+}

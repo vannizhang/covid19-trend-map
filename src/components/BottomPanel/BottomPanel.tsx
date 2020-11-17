@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeStyle } from '../../AppConfig';
+import { AppContext } from '../../context/AppContextProvider';
 
 import {
     resetQueryData,
@@ -51,6 +52,7 @@ const BottomPanel: React.FC<Props> = ({
                 boxSizing: 'border-box',
                 boxShadow: `0 0 10px 2px ${ThemeStyle['floating-panel-box-shadow']}`,
                 backgroundColor: ThemeStyle['theme-color-khaki-bright'],
+                zIndex: 1
             }}
         >
             {showLoadingIndicator ? getLoadingIndicator() : children}
@@ -60,6 +62,8 @@ const BottomPanel: React.FC<Props> = ({
 
 const BottomPanelContainer: React.FC = () => {
     const dispatch = useDispatch();
+
+    const { covid19LatestNumbers } = useContext(AppContext)
 
     const covid19CasesByTimeQueryResults = useSelector(
         covid19DataByLocationSelector
@@ -77,10 +81,20 @@ const BottomPanelContainer: React.FC = () => {
                         ? covid19CasesByTimeQueryLocation.locationName
                         : undefined
                 }
+                FIPS={
+                    covid19CasesByTimeQueryLocation
+                    ? covid19CasesByTimeQueryLocation.FIPS
+                    : undefined
+                }
                 data={
                     covid19CasesByTimeQueryResults
                         ? covid19CasesByTimeQueryResults.summaryInfo
                         : undefined
+                }
+                ranks={
+                    covid19CasesByTimeQueryLocation 
+                        ? covid19LatestNumbers[covid19CasesByTimeQueryLocation.FIPS].Ranks
+                        : []
                 }
                 closeBtnOnClick={() => {
                     dispatch(resetQueryData());

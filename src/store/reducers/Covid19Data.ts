@@ -2,7 +2,10 @@ import {
     createSlice,
     createSelector,
     createAsyncThunk,
+    PayloadAction
 } from '@reduxjs/toolkit';
+
+import { batch } from 'react-redux'
 
 import {
     RootState,
@@ -28,24 +31,16 @@ type State = {
     queryLocation: QueryLocation4Covid19TrendData;
 };
 
-type QueryLocationUpdatedAction = {
-    type: string;
-    payload: QueryLocation4Covid19TrendData;
-};
-
 type FetchCovid19TimeSeriesDataParam = {
     countyFIPS?: string;
     stateName?: string;
     isNYCCounties?: boolean;
 };
 
-type FetchCovid19TimeSeriesDataFullfilledAction = {
-    type: string;
-    payload: FetchCovid19DataResponse;
-};
+const SliceName = 'covid19TimeSeriesData'
 
 const fetchData = createAsyncThunk(
-    'covid19TimeSeriesData/fetchData',
+    `${SliceName}/fetchData`,
     async ({
         countyFIPS,
         stateName,
@@ -71,7 +66,7 @@ const fetchData = createAsyncThunk(
 );
 
 const slice = createSlice({
-    name: 'covid19TimeSeriesData',
+    name: SliceName,
     initialState: {
         loading: false,
         data: null,
@@ -83,7 +78,7 @@ const slice = createSlice({
             state.queryLocation = null;
             state.loading = null;
         },
-        queryLocationUpdated: (state, action: QueryLocationUpdatedAction) => {
+        queryLocationUpdated: (state, action: PayloadAction<QueryLocation4Covid19TrendData>) => {
             state.queryLocation = action.payload;
         },
     },
@@ -94,7 +89,7 @@ const slice = createSlice({
         },
         [fetchData.fulfilled.type]: (
             state,
-            action: FetchCovid19TimeSeriesDataFullfilledAction
+            action: PayloadAction<FetchCovid19DataResponse>
         ) => {
             state.loading = false;
             state.data = action.payload;
@@ -106,56 +101,75 @@ const { reducer } = slice;
 
 const { queryResultsReset, queryLocationUpdated } = slice.actions;
 
-export const queryCountyData = (feature: QueryLocationFeature) => (
+export const queryCountyData = ({
+    FIPS, name, feature
+}:{
+    FIPS: string;
+    name: string;
+    feature?: QueryLocationFeature,
+}) => (
     dispatch: StoreDispatch
     // getState: StoreGetState
 ): void => {
-    if (feature) {
-        const countyFIPS = feature.attributes['FIPS'];
 
-        const isNYCCounties = FIPSCodes4NYCCounties.indexOf(countyFIPS) > -1;
+    if ( FIPS && name ) {
 
-        const locationName = isNYCCounties
-            ? 'NEW YORK, NEW YORK'
-            : `${feature.attributes['NAME']}, ${feature.attributes['STATE_NAME']}`;
+        const isNYCCounties = FIPSCodes4NYCCounties.indexOf(FIPS) > -1;
 
-        const queryLocation = {
+        const queryLocation:QueryLocation4Covid19TrendData = {
             graphic: feature,
-            locationName,
+            locationName: name,
+            FIPS
         };
 
-        dispatch(queryLocationUpdated(queryLocation));
+        // should only result in one combined re-render, not two
+        batch(()=>{
 
-        dispatch(
-            fetchData({
-                countyFIPS,
-                isNYCCounties,
-            })
-        );
+            dispatch(queryLocationUpdated(queryLocation));
+
+            dispatch(
+                fetchData({
+                    countyFIPS: FIPS,
+                    isNYCCounties,
+                })
+            );
+        })
+
     } else {
         dispatch(resetQueryData());
     }
 };
 
-export const queryStateData = (feature: QueryLocationFeature) => (
+export const queryStateData = ({
+    name, feature, FIPS
+}:{
+    name: string;
+    feature?: QueryLocationFeature,
+    FIPS: string
+}) => (
     dispatch: StoreDispatch
     // getState: StoreGetState
 ): void => {
-    if (feature) {
-        const stateName = feature.attributes['STATE_NAME'];
+    if (name) {
+        // const stateName = feature.attributes['STATE_NAME'];
 
         const queryLocation = {
             graphic: feature,
-            locationName: stateName,
+            locationName: name,
+            FIPS
         };
 
-        dispatch(queryLocationUpdated(queryLocation));
+        // should only result in one combined re-render, not two
+        batch(()=>{
+            dispatch(queryLocationUpdated(queryLocation));
 
-        dispatch(
-            fetchData({
-                stateName,
-            })
-        );
+            dispatch(
+                fetchData({
+                    stateName: name,
+                })
+            );
+        })
+
     } else {
         dispatch(resetQueryData());
     }

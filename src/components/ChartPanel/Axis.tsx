@@ -101,6 +101,10 @@ const Axis: React.FC<Props> = ({ svgContainerData, scales }) => {
         }
     }, [svgContainerData, scales]);
 
+    React.useEffect(()=>{
+        console.log('draw axis')
+    })
+
     return null;
 };
 
