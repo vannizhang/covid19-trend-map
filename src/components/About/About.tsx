@@ -175,7 +175,7 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
 
                     <div>
                         <span className='avenir-demi'>Total Deaths per Capita: </span>
-                        <span>The ration of deaths to population.</span>
+                        <span>The ratio of deaths to population.</span>
                     </div>
 
                     <div>

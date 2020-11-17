@@ -7,7 +7,7 @@ import {
 } from '../utils/UrlSearchParams';
 
 import { Covid19TrendName } from 'covid19-trend-map';
-import { initialUIState, UIState, ViewMode, NarrowScreenBreakPoint } from '../store/reducers/UI';
+import { initialUIState, UIState, ViewMode, NarrowScreenBreakPoint, GridListSortField } from '../store/reducers/UI';
 import { miscFns } from 'helper-toolkit-ts';
 
 const getPreloadedState = ():PartialRootState=>{
@@ -34,6 +34,8 @@ const getPreloadedUIState = ():UIState=>{
         ? 'grid'
         : 'map';
 
+    const sortFieldDefaultVal = getDefaultValueFromHashParams('sort') as GridListSortField;
+
     return {
         ...initialUIState,
         isMobile,
@@ -41,6 +43,7 @@ const getPreloadedUIState = ():UIState=>{
         showTrendCategories: showTrendCategoriesDefaultVal,
         isNarrowSreen: window.outerWidth <= NarrowScreenBreakPoint,
         activeViewMode: activeViewModeDefaultVal,
+        gridListSortField: sortFieldDefaultVal
     };
 }
 

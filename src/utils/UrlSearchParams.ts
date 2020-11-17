@@ -23,12 +23,12 @@ const TrendTypesValuesInOrder: Covid19TrendName[] = [
 ];
 
 const SortFieldValuesInOrder: GridListSortField[] = [
-    'CaseFatalityRate',
     'CaseFatalityRate100Day',
-    'Confirmed',
+    'CaseFatalityRate',
     'ConfirmedPerCapita',
-    'Deaths',
-    'DeathsPerCapita'
+    'DeathsPerCapita',
+    'Confirmed',
+    'Deaths'
 ]
 
 export const getDefaultValueFromHashParams = (key: UrlHashParamKey) => {
@@ -38,6 +38,10 @@ export const getDefaultValueFromHashParams = (key: UrlHashParamKey) => {
 
     if (key === 'trendType') {
         return getTrendTypeFromUrlSearchParams(DefaultHashParams);
+    }
+
+    if( key === 'sort') {
+        return getSortFieldFromSearchParams(DefaultHashParams)
     }
 
     return DefaultHashParams[key] || null;
@@ -94,7 +98,7 @@ export const updateSortFieldInURLHashParams = (sortField:GridListSortField) =>{
 
     urlFns.updateHashParam({
         key,
-        value: index && index > -1 ? index.toString() : 'none',
+        value: index > -1 ? index.toString() : 'none',
     });
 }
 
@@ -130,3 +134,19 @@ const getTrendTypeFromUrlSearchParams = (hashParams?: HashParams) => {
 
     return TrendTypesValuesInOrder[index];
 };
+
+const getSortFieldFromSearchParams = (hashParams?: HashParams):GridListSortField=>{
+    hashParams = hashParams || urlFns.parseQuery();
+
+    const key: UrlHashParamKey = 'sort';
+
+    if(!hashParams[key]){
+        return 'CaseFatalityRate100Day';
+    }
+
+    const index =  hashParams[key] && +hashParams[key] > -1 && +hashParams[key] < SortFieldValuesInOrder.length 
+        ? +hashParams[key]
+        : 0;
+
+    return SortFieldValuesInOrder[index];
+}

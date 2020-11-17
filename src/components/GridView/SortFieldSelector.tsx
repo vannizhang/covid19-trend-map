@@ -4,7 +4,7 @@ import { ThemeStyle } from '../../AppConfig';
 import { 
     GridListSortField ,
     gridListSortFieldSelector,
-    gridListSortFieldUpdated,
+    updateGridListSortField,
     isMobileSeletor
 } from '../../store/reducers/UI';
 
@@ -106,7 +106,7 @@ const SortFieldSelector: React.FC = ()=>{
                         cursor: 'pointer'
                     }}
                     onClick={()=>{
-                        dispatch(gridListSortFieldUpdated(value))
+                        dispatch(updateGridListSortField(value))
                     }}
                     title={tooltip}
                 >

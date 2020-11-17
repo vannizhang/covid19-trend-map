@@ -11,6 +11,7 @@ import { Covid19TrendName } from 'covid19-trend-map';
 import {
     updateTrendCategoriesInURLHashParams,
     updateIsGridListVisibleInURLHashParams,
+    updateSortFieldInURLHashParams
 } from '../../utils/UrlSearchParams';
 
 export const NarrowScreenBreakPoint = 1020;
@@ -134,6 +135,16 @@ export const toggleShowTrendCategories = () => (
 
     updateTrendCategoriesInURLHashParams(newVal);
 };
+
+
+export const updateGridListSortField = (sortField:GridListSortField) => (
+    dispatch: StoreDispatch
+    // getState: StoreGetState
+): void=>{
+    dispatch(gridListSortFieldUpdated(sortField));
+
+    updateSortFieldInURLHashParams(sortField);
+}
 
 // selectors
 export const activeTrendSelector = createSelector(
