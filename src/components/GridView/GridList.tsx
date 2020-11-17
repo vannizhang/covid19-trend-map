@@ -59,6 +59,7 @@ type Props = {
     queryLocationFIPS: string;
     showTopBorder?: boolean;
     paddingTop?: number;
+    title: string;
     // scrollToBottomHandler?: () => void;
     onHoverHandler: (FIPS:string, tooltipPosition: TooltipPosition)=>void;
     onClickHandler: (FIPS: string)=>void;
@@ -71,6 +72,7 @@ const GridList: React.FC<Props> = ({
     queryLocationFIPS,
     showTopBorder,
     paddingTop,
+    title,
     // scrollToBottomHandler,
     onHoverHandler,
     onClickHandler
@@ -134,7 +136,18 @@ const GridList: React.FC<Props> = ({
 
     return (
         <div className="grid-container">
-            <div className="column-14 center-column leader-0">
+            <div className="column-14 center-column leader-0"
+                style={{
+                    borderTop: showTopBorder ? 'solid 1px #E8E2D3' : 'unset'
+                }}
+            >
+
+                <div className='leader-1 trailer-1 text-center'>
+                    <span 
+                        className='font-size--3 text-theme-color-khaki avenir-demi'
+                    >{title}</span>
+                </div>
+
                 <div
                     style={{
                         display: 'flex',
@@ -142,7 +155,7 @@ const GridList: React.FC<Props> = ({
                         justifyContent: 'center',
                         paddingTop: paddingTop || 60,
                         paddingBottom: 60,
-                        borderTop: showTopBorder ? 'solid 1px #E8E2D3' : 'unset'
+                        
                     }}
                 >
                     {getSparklines()}
@@ -284,6 +297,8 @@ const GridListContainer = () => {
                     ? covid19CasesByTimeQueryLocation.FIPS 
                     : ''
                 }
+                paddingTop={30}
+                title='STATE'
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{
                     console.log(FIPS, tooltipPosition);
@@ -320,6 +335,7 @@ const GridListContainer = () => {
                 }
                 // paddingTop={40}
                 showTopBorder={true}
+                title='COUNTY'
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{
                     // console.log(FIPS, tooltipPosition);
