@@ -1,3 +1,7 @@
+import {
+    numberFns
+} from 'helper-toolkit-ts';
+
 export const getNumberWithOrdinalIndicator = (num:number):string => {
     if(!num){
         return '';
@@ -20,5 +24,5 @@ export const getNumberWithOrdinalIndicator = (num:number):string => {
         ordinalIndicator = 'rd'
     }
 
-    return `${num}${ordinalIndicator}`;
+    return `${numberFns.numberWithCommas(num)}${ordinalIndicator}`;
 }

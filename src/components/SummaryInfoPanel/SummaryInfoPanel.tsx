@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { isMobileSeletor } from '../../store/reducers/UI';
+import { isMobileSeletor, isNarrowSreenSeletor } from '../../store/reducers/UI';
 
 import { ThemeStyle } from '../../AppConfig';
 import { numberFns } from 'helper-toolkit-ts';
@@ -32,6 +32,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
     closeBtnOnClick,
 }: Props) => {
     const isMobile = useSelector(isMobileSeletor);
+    const isNarrowScreen = useSelector(isNarrowSreenSeletor);
 
     const getRanksInfo = ()=>{
 
@@ -165,7 +166,7 @@ const SummaryInfoPanel: React.FC<Props> = ({
                 <div
                     style={{
                         ...blockStyle,
-                        display: 'flex',
+                        display: isNarrowScreen || isMobile ? 'none' : 'flex',
                         
                         borderRight: 'unset',
                     }}

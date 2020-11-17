@@ -2,8 +2,10 @@ import React, {
     useEffect
 } from 'react';
 import { useSelector } from 'react-redux';
-import { ThemeStyle } from '../../AppConfig';
 import { isMobileSeletor, isOverviewMapVisibleSelector, state2highlightInOverviewMapSelector } from '../../store/reducers/UI';
+import {
+    queryLocationSelector,
+} from '../../store/reducers/Covid19Data';
 
 type USAStateSVGProps = {
     state2highlight: string;
@@ -362,16 +364,19 @@ const OverviewMap = () => {
     const isVisible = useSelector(isOverviewMapVisibleSelector);
     const state2highlight = useSelector(state2highlightInOverviewMapSelector);
     const isMobile = useSelector(isMobileSeletor);
+    const queryLocation = useSelector(queryLocationSelector);
 
     return isVisible && !isMobile ? (
         <div
             style={{
                 position: 'absolute',
-                bottom: 0,
+                // bottom panel is open when queryLocation is not undefined, 
+                // therefore change the bottom to 230 to make the overview map float on top of bottom panel instead of overlap
+                bottom: queryLocation ? 230 : 0,
                 right: 0,
                 padding: '1rem',
-                zIndex: 1,
-                backgroundColor: ThemeStyle["theme-color-khaki"],
+                zIndex: 2,
+                // backgroundColor: ThemeStyle["theme-color-khaki"],
                 // boxShadow: `0 0 6px 2px ${ThemeStyle["floating-panel-box-shadow"]}`
                 // height: '100%'
             }}

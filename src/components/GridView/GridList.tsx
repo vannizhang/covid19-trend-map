@@ -118,7 +118,7 @@ const GridList: React.FC<Props> = ({
                     key={FIPS}
                     path={path}
                     color={ThemeStyle['theme-color-red']}
-                    backgroundColor={ FIPS === queryLocationFIPS ? '#E8E2D3' : undefined}
+                    backgroundColor={ FIPS === queryLocationFIPS ? '#DFD8C2' : undefined}
                     frame={frame}
                     size={SparklineSize}
                     onHoverHandler={(tooltipPosition)=>{

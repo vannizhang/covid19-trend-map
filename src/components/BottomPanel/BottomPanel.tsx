@@ -52,7 +52,7 @@ const BottomPanel: React.FC<Props> = ({
                 boxSizing: 'border-box',
                 boxShadow: `0 0 10px 2px ${ThemeStyle['floating-panel-box-shadow']}`,
                 backgroundColor: ThemeStyle['theme-color-khaki-bright'],
-                zIndex: 5
+                zIndex: 1
             }}
         >
             {showLoadingIndicator ? getLoadingIndicator() : children}
