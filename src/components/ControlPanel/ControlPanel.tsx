@@ -38,10 +38,12 @@ const SwitchBtnData: {
 
 const ViewToggleBtns: {
     value: ViewMode;
+    label: string;
     icon: any;
 }[] = [
     {
         value: 'grid',
+        label: 'Grid View',
         icon: (
             <svg height="24" width="24" viewBox="0 0 24 24">
                 <path
@@ -54,6 +56,7 @@ const ViewToggleBtns: {
     },
     {
         value: 'map',
+        label: 'Map View',
         icon: (
             <svg height="24" width="24" viewBox="0 0 24 24">
                 <path
@@ -207,7 +210,7 @@ const ControlPanel: React.FC = () => {
     };
 
     const getViewToggleBtns = () => {
-        const viewToogleBtns = ViewToggleBtns.map(({ value, icon }) => {
+        const viewToogleBtns = ViewToggleBtns.map(({ value, icon, label }) => {
             const isActive = activeViewMode === value;
 
             return (
@@ -232,6 +235,7 @@ const ControlPanel: React.FC = () => {
                             : `4px solid transparent`,
                         borderTop: `solid 1px #E0D8C1`,
                     }}
+                    title={label}
                 >
                     {icon}
                 </div>
