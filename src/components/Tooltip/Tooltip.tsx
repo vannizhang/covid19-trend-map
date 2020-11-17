@@ -147,7 +147,11 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
         const trendCategory = data.trendCategory;
 
         return (
-            <div className="trailer-quarter">
+            <div className="trailer-quarter padding-leader-quarter"
+                style={{
+                    borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
+                }}
+            >
                 <span>
                     <span
                         className="text-theme-color-red avenir-demi font-size--1"
@@ -181,10 +185,10 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
         return (
             <div
                 style={{
-                    margin: '.5rem 0 .5rem',
-                    padding: '.5rem 0',
+                    margin: '.5rem 0 .25rem',
+                    padding: '.5rem 0 .25rem',
                     borderTop: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`,
-                    borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
+                    // borderBottom: `solid 1px ${ThemeStyle["theme-color-khaki-dark-semi-transparent"]}`
                 }}
             >
                 <div className='trailer-quarter'>
@@ -228,10 +232,6 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                         />
                     </div>
 
-                </div>
-
-                <div className='leader-half text-right'>
-                    <span className='font-size--3'>data: Johns Hopkins University, Esri</span>
                 </div>
 
             </div>
@@ -323,6 +323,12 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                 { content }
                 { getRanks() }
                 { getTrendType() }
+
+                <div style={{
+                    fontSize: '.75rem'
+                }}>
+                    <span className=''>data: Johns Hopkins University, Esri</span>
+                </div>
             </div>
         );
     };
@@ -348,11 +354,15 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                 style={{
                     padding: '5px 15px',
                     backgroundColor: '#E8E2D2',
-                    textTransform: 'uppercase',
+                    // textTransform: 'uppercase',
                 }}
             >
                 <span className="avenir-demi font-size--1">
-                    <span className="text-theme-color-red">
+                    <span className="text-theme-color-red"
+                        style={{
+                            textTransform: 'uppercase',
+                        }}
+                    >
                         {data.locationName} 
                     </span>{' '}
                     <span className="text-theme-color-khaki">

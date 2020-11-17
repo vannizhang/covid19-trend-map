@@ -6,6 +6,7 @@ import { isMobileSeletor, isOverviewMapVisibleSelector, state2highlightInOvervie
 import {
     queryLocationSelector,
 } from '../../store/reducers/Covid19Data';
+import { getStateAbbrev } from '../../utils/getStateName';
 
 type USAStateSVGProps = {
     state2highlight: string;
@@ -366,7 +367,10 @@ const OverviewMap = () => {
     const isMobile = useSelector(isMobileSeletor);
     const queryLocation = useSelector(queryLocationSelector);
 
-    return isVisible && !isMobile ? (
+    const shouldShow = isVisible || queryLocation;
+    const stateAbbrev = state2highlight || getStateAbbrev(queryLocation?.FIPS);
+
+    return shouldShow && !isMobile ? (
         <div
             style={{
                 position: 'absolute',
@@ -382,7 +386,7 @@ const OverviewMap = () => {
             }}
         >
             <USAStateSVG 
-                state2highlight={state2highlight}
+                state2highlight={stateAbbrev}
             />
         </div>
     ) : null;

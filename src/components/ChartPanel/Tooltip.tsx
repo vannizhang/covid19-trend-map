@@ -91,6 +91,7 @@ const Tooltip: React.FC<Props> = ({ svgContainerData, scales, data }) => {
                     pointerEvents: 'none',
                     boxSizing: 'border-box',
                     boxShadow: `0 0 10px 2px ${ThemeStyle['floating-panel-box-shadow']}`,
+                    zIndex: 5
                 }}
             >
                 <div className="font-size--3 avenir-demi">
