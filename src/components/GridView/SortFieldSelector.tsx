@@ -29,7 +29,7 @@ const SortFields: {
     {
         label: 'Overall Case Fatality Rate',
         value: 'CaseFatalityRate',
-        tooltip: 'The simple ratio of deaths to cases since February, 2020. Counties with no deaths are omitted from this list.'
+        tooltip: 'The simple ratio of deaths to cases since March, 2020. Counties with no deaths are omitted from this list.'
     },
     {
         label: 'Total Cases per Capita',
@@ -44,12 +44,12 @@ const SortFields: {
     {
         label: 'Total Cases',
         value: 'Confirmed',
-        tooltip: 'Total number of cases since February, 2020.'
+        tooltip: 'Total number of cases since March, 2020.'
     },
     {
         label: 'Total Deaths',
         value: 'Deaths',
-        tooltip: 'Total number of Deaths since February, 2020.'
+        tooltip: 'Total number of Deaths since March, 2020.'
     }
 ]
 

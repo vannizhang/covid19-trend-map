@@ -153,8 +153,8 @@ const GridList: React.FC<Props> = ({
                         display: 'flex',
                         flexWrap: 'wrap',
                         justifyContent: 'center',
-                        paddingTop: paddingTop || 60,
-                        paddingBottom: 60,
+                        paddingTop: paddingTop || 30,
+                        paddingBottom: 30,
                         
                     }}
                 >
@@ -297,7 +297,7 @@ const GridListContainer = () => {
                     ? covid19CasesByTimeQueryLocation.FIPS 
                     : ''
                 }
-                paddingTop={30}
+                paddingTop={5}
                 title='STATE'
                 // scrollToBottomHandler={loadSparklinesData}
                 onHoverHandler={(FIPS, tooltipPosition)=>{

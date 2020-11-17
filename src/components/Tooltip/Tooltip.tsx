@@ -229,6 +229,11 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     </div>
 
                 </div>
+
+                <div className='leader-half text-right'>
+                    <span className='font-size--3'>data: Johns Hopkins University, Esri</span>
+                </div>
+
             </div>
 
         )
@@ -269,7 +274,7 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     <br />
 
                     <span>
-                        1 covid death per{' '} 
+                        1 death per{' '} 
                         <span className='text-theme-color-red'>{numberFns.numberWithCommas(death2PopulationRatio)}</span>{' '}
                         persons
                     </span>
@@ -346,9 +351,16 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     textTransform: 'uppercase',
                 }}
             >
-                <span className="text-theme-color-red avenir-demi font-size--1">
-                    {data.locationName}
+                <span className="avenir-demi font-size--1">
+                    <span className="text-theme-color-red">
+                        {data.locationName} 
+                    </span>{' '}
+                    <span className="text-theme-color-khaki">
+                        Covid Stats
+                    </span>
+                    
                 </span>
+
             </div>
 
             {getContent()}

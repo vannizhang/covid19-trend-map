@@ -150,6 +150,45 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
                     </p>
                 </div>
 
+                <div className='trailer-1'>
+                    <h4 className="header-khaki avenir-bold">
+                        ABOUT THE GRID VIEW SORT OPTIONS
+                    </h4>
+                    <div>
+                        The Grid View provides six options by which to sort the state and county trend lines. They are:
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>100-Day Case Fatality Rate: </span>
+                        <span>The simple ratio of deaths to cases over the past 100 days. Counties with no deaths are omitted from this list.</span>
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>Overall Case Fatality Rate:</span>
+                        <span>The simple ratio of deaths to cases since March, 2020. Counties with no deaths are omitted from this list.</span>
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>Total Cases per Capita:</span>
+                        <span>The ratio of cumulative case counts to population.</span>
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>Total Deaths per Capita: </span>
+                        <span>The ration of deaths to population.</span>
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>Total Cases: </span>
+                        <span>The total number of cases since March, 2020.</span>
+                    </div>
+
+                    <div>
+                        <span className='avenir-demi'>Total Deaths:</span>
+                        <span>The total number of deaths since March, 2020.</span>
+                    </div>
+                </div>
+
                 <div>
                     <h4 className="header-khaki avenir-bold">SOURCES</h4>
                     <p>
