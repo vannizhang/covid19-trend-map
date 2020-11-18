@@ -368,7 +368,20 @@ const OverviewMap = () => {
     const queryLocation = useSelector(queryLocationSelector);
 
     const shouldShow = isVisible || queryLocation;
-    const stateAbbrev = state2highlight || getStateAbbrev(queryLocation?.FIPS);
+    // const stateAbbrev = state2highlight || getStateAbbrev(queryLocation?.FIPS);
+
+    const getState2Highlight = ()=>{
+        if(state2highlight){
+            return state2highlight;
+        }
+
+        if(queryLocation){
+            const FIPS = queryLocation.FIPS.substr(0, 2);
+            return getStateAbbrev(FIPS)
+        }
+
+        return '';
+    }
 
     return shouldShow && !isMobile ? (
         <div
@@ -386,7 +399,7 @@ const OverviewMap = () => {
             }}
         >
             <USAStateSVG 
-                state2highlight={stateAbbrev}
+                state2highlight={getState2Highlight()}
             />
         </div>
     ) : null;
