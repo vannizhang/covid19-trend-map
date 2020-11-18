@@ -195,9 +195,9 @@ const GridListContainer = () => {
             ...features,
         ];
 
-        if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
-            sortedFeatures = sortedFeatures.filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
-        }
+        // if(sortField === 'CaseFatalityRate' || sortField === 'CaseFatalityRate100Day'){
+        //     sortedFeatures = sortedFeatures.filter(d=>d.attributes.Deaths > 0 && d.attributes.CaseFatalityRate100Day > 0)
+        // }
 
         sortedFeatures.sort((a, b) => {
             return sortOrder === 'descending' 

@@ -160,12 +160,12 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
 
                     <div>
                         <span className='avenir-demi'>100-Day Case Fatality Rate: </span>
-                        <span>The simple ratio of deaths to cases over the past 100 days. Counties with no deaths are omitted from this list.</span>
+                        <span>The simple ratio of deaths to cases over the past 100 days.</span>
                     </div>
 
                     <div>
                         <span className='avenir-demi'>Overall Case Fatality Rate:</span>
-                        <span>The simple ratio of deaths to cases since March, 2020. Counties with no deaths are omitted from this list.</span>
+                        <span>The simple ratio of deaths to cases since March, 2020.</span>
                     </div>
 
                     <div>
