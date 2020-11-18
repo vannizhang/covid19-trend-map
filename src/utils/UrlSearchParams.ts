@@ -12,7 +12,7 @@ type HashParams = {
     [key: string]: string;
 };
 
-type UrlHashParamKey = '@' | 'trendCategories' | 'trendType' | 'grid' | 'sort';
+type UrlHashParamKey = '@' | 'trendCategories' | 'trendType' | 'grid' | 'sort' | 'q';
 
 const DefaultHashParams: HashParams = urlFns.parseHash();
 
@@ -99,6 +99,16 @@ export const updateSortFieldInURLHashParams = (sortField:GridListSortField) =>{
     urlFns.updateHashParam({
         key,
         value: index > -1 ? index.toString() : 'none',
+    });
+}
+
+
+export const updateQueryInURLHashParams = (FIPS?:string) =>{
+    const key: UrlHashParamKey = 'q';
+
+    urlFns.updateHashParam({
+        key,
+        value: FIPS || '',
     });
 }
 

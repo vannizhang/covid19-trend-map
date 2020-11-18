@@ -25,6 +25,10 @@ import {
     FetchCovid19DataResponse,
 } from '../../utils/queryCovid19Data';
 
+import {
+    updateQueryInURLHashParams
+} from '../../utils/UrlSearchParams'
+
 type State = {
     loading: boolean;
     data: FetchCovid19DataResponse;
@@ -135,6 +139,8 @@ export const queryCountyData = ({
             );
         })
 
+        updateQueryInURLHashParams(FIPS);
+
     } else {
         dispatch(resetQueryData());
     }
@@ -158,7 +164,7 @@ export const queryStateData = ({
             locationName: name,
             FIPS
         };
-
+        
         // should only result in one combined re-render, not two
         batch(()=>{
             dispatch(queryLocationUpdated(queryLocation));
@@ -170,6 +176,8 @@ export const queryStateData = ({
             );
         })
 
+        updateQueryInURLHashParams(FIPS);
+
     } else {
         dispatch(resetQueryData());
     }
@@ -180,6 +188,8 @@ export const resetQueryData = () => (
     // getState: StoreGetState
 ): void => {
     dispatch(queryResultsReset());
+
+    updateQueryInURLHashParams();
 };
 
 export const covid19DataByLocationSelector = createSelector(

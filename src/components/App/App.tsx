@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 
@@ -35,6 +35,10 @@ import {
 
 import { AppContext } from '../../context/AppContextProvider';
 
+import  {
+    getDefaultValueFromHashParams
+} from '../../utils/UrlSearchParams'
+
 import AppConfig from '../../AppConfig';
 
 import useWindowSize from '@rehooks/window-size';
@@ -54,7 +58,28 @@ const App: React.FC<Props> = ({
 
     const windowSize = useWindowSize();
 
-    React.useEffect(() => {
+    useEffect(() => {
+        // query covid19 data to render detailed chart for state/county if FIPS code is found from the hash params
+        const FIPS = getDefaultValueFromHashParams('q') as string;
+
+        if(FIPS && covid19LatestNumbers[FIPS]){
+
+            const { Name } = covid19LatestNumbers[FIPS];
+
+            (FIPS.length === 2) 
+                ? dispatch(queryStateData({
+                    name: Name,
+                    FIPS
+                }))
+                :  dispatch(queryCountyData({
+                    name: Name,
+                    FIPS,
+                }))
+        }
+
+    }, []);
+
+    useEffect(() => {
         // console.log(windowSize.outerWidth)
         dispatch(updateIsNarrowSreen(windowSize.outerWidth));
     }, [windowSize]);
