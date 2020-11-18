@@ -248,7 +248,18 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
             deaths,
         } = data;
 
-        const death2PopulationRatio = +Math.round(population/deaths).toFixed(0)
+        const death2PopulationRatio = deaths ? +Math.round(population/deaths).toFixed(0) : undefined;
+
+        const death2PopulationInfo = death2PopulationRatio ? (
+            <>
+                <span>
+                    1 death per{' '} 
+                    <span className='text-theme-color-red'>{numberFns.numberWithCommas(death2PopulationRatio)}</span>{' '}
+                    persons
+                </span>
+                <br/>
+            </>
+        ) : null;
 
         const content =
             data.confirmed === 0 && data.trendCategory ? (
@@ -273,12 +284,9 @@ const Tooltip: React.FC<Props> = ({ position, data, offsetX }: Props) => {
                     </span>
                     <br />
 
-                    <span>
-                        1 death per{' '} 
-                        <span className='text-theme-color-red'>{numberFns.numberWithCommas(death2PopulationRatio)}</span>{' '}
-                        persons
-                    </span>
-                    <br/>
+                    {
+                        death2PopulationInfo
+                    }
                     
                     <span>
                         <span className="text-theme-color-red">
