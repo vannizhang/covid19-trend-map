@@ -1,6 +1,6 @@
 # CovidPulse App
 
-Visualize US Covid-19 trend lines since, since March 2020.
+Visualize US Covid-19 trend lines, since March 2020.
 
 [view it live](https://livingatlas.arcgis.com/covidpulse/)
 ![screenshot](./screenshot.png)
