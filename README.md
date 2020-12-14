@@ -5,7 +5,7 @@ Visualize US Covid-19 trend lines, since March 2020.
 [view it live](https://livingatlas.arcgis.com/covidpulse/)
 ![screenshot](./screenshot.png)
 
-## Quick Start
+## Getting Started
 
 - To begin, clone this repository to your computer:
 
@@ -32,14 +32,21 @@ Visualize US Covid-19 trend lines, since March 2020.
     # it will place all files needed for deployment into the /build directory 
     npm run build
     ```
+## FAQ
+
+- How to generate [data](./src/static/) for sparklines?
+
+    > Here is the [repository](https://github.com/vannizhang/covid19-trend-map-data) with scripts that we use to fetch Covid-19 Data for the US from JHU Covid-19 County Cases and transform them into the JSON files with paths that can be rendered as sparklines.
+
+- How to render data as sparklines?
+
+    > Here is a [blog post](https://www.esri.com/arcgis-blog/products/js-api-arcgis/mapping/how-to-create-a-sparkline-map-with-the-arcgis-api-for-javascript/) with step by step instructions about how to create a sparkline map using CIMSymbol with the ArcGIS API for JavaScript.
 
 ## Resources
 - [ArcGIS Blog: CovidPulse](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/health/covidpulse/)
-- [ArcGIS Blog: How to create a sparkline map with the ArcGIS API for JavaScript](https://www.esri.com/arcgis-blog/products/js-api-arcgis/mapping/how-to-create-a-sparkline-map-with-the-arcgis-api-for-javascript/)
 - [ArcGIS Blog: A tour of CovidPulse and its inception](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/health/a-tour-of-covidpulse-and-its-inception/)
 - [ArcGIS Blog: CovidPulse update: Grid View](https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/mapping/covidpulse-update-grid-view/)
 - [JHU Centers for Civic Impact Covid-19 County Cases](https://www.arcgis.com/home/item.html?id=4cb598ae041348fb92270f102a6783cb#/wayback-81-flavors-of-world-imagery/)
-
 
 
 ## Issues
@@ -65,4 +72,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-A copy of the license is available in the repository's [LICENSE.txt](license.txt) file.
+A copy of the license is available in the repository's [LICENSE](LICENSE) file.
