@@ -10,7 +10,7 @@ import App from './components/App/App';
 import AppContextProvider from './context/AppContextProvider';
 import getPreloadedState from './utils/getPreloadedState';
 
-setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
+// setDefaultOptions({ url: 'https://js.arcgis.com/next/' });
 
 const preloadedState = getPreloadedState();
 const store = configureAppStore(preloadedState);
