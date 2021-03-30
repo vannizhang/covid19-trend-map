@@ -72,7 +72,7 @@
     "@rehooks/window-size": "^1.0.2",
     "@types/d3": "^5.7.2",
     "@types/react-redux": "^7.1.9",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "calcite-web": "github:Esri/calcite-web#v1.2.5",
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^6.0.3",
