@@ -1,6 +1,7 @@
 import './About.scss';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { modal, bus } from 'calcite-web/dist/js/calcite-web.min.js';
+import { format } from 'date-fns'
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,6 +9,7 @@ import {
     isAboutModalOpenSelector,
     isAboutModalOpenToggled,
 } from '../../store/reducers/UI';
+import { AppContext } from '../../context/AppContextProvider';
 
 type Props = {
     ymax4confirmed: number;
@@ -18,6 +20,8 @@ const ModalID = 'about';
 
 const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
     const dispatch = useDispatch();
+
+    const { lastModifiedDate } = useContext(AppContext)
 
     const isOpen = useSelector(isAboutModalOpenSelector);
 
@@ -294,6 +298,12 @@ const About: React.FC<Props> = ({ ymax4confirmed, ymax4deaths }: Props) => {
                             Esri COVID-19 hub.
                         </a>
                     </p>
+                </div>
+
+                <div className='leader-1'>
+                    <span className='font-size--3' data-sparkine-data-modified-date={lastModifiedDate}>
+                        The sparkline data was updated on { format(lastModifiedDate, 'HH:mm a, MMMM dd, yyyy')}.
+                    </span>
                 </div>
             </div>
         </div>

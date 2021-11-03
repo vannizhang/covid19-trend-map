@@ -59,6 +59,7 @@ declare module 'covid19-trend-map' {
             deaths: PathFrame;
             newCases: PathFrame;
         };
+        modified: number;
     };
 
     type QueryLocationFeature = {

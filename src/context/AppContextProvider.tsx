@@ -14,6 +14,7 @@ import AppConfig from '../AppConfig';
 import { getModifiedTime } from '../utils/getModifiedDate';
 
 type AppContextProps = {
+    lastModifiedDate: number;
     covid19USCountiesData: Covid19TrendDataQueryResponse;
     covid19USStatesData: Covid19TrendDataQueryResponse;
     covid19LatestNumbers: Covid19LatestNumbers;
@@ -45,13 +46,13 @@ const AppContextProvider: React.FC = ({
                 Covid19TrendDataQueryResponse
             >(Url4StatesJSON);
             // setCovid19USStatesData(queryResUSStates.data);
-            // console.log(queryResUSStates)
+            // console.log(queryResUSStates.data)
 
             const queryResUSCounties = await axios.get<
                 Covid19TrendDataQueryResponse
             >(Url4CountiesJSON);
             // setCovid19USCountiesData(queryResUSCounties.data);
-            // console.log(queryResUSCounties)
+            // console.log(queryResUSCounties.data)
 
             const queryResLatestNumbers = await axios.get<Covid19LatestNumbers>(
                 Url4LatestNumbers
@@ -97,7 +98,8 @@ const AppContextProvider: React.FC = ({
                 covid19USStatesData: queryResUSStates.data,
                 covid19LatestNumbers: queryResLatestNumbers.data,
                 covid19TrendData4USCountiesWithLatestNumbers,
-                covid19TrendData4USStatesWithLatestNumbers
+                covid19TrendData4USStatesWithLatestNumbers,
+                lastModifiedDate: queryResUSStates.data.modified
             });
         } catch (err) {
             console.error(err);
