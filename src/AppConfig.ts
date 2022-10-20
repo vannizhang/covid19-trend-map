@@ -7,7 +7,7 @@ export default {
         'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_States_Generalized/FeatureServer/0',
     // 'us-counties-feature-layer-item-id': '7566e0221e5646f99ea249a197116605',
     'us-counties-feature-layer-item-url':
-        'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Counties_Generalized/FeatureServer/0',
+        'https://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/USA_Counties_Generalized_Boundaries/FeatureServer/0',
     'static-files-host': '/media/covidpulse/',
     'covid19-data-us-states-json': 'us-states-paths.json',
     'covid19-data-us-counties-json': 'us-counties-paths.json',
