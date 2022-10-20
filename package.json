@@ -76,7 +76,7 @@
     "calcite-web": "github:Esri/calcite-web#v1.2.5",
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^6.0.3",
-    "d3": "^5.16.0",
+    "d3": "^7.6.1",
     "date-fns": "^2.25.0",
     "date-fns-tz": "^1.0.10",
     "esri-loader": "^3.6.0",
