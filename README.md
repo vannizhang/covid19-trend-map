@@ -1,5 +1,7 @@
 # CovidPulse App
 
+### This repository is archived. On March 10, 2023, the Johns Hopkins Coronavirus Resource Center ceased collecting and reporting of global COVID-19 data.
+
 Visualize US Covid-19 trend lines, since March 2020.
 
 [view it live](https://livingatlas.arcgis.com/covidpulse/)
