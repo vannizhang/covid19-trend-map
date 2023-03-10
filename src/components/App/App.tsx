@@ -42,6 +42,7 @@ import  {
 import AppConfig from '../../AppConfig';
 
 import useWindowSize from '@rehooks/window-size';
+import MessageModal from '../MessageModal/MessageModal';
 
 type Props = {
     covid19USCountiesData: Covid19TrendDataQueryResponse;
@@ -194,6 +195,8 @@ const App: React.FC<Props> = ({
                 ymax4confirmed={covid19USStatesData.frames.confirmed.ymax}
                 ymax4deaths={covid19USStatesData.frames.deaths.ymax}
             />
+
+            <MessageModal />
         </>
     );
 };
